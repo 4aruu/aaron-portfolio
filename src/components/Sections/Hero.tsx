@@ -101,8 +101,8 @@ export default function Hero() {
       <canvas ref={canvasRef} className="hero-canvas" />
       <div className="hero-content">
         <div className="hero-panel">
-          <div className="role-badge">Senior Developer & Designer</div>
-          <h1 className="hero-title">Aaron</h1>
+          <div className="role-badge">Aspiring Developer & Designer</div>
+          <h1 className="hero-title">Aaron Jacob Sunil</h1>
           <p className="hero-subtitle">Building thoughtful, usable interfaces and backend systems.</p>
           <div className="hero-actions">
             <button className="hero-cta" type="button" onClick={(e) => { e.stopPropagation(); handleHeroClick(); }}>Explore ↓</button>

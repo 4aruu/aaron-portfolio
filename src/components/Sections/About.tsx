@@ -26,7 +26,7 @@ export default function About() {
               </p>
 
               <p className="about-cta">
-                Currently studying at <span className="accent">Amal Jyothi College of Engineering</span>, interning at <span className="accent">Cybercell–SGOU</span>, and always exploring what's next in full-stack development.
+                Currently studying at <span className="accent">Amal Jyothi College of Engineering</span>, interned at <span className="accent">Cybercell–Sreenarayana Guru Open University</span>, and always exploring what's next in full-stack development.
               </p>
             </div>
 
@@ -54,6 +54,10 @@ export default function About() {
                 <div className="stat-label">Curiosity</div>
                 <div className="stat-desc">For elegant solutions</div>
               </div>
+
+              <a href="/resume.pdf" download className="resume-button">
+                <span>↓</span> Download Resume
+              </a>
             </div>
           </div>
         </div>
