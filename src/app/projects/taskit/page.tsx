@@ -15,7 +15,7 @@ export default function TaskITPage() {
         <h3>Tech Stack</h3>
         <p>{project.tech?.join(' · ')}</p>
 
-        {project.repo && <p><a href={project.repo} className="card-link">Repository</a></p>}
+        {project.github && <p><a href={project.github} className="card-link">Repository</a></p>}
       </div>
     </main>
   );
