@@ -8,7 +8,6 @@ export function useLenis() {
     const lenis = new Lenis({
       lerp: 0.08,          // smoothness
       smoothWheel: true,  // mouse wheel
-      smoothTouch: false // touch devices (safe to keep)
     });
 
     function raf(time: number) {
