@@ -8,6 +8,7 @@ export interface Project {
   live?: string;
   featured: boolean;
   subtitle?: string;  
+  icon?: string;
 }
 export const PROJECTS: Project[] = [
   {
