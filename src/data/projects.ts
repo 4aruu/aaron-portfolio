@@ -7,8 +7,8 @@ export interface Project {
   github?: string;
   live?: string;
   featured: boolean;
+  subtitle?: string;  
 }
-
 export const PROJECTS: Project[] = [
   {
     id: 'nutriswap',
