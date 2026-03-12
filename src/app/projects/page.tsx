@@ -1,13 +1,5 @@
-import Projects from '../../components/Sections/Projects';
-
-export const metadata = {
-  title: 'Projects',
-};
+import { redirect } from "next/navigation";
 
 export default function ProjectsPage() {
-  return (
-    <main>
-      <Projects />
-    </main>
-  );
+  redirect("/#projects");
 }

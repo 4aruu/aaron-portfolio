@@ -1,22 +1,13 @@
-import { PROJECTS } from '@/data/projects';
+import ProjectDetail from "@/components/ProjectDetail";
+import { PROJECTS } from "@/data/projects";
 
-const project = PROJECTS.find(p => p.id === 'infobot')!;
+const project = PROJECTS.find((p) => p.id === "infobot")!;
 
-export const metadata = { title: project.title };
+export const metadata = {
+  title: `${project.title} — Aaron Jacob Sunil`,
+  description: project.description,
+};
 
 export default function InfobotPage() {
-  return (
-    <main className="section">
-      <div className="section-container">
-        <h1 className="section-title">{project.title}</h1>
-        <p className="section-subtitle">{project.subtitle}</p>
-        <p>{project.description}</p>
-
-        <h3>Tech Stack</h3>
-        <p>{project.tech?.join(' · ')}</p>
-
-        {project.github && <p><a href={project.github} className="card-link">Repository</a></p>}
-      </div>
-    </main>
-  );
+  return <ProjectDetail projectId="infobot" />;
 }

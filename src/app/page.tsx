@@ -1,38 +1,46 @@
 "use client";
 
 import { useEffect } from "react";
-import { useLenis } from "@/hooks/useLenis";
+import Lenis from "lenis";
 
-import Systems from "@/components/Sections/Systems";
-import Hero from "@/components/Sections/Hero";
-import About from "@/components/Sections/About";
-import Projects from "@/components/Sections/Projects";
-import Skills from "@/components/Sections/Skills";
-import Contact from "@/components/Sections/Contact";
-
-import { useSection } from "@/hooks/useSection";
-import { SECTIONS } from "@/data/sections";
-import { setAccentColor } from "@/animations/colors";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import Features from "@/components/Features";
+import Philosophy from "@/components/Philosophy";
+import Protocol from "@/components/Protocol";
+import ProjectsShowcase from "@/components/ProjectsShowcase";
+import ContactCTA from "@/components/ContactCTA";
+import Footer from "@/components/Footer";
 
 export default function Page() {
-  useLenis();
-  const activeSection = useSection();
-
+  // Smooth scrolling
   useEffect(() => {
-    const section = SECTIONS.find((s) => s.id === activeSection);
-    if (section) {
-      setAccentColor(section.color);
+    const lenis = new Lenis({
+      lerp: 0.07,
+      smoothWheel: true,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
-  }, [activeSection]);
+
+    requestAnimationFrame(raf);
+    return () => lenis.destroy();
+  }, []);
 
   return (
     <>
-      <Hero />
-      <About />
-      <Projects />
-      <Systems />
-      <Skills />
-      <Contact />
+      <Navbar />
+      <main>
+        <Hero />
+        <Features />
+        <Philosophy />
+        <Protocol />
+        <ProjectsShowcase />
+        <ContactCTA />
+      </main>
+      <Footer />
     </>
   );
-} 
+}
