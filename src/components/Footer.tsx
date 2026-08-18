@@ -15,27 +15,18 @@ const NAV_COLUMNS = [
     {
         title: "Connect",
         links: [
-            {
-                label: "GitHub",
-                href: "https://github.com/4aruu",
-                external: true,
-            },
+            { label: "GitHub", href: "https://github.com/4aruu", external: true },
             {
                 label: "LinkedIn",
                 href: "https://www.linkedin.com/in/aaron-jacob-sunil",
                 external: true,
             },
-            {
-                label: "Email",
-                href: "mailto:aaronjacobsunil@gmail.com",
-            },
+            { label: "Email", href: "mailto:aaronjacobsunil@gmail.com" },
         ],
     },
     {
         title: "Resources",
-        links: [
-            { label: "Resume", href: "/resume.pdf", download: true },
-        ],
+        links: [{ label: "Resume", href: "/resume.pdf", download: true }],
     },
 ];
 
@@ -48,16 +39,16 @@ export default function Footer() {
     };
 
     return (
-        <footer className="relative bg-obsidian rounded-t-mega border-t border-white/[0.04] mt-[-2rem]">
-            <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 pt-16 sm:pt-20 pb-8">
+        <footer className="relative bg-paper dark:bg-dark-surface border-t border-fog dark:border-dark-border">
+            <div className="max-w-page mx-auto px-6 sm:px-10 lg:px-16 pt-16 sm:pt-20 pb-8">
                 {/* Main Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
                     {/* Brand */}
                     <div className="lg:col-span-1">
-                        <h3 className="font-cursive font-bold text-xl text-shimmer tracking-tight mb-3">
+                        <h3 className="font-display font-semibold text-xl text-obsidian dark:text-dark-text tracking-[-0.01em] mb-3">
                             Aaron Jacob Sunil
                         </h3>
-                        <p className="text-ivory/30 text-sm leading-relaxed font-light mb-6 max-w-[240px]">
+                        <p className="text-obsidian/50 dark:text-dark-text/50 text-sm leading-relaxed mb-6 max-w-[240px]">
                             Systems-first developer crafting intelligent, resilient
                             applications.
                         </p>
@@ -68,7 +59,7 @@ export default function Footer() {
                                 href="https://github.com/4aruu"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-ivory/40 hover:text-champagne hover:border-champagne/30 transition-all duration-300 no-underline link-lift"
+                                className="w-9 h-9 rounded-link bg-mist dark:bg-dark-mist flex items-center justify-center text-obsidian/60 dark:text-dark-text/60 hover:text-signal-blue transition-colors duration-200 no-underline"
                                 aria-label="GitHub"
                             >
                                 <Github size={15} />
@@ -77,14 +68,14 @@ export default function Footer() {
                                 href="https://www.linkedin.com/in/aaron-jacob-sunil"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-ivory/40 hover:text-champagne hover:border-champagne/30 transition-all duration-300 no-underline link-lift"
+                                className="w-9 h-9 rounded-link bg-mist dark:bg-dark-mist flex items-center justify-center text-obsidian/60 dark:text-dark-text/60 hover:text-signal-blue transition-colors duration-200 no-underline"
                                 aria-label="LinkedIn"
                             >
                                 <Linkedin size={15} />
                             </a>
                             <a
                                 href="mailto:aaronjacobsunil@gmail.com"
-                                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-ivory/40 hover:text-champagne hover:border-champagne/30 transition-all duration-300 no-underline link-lift"
+                                className="w-9 h-9 rounded-link bg-mist dark:bg-dark-mist flex items-center justify-center text-obsidian/60 dark:text-dark-text/60 hover:text-signal-blue transition-colors duration-200 no-underline"
                                 aria-label="Email"
                             >
                                 <Mail size={15} />
@@ -95,7 +86,7 @@ export default function Footer() {
                     {/* Navigation Columns */}
                     {NAV_COLUMNS.map((col) => (
                         <div key={col.title}>
-                            <h4 className="text-ivory/30 text-[11px] font-mono font-semibold tracking-[0.15em] uppercase mb-5">
+                            <h4 className="text-obsidian/40 dark:text-dark-text/40 text-[11px] font-semibold tracking-[0.1em] uppercase mb-5">
                                 {col.title}
                             </h4>
                             <ul className="list-none space-y-3">
@@ -106,7 +97,7 @@ export default function Footer() {
                                             {isInternal ? (
                                                 <button
                                                     onClick={() => handleNavClick(link.href)}
-                                                    className="text-ivory/50 text-sm font-light hover:text-champagne link-lift cursor-pointer bg-transparent border-none transition-colors duration-300"
+                                                    className="text-obsidian/60 dark:text-dark-text/60 text-sm hover:text-signal-blue cursor-pointer bg-transparent border-none transition-colors duration-200"
                                                 >
                                                     {link.label}
                                                 </button>
@@ -128,7 +119,7 @@ export default function Footer() {
                                                             ? true
                                                             : undefined
                                                     }
-                                                    className="text-ivory/50 text-sm font-light hover:text-champagne link-lift no-underline transition-colors duration-300"
+                                                    className="text-obsidian/60 dark:text-dark-text/60 text-sm hover:text-signal-blue no-underline transition-colors duration-200"
                                                 >
                                                     {link.label}
                                                 </a>
@@ -142,20 +133,11 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="pt-6 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4">
-                    {/* System Status */}
-                    <div className="flex items-center gap-2.5">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
-                        </span>
-                        <span className="text-[11px] font-mono text-ivory/30 tracking-wider">
-                            System Operational
-                        </span>
+                <div className="pt-6 border-t border-fog dark:border-dark-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-obsidian/40 dark:text-dark-text/40 text-[11px] font-mono tracking-wider">
+                        System Operational
                     </div>
-
-                    {/* Legal */}
-                    <div className="text-ivory/20 text-[11px] font-mono">
+                    <div className="text-obsidian/30 dark:text-dark-text/30 text-[11px] font-mono">
                         © {new Date().getFullYear()} Aaron Jacob Sunil. All rights reserved.
                     </div>
                 </div>

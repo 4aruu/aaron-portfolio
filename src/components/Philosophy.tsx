@@ -53,44 +53,34 @@ export default function Philosophy() {
     return (
         <section
             ref={sectionRef}
-            className="relative py-32 sm:py-40 lg:py-52 px-6 sm:px-10 lg:px-16 bg-midnight overflow-hidden"
+            className="relative py-32 sm:py-40 lg:py-52 px-6 sm:px-10 lg:px-16 bg-canvas dark:bg-dark-canvas overflow-hidden"
         >
-            {/* Parallax Background Texture */}
-            <div className="absolute inset-0 z-0">
-                <img
-                    src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80&auto=format&fit=crop"
-                    alt=""
-                    className="w-full h-full object-cover opacity-[0.06]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-midnight via-transparent to-midnight" />
-            </div>
-
-            <div className="relative z-10 max-w-[1100px] mx-auto">
+            <div className="relative z-10 max-w-content mx-auto">
                 {/* Neutral statement */}
                 <div className="mb-16 sm:mb-20">
-                    <p className="text-ivory/30 text-base sm:text-lg font-light leading-relaxed max-w-2xl">
+                    <p className="text-obsidian/45 dark:text-dark-text/45 text-base sm:text-lg leading-relaxed max-w-2xl">
                         {splitWords("Most developers focus on shipping features that work today.")}
                     </p>
                 </div>
 
                 {/* Power statement */}
                 <div className="phil-contrast">
-                    <p className="text-ivory text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold tracking-[-0.03em] leading-[1.15] max-w-4xl">
+                    <p className="text-obsidian dark:text-dark-text text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-semibold tracking-[-0.02em] leading-[1.12] max-w-4xl">
                         {splitWords("I architect systems that")}
-                        <span className="phil-word inline-block mr-[0.3em] font-cursive text-shimmer text-[1.15em]">
+                        <span className="phil-word inline-block mr-[0.3em] text-signal-blue dark:text-signal-blue-dark">
                             endure
                         </span>
-                        {splitWords("— fault-tolerant, context-aware, and built for what comes next.")}
+                        {splitWords("- fault-tolerant, context-aware, and built for what comes next.")}
                     </p>
                 </div>
 
-                {/* Subtle divider line */}
+                {/* Divider */}
                 <div className="mt-20 sm:mt-28 flex items-center gap-4">
-                    <div className="h-px flex-1 bg-gradient-to-r from-champagne/30 to-transparent" />
-                    <span className="text-[10px] font-mono text-champagne/40 tracking-[0.3em] uppercase">
+                    <div className="h-px flex-1 bg-fog" />
+                    <span className="text-[10px] font-mono text-obsidian/40 dark:text-dark-text/40 tracking-[0.3em] uppercase">
                         Process
                     </span>
-                    <div className="h-px flex-1 bg-gradient-to-l from-champagne/30 to-transparent" />
+                    <div className="h-px flex-1 bg-fog" />
                 </div>
             </div>
         </section>

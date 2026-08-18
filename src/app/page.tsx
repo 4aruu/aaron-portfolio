@@ -5,6 +5,7 @@ import Lenis from "lenis";
 
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import TechMarquee from "@/components/TechMarquee";
 import Features from "@/components/Features";
 import Philosophy from "@/components/Philosophy";
 import Protocol from "@/components/Protocol";
@@ -34,6 +35,7 @@ export default function Page() {
       <Navbar />
       <main>
         <Hero />
+        <TechMarquee />
         <Features />
         <Philosophy />
         <Protocol />

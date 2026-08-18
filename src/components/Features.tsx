@@ -32,16 +32,16 @@ function ShufflerCard() {
     }, []);
 
     return (
-        <div className="bg-obsidian rounded-card border border-white/[0.06] p-7 sm:p-8 h-full flex flex-col">
+        <div className="bg-paper dark:bg-dark-surface rounded-card border border-fog dark:border-dark-border p-7 sm:p-8 h-full flex flex-col">
             <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-xl bg-champagne/10 flex items-center justify-center">
-                    <Cpu size={18} className="text-champagne" />
+                <div className="w-9 h-9 rounded-xl bg-signal-blue/10 dark:bg-signal-blue-dark/10 flex items-center justify-center">
+                    <Cpu size={18} className="text-signal-blue dark:text-signal-blue-dark" />
                 </div>
-                <h3 className="font-heading font-bold text-ivory text-base tracking-tight">
+                <h3 className="font-display font-semibold text-obsidian dark:text-dark-text text-base tracking-tight">
                     Hybrid Intelligence
                 </h3>
             </div>
-            <p className="text-ivory/40 text-[13px] leading-relaxed mb-6">
+            <p className="text-obsidian/50 dark:text-dark-text/50 text-[13px] leading-relaxed mb-6">
                 Systems that fuse GenAI with deterministic models for zero-downtime
                 reliability.
             </p>
@@ -64,24 +64,24 @@ function ShufflerCard() {
                         >
                             <div
                                 className={`rounded-xl border p-4 ${isTop
-                                        ? "bg-champagne/[0.08] border-champagne/30"
-                                        : "bg-white/[0.02] border-white/[0.06]"
+                                        ? "bg-paper dark:bg-dark-surface border-signal-blue/30 dark:border-signal-blue-dark/30 border-l-[3px]"
+                                        : "bg-canvas dark:bg-dark-canvas border-fog dark:border-dark-border"
                                     }`}
                             >
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <div
-                                            className={`text-sm font-semibold ${isTop ? "text-champagne" : "text-ivory/50"
+                                            className={`text-sm font-semibold ${isTop ? "text-signal-blue dark:text-signal-blue-dark" : "text-obsidian/60 dark:text-dark-text/60"
                                                 }`}
                                         >
                                             {label.title}
                                         </div>
-                                        <div className="text-[11px] text-ivory/30 mt-0.5 font-mono">
+                                        <div className="text-[11px] text-obsidian/40 dark:text-dark-text/40 mt-0.5 font-mono">
                                             {label.sub}
                                         </div>
                                     </div>
                                     {isTop && (
-                                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-dot" />
+                                        <div className="w-2 h-2 rounded-full bg-emerald-400 " />
                                     )}
                                 </div>
                             </div>
@@ -140,23 +140,23 @@ function TypewriterCard() {
     }, [lines, charIndex]);
 
     return (
-        <div className="bg-obsidian rounded-card border border-white/[0.06] p-7 sm:p-8 h-full flex flex-col">
+        <div className="bg-paper dark:bg-dark-surface rounded-card border border-fog dark:border-dark-border p-7 sm:p-8 h-full flex flex-col">
             <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-xl bg-champagne/10 flex items-center justify-center">
-                    <Zap size={18} className="text-champagne" />
+                <div className="w-9 h-9 rounded-xl bg-signal-blue/10 dark:bg-signal-blue-dark/10 flex items-center justify-center">
+                    <Zap size={18} className="text-signal-blue dark:text-signal-blue-dark" />
                 </div>
-                <h3 className="font-heading font-bold text-ivory text-base tracking-tight">
+                <h3 className="font-display font-semibold text-obsidian dark:text-dark-text text-base tracking-tight">
                     Real-time Systems
                 </h3>
             </div>
-            <p className="text-ivory/40 text-[13px] leading-relaxed mb-5">
+            <p className="text-obsidian/50 dark:text-dark-text/50 text-[13px] leading-relaxed mb-5">
                 Backend architectures built for instant, precise response.
             </p>
 
             {/* Live Feed Label */}
             <div className="flex items-center gap-2 mb-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-dot" />
-                <span className="text-[10px] font-mono text-ivory/40 tracking-[0.15em] uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 " />
+                <span className="text-[10px] font-mono text-obsidian/50 dark:text-dark-text/50 tracking-[0.15em] uppercase">
                     Live Feed
                 </span>
             </div>
@@ -164,16 +164,16 @@ function TypewriterCard() {
             {/* Terminal */}
             <div
                 ref={feedRef}
-                className="flex-1 bg-black/40 rounded-xl p-4 font-mono text-[12px] leading-relaxed overflow-hidden min-h-[140px] border border-white/[0.04]"
+                className="flex-1 bg-obsidian/5 rounded-xl p-4 font-mono text-[12px] leading-relaxed overflow-hidden min-h-[140px] border border-fog dark:border-dark-border"
             >
                 {lines.map((line, i) => (
-                    <div key={i} className="text-ivory/40 mb-1">
+                    <div key={i} className="text-obsidian/50 dark:text-dark-text/50 mb-1">
                         {line}
                     </div>
                 ))}
-                <div className="text-champagne">
+                <div className="text-signal-blue dark:text-signal-blue-dark">
                     {messages[currentMsg].slice(0, charIndex)}
-                    <span className="cursor-blink text-champagne ml-[1px]">▊</span>
+                    <span className="cursor-blink text-signal-blue dark:text-signal-blue-dark ml-[1px]">▊</span>
                 </div>
             </div>
         </div>
@@ -268,16 +268,16 @@ function SchedulerCard() {
     }, [runAnimation]);
 
     return (
-        <div className="bg-obsidian rounded-card border border-white/[0.06] p-7 sm:p-8 h-full flex flex-col">
+        <div className="bg-paper dark:bg-dark-surface rounded-card border border-fog dark:border-dark-border p-7 sm:p-8 h-full flex flex-col">
             <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-xl bg-champagne/10 flex items-center justify-center">
-                    <Shield size={18} className="text-champagne" />
+                <div className="w-9 h-9 rounded-xl bg-signal-blue/10 dark:bg-signal-blue-dark/10 flex items-center justify-center">
+                    <Shield size={18} className="text-signal-blue dark:text-signal-blue-dark" />
                 </div>
-                <h3 className="font-heading font-bold text-ivory text-base tracking-tight">
+                <h3 className="font-display font-semibold text-obsidian dark:text-dark-text text-base tracking-tight">
                     Context-Locked AI
                 </h3>
             </div>
-            <p className="text-ivory/40 text-[13px] leading-relaxed mb-5">
+            <p className="text-obsidian/50 dark:text-dark-text/50 text-[13px] leading-relaxed mb-5">
                 AI that stays within defined knowledge boundaries. No hallucinations.
             </p>
 
@@ -298,7 +298,7 @@ function SchedulerCard() {
                 >
                     <path
                         d="M5 3l14 8-6 2-3 6z"
-                        fill="#C9A84C"
+                        fill="#0071e3"
                         stroke="#0D0D12"
                         strokeWidth="1"
                     />
@@ -309,7 +309,7 @@ function SchedulerCard() {
                     {days.map((day, i) => (
                         <div
                             key={i}
-                            className="text-center text-[10px] font-mono text-ivory/30"
+                            className="text-center text-[10px] font-mono text-obsidian/40 dark:text-dark-text/40"
                         >
                             {day}
                         </div>
@@ -326,12 +326,12 @@ function SchedulerCard() {
                             <div
                                 key={i}
                                 className={`aspect-square rounded-lg flex items-center justify-center border transition-all duration-300 ${isActive
-                                        ? "bg-champagne/20 border-champagne/40"
-                                        : "bg-white/[0.02] border-white/[0.06]"
+                                        ? "bg-signal-blue/15 dark:bg-signal-blue-dark/15 border-signal-blue/40 dark:border-signal-blue-dark/40"
+                                        : "bg-canvas dark:bg-dark-canvas border-fog dark:border-dark-border"
                                     } ${isPressing ? "scale-[0.9]" : "scale-100"}`}
                             >
                                 {isActive && schedItem && (
-                                    <span className="text-[8px] font-mono text-champagne font-semibold">
+                                    <span className="text-[8px] font-mono text-signal-blue dark:text-signal-blue-dark font-semibold">
                                         {schedItem.label}
                                     </span>
                                 )}
@@ -344,8 +344,8 @@ function SchedulerCard() {
                 <div className="mt-4 flex justify-end">
                     <div
                         className={`px-4 py-1.5 rounded-lg text-[11px] font-mono font-medium transition-all duration-300 ${saved
-                                ? "bg-champagne/20 text-champagne border border-champagne/30"
-                                : "bg-white/[0.03] text-ivory/30 border border-white/[0.06]"
+                                ? "bg-signal-blue/15 dark:bg-signal-blue-dark/15 text-signal-blue dark:text-signal-blue-dark border border-signal-blue/30 dark:border-signal-blue-dark/30"
+                                : "bg-white/[0.03] text-obsidian/40 dark:text-dark-text/40 border border-white/[0.06]"
                             }`}
                     >
                         {saved ? "✓ Saved" : "Save"}
@@ -396,17 +396,17 @@ export default function Features() {
         <section
             id="features"
             ref={sectionRef}
-            className="relative py-24 sm:py-32 lg:py-40 px-6 sm:px-10 lg:px-16"
+            className="relative py-24 sm:py-32 lg:py-40 px-6 sm:px-10 lg:px-16 bg-canvas dark:bg-dark-canvas"
         >
             <div className="max-w-[1400px] mx-auto">
                 {/* Section Header */}
                 <div className="max-w-2xl mb-16 sm:mb-20">
-                    <span className="feature-heading block text-champagne text-xs font-mono tracking-[0.2em] uppercase mb-4">
+                    <span className="feature-heading block text-signal-blue dark:text-signal-blue-dark text-xs font-mono tracking-[0.2em] uppercase mb-4">
                         Core Capabilities
                     </span>
-                    <h2 className="feature-heading font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-ivory tracking-[-0.03em] leading-[1.1]">
+                    <h2 className="feature-heading font-display font-semibold text-3xl sm:text-4xl lg:text-5xl text-obsidian dark:text-dark-text tracking-[-0.02em] leading-[1.08]">
                         Systems designed to{" "}
-                        <span className="font-cursive text-shimmer text-[1.15em]">think</span>,
+                        <span className="text-signal-blue dark:text-signal-blue-dark">think</span>,
                         not just run.
                     </h2>
                 </div>

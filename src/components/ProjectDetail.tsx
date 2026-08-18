@@ -31,16 +31,14 @@ export default function ProjectDetail({ projectId }: Props) {
         window.scrollTo(0, 0);
 
         const ctx = gsap.context(() => {
-            // Hero entrance
             gsap.from(".detail-hero-content > *", {
-                y: 40,
+                y: 32,
                 opacity: 0,
-                duration: 0.8,
-                ease: "power3.out",
-                stagger: 0.1,
+                duration: 0.7,
+                ease: "power2.out",
+                stagger: 0.08,
             });
 
-            // Sections reveal
             const sections = pageRef.current?.querySelectorAll(".detail-section");
             sections?.forEach((section) => {
                 const observer = new IntersectionObserver(
@@ -64,22 +62,14 @@ export default function ProjectDetail({ projectId }: Props) {
     if (!project) return null;
 
     return (
-        <div ref={pageRef} className="min-h-screen bg-obsidian text-ivory">
+        <div ref={pageRef} className="min-h-screen bg-canvas dark:bg-dark-canvas text-obsidian dark:text-dark-text">
             {/* ═══ Hero ═══ */}
-            <section className={`relative pt-28 sm:pt-36 pb-16 sm:pb-24 px-6 sm:px-10 lg:px-16 border-b border-white/[0.04] overflow-hidden proj-hero-${project.gradientClass}`}>
-
-                {/* Gradient accent */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[200px] pointer-events-none" style={{ background: `${project.accentColor}10` }} />
-
-                {/* Floating orbs */}
-                <div className="floating-orb absolute top-20 left-[10%] w-32 h-32 rounded-full blur-[100px] opacity-20" style={{ background: project.accentColor }} />
-                <div className="floating-orb absolute bottom-10 right-[15%] w-24 h-24 rounded-full blur-[80px] opacity-15" style={{ background: project.accentColor, animationDelay: '2s' }} />
-
-                <div className="detail-hero-content relative z-10 max-w-[1100px] mx-auto">
+            <section className="relative pt-28 sm:pt-36 pb-16 sm:pb-24 px-6 sm:px-10 lg:px-16 border-b border-fog dark:border-dark-border bg-paper dark:bg-dark-surface">
+                <div className="detail-hero-content relative z-10 max-w-content mx-auto">
                     {/* Back link */}
                     <Link
                         href="/"
-                        className="inline-flex items-center gap-2 text-ivory/40 text-sm font-light hover:text-champagne transition-colors duration-300 mb-10 no-underline link-lift"
+                        className="inline-flex items-center gap-2 text-obsidian/50 dark:text-dark-text/50 text-sm hover:text-signal-blue transition-colors duration-200 mb-10 no-underline"
                     >
                         <ArrowLeft size={14} />
                         Back to Home
@@ -87,14 +77,14 @@ export default function ProjectDetail({ projectId }: Props) {
 
                     {/* Number + Title */}
                     <div className="flex items-start gap-5 mb-6">
-                        <span className="text-champagne/20 font-mono text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-none mt-1">
+                        <span className="text-obsidian/20 dark:text-dark-text/20 font-mono text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-none mt-1">
                             {String(idx + 1).padStart(2, "0")}
                         </span>
                         <div>
-                            <h1 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl tracking-[-0.03em] leading-[1.1]">
-                                <span className="font-cursive text-shimmer text-[1.1em]">{project.title}</span>
+                            <h1 className="font-display font-semibold text-3xl sm:text-4xl lg:text-5xl tracking-[-0.02em] leading-[1.08] text-obsidian dark:text-dark-text">
+                                {project.title}
                             </h1>
-                            <p className="text-ivory/40 text-base sm:text-lg font-light mt-3 max-w-2xl leading-relaxed">
+                            <p className="text-obsidian/60 dark:text-dark-text/60 text-base sm:text-lg mt-3 max-w-2xl leading-relaxed">
                                 {project.description}
                             </p>
                         </div>
@@ -105,7 +95,7 @@ export default function ProjectDetail({ projectId }: Props) {
                         {project.tech.map((t, i) => (
                             <span
                                 key={i}
-                                className="px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] text-ivory/50 text-[11px] font-mono font-medium"
+                                className="px-3 py-1.5 rounded-pill bg-mist dark:bg-dark-mist text-charcoal dark:text-dark-text-secondary text-[11px] font-mono font-medium"
                             >
                                 {t}
                             </span>
@@ -119,7 +109,7 @@ export default function ProjectDetail({ projectId }: Props) {
                                 href={project.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-ivory/60 text-sm font-medium hover:border-champagne/30 hover:text-champagne transition-all duration-300 no-underline link-lift"
+                                className="btn-neutral-pill inline-flex items-center gap-2.5 text-sm no-underline"
                             >
                                 <Github size={15} />
                                 View Source
@@ -130,7 +120,7 @@ export default function ProjectDetail({ projectId }: Props) {
                                 href={project.live}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-champagne text-obsidian text-sm font-semibold hover:bg-champagne-light transition-all duration-300 no-underline"
+                                className="btn-primary-pill inline-flex items-center gap-2.5 text-sm no-underline"
                             >
                                 <ExternalLink size={15} />
                                 Live Demo
@@ -142,15 +132,15 @@ export default function ProjectDetail({ projectId }: Props) {
 
             {/* ═══ Highlights Strip ═══ */}
             {project.highlights.length > 0 && (
-                <section className="detail-section reveal-up border-b border-white/[0.04]">
-                    <div className="max-w-[1100px] mx-auto px-6 sm:px-10 lg:px-16 py-10 sm:py-14">
+                <section className="detail-section reveal-up border-b border-fog dark:border-dark-border bg-paper dark:bg-dark-surface">
+                    <div className="max-w-content mx-auto px-6 sm:px-10 lg:px-16 py-10 sm:py-14">
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
                             {project.highlights.map((h, i) => (
                                 <div key={i} className="text-center sm:text-left">
-                                    <p className="text-xl sm:text-2xl font-heading font-bold tracking-tight" style={{ color: project.accentColor }}>
+                                    <p className="text-xl sm:text-2xl font-display font-semibold tracking-tight text-signal-blue dark:text-signal-blue-dark">
                                         {h.value}
                                     </p>
-                                    <p className="text-ivory/30 text-[11px] font-mono tracking-[0.1em] uppercase mt-1">
+                                    <p className="text-obsidian/40 dark:text-dark-text/40 text-[11px] font-mono tracking-[0.1em] uppercase mt-1">
                                         {h.label}
                                     </p>
                                 </div>
@@ -162,26 +152,24 @@ export default function ProjectDetail({ projectId }: Props) {
 
             {/* ═══ Overview ═══ */}
             <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16">
-                <div className="max-w-[1100px] mx-auto">
+                <div className="max-w-content mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-                        {/* Problem */}
                         {project.problem && (
                             <div>
-                                <h2 className="text-xs font-mono tracking-[0.2em] uppercase mb-5" style={{ color: project.accentColor }}>
-                                    <span className="font-cursive text-lg tracking-normal normal-case">The Problem</span>
+                                <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-5">
+                                    The Problem
                                 </h2>
-                                <p className="text-ivory/60 text-base leading-relaxed font-light">
+                                <p className="text-obsidian/70 dark:text-dark-text/70 text-base leading-relaxed">
                                     {project.problem}
                                 </p>
                             </div>
                         )}
 
-                        {/* Solution */}
                         <div>
-                            <h2 className="text-xs font-mono tracking-[0.2em] uppercase mb-5" style={{ color: project.accentColor }}>
-                                <span className="font-cursive text-lg tracking-normal normal-case">The Solution</span>
+                            <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-5">
+                                The Solution
                             </h2>
-                            <p className="text-ivory/60 text-base leading-relaxed font-light">
+                            <p className="text-obsidian/70 dark:text-dark-text/70 text-base leading-relaxed">
                                 {project.longDescription}
                             </p>
                         </div>
@@ -191,17 +179,14 @@ export default function ProjectDetail({ projectId }: Props) {
 
             {/* ═══ Architecture ═══ */}
             {project.architecture && (
-                <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-midnight/50">
-                    <div className="max-w-[1100px] mx-auto">
-                        <h2 className="text-xs font-mono tracking-[0.2em] uppercase mb-8" style={{ color: project.accentColor }}>
-                            <span className="font-cursive text-lg tracking-normal normal-case">System Architecture</span>
+                <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-paper dark:bg-dark-surface border-y border-fog dark:border-dark-border">
+                    <div className="max-w-content mx-auto">
+                        <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-8">
+                            System Architecture
                         </h2>
 
-                        <div className="relative rounded-card bg-obsidian border border-white/[0.06] p-8 sm:p-10 lg:p-12 overflow-hidden">
-                            {/* Decorative corner accent */}
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-champagne/[0.03] rounded-bl-[100px] pointer-events-none" />
-
-                            <p className="relative z-10 text-ivory/50 text-base sm:text-lg leading-[1.8] font-light max-w-3xl">
+                        <div className="relative rounded-card bg-canvas dark:bg-dark-canvas border border-fog dark:border-dark-border p-8 sm:p-10 lg:p-12">
+                            <p className="text-obsidian/70 dark:text-dark-text/70 text-base sm:text-lg leading-[1.8] max-w-3xl">
                                 {project.architecture}
                             </p>
 
@@ -209,14 +194,11 @@ export default function ProjectDetail({ projectId }: Props) {
                             <div className="relative z-10 mt-10 flex flex-wrap items-center gap-3">
                                 {project.tech.slice(0, 5).map((t, i) => (
                                     <span key={i} className="flex items-center gap-2">
-                                        <span className="px-3 py-1.5 rounded-lg bg-champagne/[0.08] border border-champagne/[0.15] text-champagne text-[11px] font-mono font-medium">
+                                        <span className="px-3 py-1.5 rounded-link bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border text-obsidian/70 dark:text-dark-text/70 text-[11px] font-mono font-medium">
                                             {t}
                                         </span>
                                         {i < Math.min(4, project.tech.length - 1) && (
-                                            <ChevronRight
-                                                size={12}
-                                                className="text-champagne/30"
-                                            />
+                                            <ChevronRight size={12} className="text-obsidian/25 dark:text-dark-text/25" />
                                         )}
                                     </span>
                                 ))}
@@ -229,21 +211,21 @@ export default function ProjectDetail({ projectId }: Props) {
             {/* ═══ Features ═══ */}
             {project.features.length > 0 && (
                 <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16">
-                    <div className="max-w-[1100px] mx-auto">
-                        <h2 className="text-xs font-mono tracking-[0.2em] uppercase mb-10" style={{ color: project.accentColor }}>
-                            <span className="font-cursive text-lg tracking-normal normal-case">Key Features</span>
+                    <div className="max-w-content mx-auto">
+                        <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-10">
+                            Key Features
                         </h2>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {project.features.map((feature, i) => (
                                 <div
                                     key={i}
-                                    className="group rounded-card bg-white/[0.02] border border-white/[0.04] p-6 transition-all duration-400 hover:border-champagne/20 hover:bg-white/[0.04]"
+                                    className="group rounded-card bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border p-6 transition-colors duration-300 hover:border-obsidian/25"
                                 >
-                                    <span className="text-champagne/30 font-mono text-[11px] font-semibold block mb-3">
+                                    <span className="text-obsidian/25 dark:text-dark-text/25 font-mono text-[11px] font-semibold block mb-3">
                                         {String(i + 1).padStart(2, "0")}
                                     </span>
-                                    <p className="text-ivory/60 text-sm leading-relaxed font-light">
+                                    <p className="text-obsidian/70 dark:text-dark-text/70 text-sm leading-relaxed">
                                         {feature}
                                     </p>
                                 </div>
@@ -255,12 +237,12 @@ export default function ProjectDetail({ projectId }: Props) {
 
             {/* ═══ My Role ═══ */}
             {project.role && (
-                <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-midnight/50">
-                    <div className="max-w-[1100px] mx-auto">
-                        <h2 className="text-xs font-mono tracking-[0.2em] uppercase mb-6" style={{ color: project.accentColor }}>
-                            <span className="font-cursive text-lg tracking-normal normal-case">My Role</span>
+                <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-paper dark:bg-dark-surface border-y border-fog dark:border-dark-border">
+                    <div className="max-w-content mx-auto">
+                        <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-6">
+                            My Role
                         </h2>
-                        <p className="text-ivory/50 text-lg sm:text-xl leading-relaxed font-light max-w-3xl">
+                        <p className="text-obsidian/70 dark:text-dark-text/70 text-lg sm:text-xl leading-relaxed max-w-3xl">
                             {project.role}
                         </p>
                     </div>
@@ -268,18 +250,18 @@ export default function ProjectDetail({ projectId }: Props) {
             )}
 
             {/* ═══ Previous / Next Navigation ═══ */}
-            <section className="border-t border-white/[0.04] py-12 sm:py-16 px-6 sm:px-10 lg:px-16">
-                <div className="max-w-[1100px] mx-auto flex items-stretch justify-between gap-6">
+            <section className="border-t border-fog dark:border-dark-border py-12 sm:py-16 px-6 sm:px-10 lg:px-16">
+                <div className="max-w-content mx-auto flex items-stretch justify-between gap-6">
                     {prev ? (
                         <Link
                             href={`/projects/${prev.id}`}
-                            className="group flex-1 max-w-[45%] rounded-card bg-white/[0.02] border border-white/[0.04] p-6 sm:p-8 transition-all duration-400 hover:border-champagne/20 no-underline"
+                            className="group flex-1 max-w-[45%] rounded-card bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border p-6 sm:p-8 transition-colors duration-300 hover:border-obsidian/25 no-underline"
                         >
-                            <span className="flex items-center gap-2 text-ivory/30 text-[11px] font-mono tracking-[0.15em] uppercase mb-3">
+                            <span className="flex items-center gap-2 text-obsidian/40 dark:text-dark-text/40 text-[11px] font-mono tracking-[0.15em] uppercase mb-3">
                                 <ArrowLeft size={12} />
                                 Previous
                             </span>
-                            <h3 className="font-heading font-bold text-base sm:text-lg text-ivory group-hover:text-champagne transition-colors duration-300 tracking-tight">
+                            <h3 className="font-display font-semibold text-base sm:text-lg text-obsidian dark:text-dark-text group-hover:text-signal-blue transition-colors duration-200 tracking-tight">
                                 {prev.title}
                             </h3>
                         </Link>
@@ -290,13 +272,13 @@ export default function ProjectDetail({ projectId }: Props) {
                     {next ? (
                         <Link
                             href={`/projects/${next.id}`}
-                            className="group flex-1 max-w-[45%] rounded-card bg-white/[0.02] border border-white/[0.04] p-6 sm:p-8 transition-all duration-400 hover:border-champagne/20 no-underline text-right"
+                            className="group flex-1 max-w-[45%] rounded-card bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border p-6 sm:p-8 transition-colors duration-300 hover:border-obsidian/25 no-underline text-right"
                         >
-                            <span className="flex items-center justify-end gap-2 text-ivory/30 text-[11px] font-mono tracking-[0.15em] uppercase mb-3">
+                            <span className="flex items-center justify-end gap-2 text-obsidian/40 dark:text-dark-text/40 text-[11px] font-mono tracking-[0.15em] uppercase mb-3">
                                 Next
                                 <ArrowRight size={12} />
                             </span>
-                            <h3 className="font-heading font-bold text-base sm:text-lg text-ivory group-hover:text-champagne transition-colors duration-300 tracking-tight">
+                            <h3 className="font-display font-semibold text-base sm:text-lg text-obsidian dark:text-dark-text group-hover:text-signal-blue transition-colors duration-200 tracking-tight">
                                 {next.title}
                             </h3>
                         </Link>

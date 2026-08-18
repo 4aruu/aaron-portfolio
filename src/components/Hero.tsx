@@ -1,67 +1,82 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { ArrowDown, Briefcase, FileDown } from "lucide-react";
+import { ArrowDown, Briefcase, FileDown, Network } from "lucide-react";
+
+const TAGLINES = [
+    "Intention.",
+    "Resilience.",
+    "Precision.",
+    "Longevity.",
+];
+
+function useTypewriterLoop(words: string[]) {
+    const [text, setText] = useState(words[0]);
+    const [wordIndex, setWordIndex] = useState(0);
+    const [deleting, setDeleting] = useState(false);
+
+    useEffect(() => {
+        if (
+            typeof window !== "undefined" &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ) {
+            // Respect the same accessibility rule already applied to the marquee:
+            // no motion that runs without the visitor triggering it.
+            return;
+        }
+
+        const current = words[wordIndex % words.length];
+        const typingSpeed = deleting ? 45 : 90;
+        const holdTime = 1600;
+
+        if (!deleting && text === current) {
+            const holdTimeout = setTimeout(() => setDeleting(true), holdTime);
+            return () => clearTimeout(holdTimeout);
+        }
+
+        if (deleting && text === "") {
+            setDeleting(false);
+            setWordIndex((i) => (i + 1) % words.length);
+            return;
+        }
+
+        const timeout = setTimeout(() => {
+            setText((prev) =>
+                deleting ? prev.slice(0, -1) : current.slice(0, prev.length + 1)
+            );
+        }, typingSpeed);
+
+        return () => clearTimeout(timeout);
+    }, [text, deleting, wordIndex, words]);
+
+    return text;
+}
 
 export default function Hero() {
     const sectionRef = useRef<HTMLElement>(null);
+    const kickerRef = useRef<HTMLDivElement>(null);
     const line1Ref = useRef<HTMLDivElement>(null);
     const line2Ref = useRef<HTMLDivElement>(null);
     const subtitleRef = useRef<HTMLParagraphElement>(null);
     const ctaRef = useRef<HTMLDivElement>(null);
-    const badgeRef = useRef<HTMLDivElement>(null);
+    const typedText = useTypewriterLoop(TAGLINES);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({
-                defaults: { ease: "power3.out" },
-                delay: 0.3,
+                defaults: { ease: "power2.out" },
+                delay: 0.2,
             });
 
-            tl.from(badgeRef.current, {
-                y: 20,
-                opacity: 0,
-                duration: 0.8,
-            })
+            tl.from(kickerRef.current, { y: 16, opacity: 0, duration: 0.6 })
+                .from(line1Ref.current, { y: 24, opacity: 0, duration: 0.7 }, "-=0.35")
+                .from(line2Ref.current, { y: 24, opacity: 0, duration: 0.7 }, "-=0.5")
+                .from(subtitleRef.current, { y: 16, opacity: 0, duration: 0.6 }, "-=0.4")
                 .from(
-                    line1Ref.current,
-                    {
-                        y: 50,
-                        opacity: 0,
-                        duration: 1,
-                    },
-                    "-=0.4"
-                )
-                .from(
-                    line2Ref.current,
-                    {
-                        y: 60,
-                        opacity: 0,
-                        duration: 1.1,
-                    },
-                    "-=0.6"
-                )
-                .from(
-                    subtitleRef.current,
-                    {
-                        y: 30,
-                        opacity: 0,
-                        duration: 0.8,
-                    },
-                    "-=0.5"
-                )
-                .from(
-                    ctaRef.current?.children
-                        ? Array.from(ctaRef.current.children)
-                        : [],
-                    {
-                        y: 25,
-                        opacity: 0,
-                        duration: 0.7,
-                        stagger: 0.08,
-                    },
-                    "-=0.4"
+                    ctaRef.current?.children ? Array.from(ctaRef.current.children) : [],
+                    { y: 16, opacity: 0, duration: 0.5, stagger: 0.08 },
+                    "-=0.35"
                 );
         }, sectionRef);
 
@@ -77,48 +92,41 @@ export default function Hero() {
         <section
             id="hero"
             ref={sectionRef}
-            className="relative w-full min-h-[100dvh] flex items-end overflow-hidden"
+            className="relative w-full min-h-[100dvh] flex items-center bg-canvas dark:bg-dark-canvas overflow-hidden"
         >
-            {/* Background Image */}
-            <div className="absolute inset-0 z-0">
-                <img
-                    src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80&auto=format&fit=crop"
-                    alt=""
-                    className="w-full h-full object-cover"
-                />
-                {/* Heavy gradient overlays */}
-                <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/80 to-obsidian/30" />
-                <div className="absolute inset-0 bg-gradient-to-r from-obsidian/60 to-transparent" />
-                <div className="absolute inset-0 bg-obsidian/20" />
-            </div>
+            {/* Static architecture-motif watermark filling the empty right side */}
+            <Network
+                className="pointer-events-none absolute -right-16 top-1/2 -translate-y-1/2 text-obsidian/10 dark:text-dark-text/10 hidden lg:block"
+                size={560}
+                strokeWidth={0.75}
+            />
 
-            {/* Content — Bottom Left */}
-            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 pb-16 sm:pb-24 lg:pb-32 pt-32">
-                <div className="max-w-3xl">
-                    {/* Badge */}
-                    <div ref={badgeRef} className="mb-6">
-                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-champagne/10 border border-champagne/20 text-champagne text-xs font-mono font-medium tracking-wider uppercase">
-                            <span className="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse-dot" />
+            <div className="relative w-full max-w-page mx-auto px-6 sm:px-10 lg:px-16 pt-24 pb-16">
+                <div className="max-w-content">
+                    {/* Kicker */}
+                    <div ref={kickerRef} className="mb-6">
+                        <span className="font-text text-[12px] font-semibold tracking-[0.08em] uppercase text-obsidian/60 dark:text-dark-text/60">
                             Systems-First Developer
                         </span>
                     </div>
 
-                    {/* Hero Typography */}
+                    {/* Hero Typography — left-aligned, single tinted word */}
                     <div ref={line1Ref}>
-                        <span className="hero-title-line1 block font-heading font-bold text-ivory/80 tracking-[-0.04em] text-[clamp(1.5rem,4vw,3rem)] leading-[1.1]">
+                        <span className="hero-title-line1 block font-display font-semibold text-obsidian dark:text-dark-text tracking-[-0.015em] text-[clamp(2rem,5vw,4rem)] leading-[1.06]">
                             Architecture meets
                         </span>
                     </div>
                     <div ref={line2Ref}>
-                        <span className="hero-title-line2 block font-cursive text-shimmer tracking-[-0.03em] text-[clamp(3.5rem,10vw,8rem)] leading-[0.95] mt-1">
-                            Intention.
+                        <span className="hero-title-line2 block font-display font-semibold text-signal-blue dark:text-signal-blue-dark tracking-[-0.015em] text-[clamp(2.5rem,7vw,5.5rem)] leading-[1.04] mt-1 min-h-[1.04em]">
+                            {typedText}
+                            <span className="typewriter-cursor" aria-hidden="true" />
                         </span>
                     </div>
 
                     {/* Subtitle */}
                     <p
                         ref={subtitleRef}
-                        className="mt-8 text-ivory/50 text-base sm:text-lg leading-relaxed max-w-xl font-light"
+                        className="mt-8 text-obsidian/60 dark:text-dark-text/60 text-base sm:text-[17px] leading-[1.47] max-w-xl font-normal"
                     >
                         Crafting intelligent, resilient full-stack applications where every
                         system is fault-tolerant, every interface is intentional, and every
@@ -126,19 +134,18 @@ export default function Hero() {
                     </p>
 
                     {/* CTAs */}
-                    <div ref={ctaRef} className="flex flex-wrap gap-4 mt-10">
+                    <div ref={ctaRef} className="flex flex-wrap items-center gap-4 mt-10">
                         <button
                             onClick={() => scrollToSection("#contact")}
-                            className="btn-magnetic group relative bg-champagne text-obsidian px-7 py-3.5 rounded-full text-sm font-semibold tracking-tight flex items-center gap-2.5 cursor-pointer border-none"
+                            className="btn-primary-pill flex items-center gap-2.5 cursor-pointer text-sm"
                         >
-                            <span className="btn-bg bg-champagne-dark rounded-full" />
-                            <Briefcase size={16} className="relative z-10" />
-                            <span className="relative z-10">Let&apos;s Work Together</span>
+                            <Briefcase size={16} />
+                            Let&apos;s Work Together
                         </button>
 
                         <button
                             onClick={() => scrollToSection("#projects")}
-                            className="btn-magnetic group bg-transparent border border-ivory/20 text-ivory px-7 py-3.5 rounded-full text-sm font-medium tracking-tight flex items-center gap-2.5 cursor-pointer hover:bg-ivory/[0.06] transition-colors duration-300"
+                            className="btn-neutral-pill flex items-center gap-2.5 cursor-pointer text-sm"
                         >
                             View Projects
                         </button>
@@ -146,7 +153,7 @@ export default function Hero() {
                         <a
                             href="/resume.pdf"
                             download
-                            className="btn-magnetic group bg-transparent border border-ivory/10 text-ivory/60 px-6 py-3.5 rounded-full text-sm font-medium tracking-tight flex items-center gap-2 cursor-pointer hover:text-ivory hover:border-ivory/20 transition-all duration-300 no-underline"
+                            className="link-inline flex items-center gap-1.5 text-sm font-medium no-underline hover:underline"
                         >
                             <FileDown size={14} />
                             Resume
@@ -156,11 +163,11 @@ export default function Hero() {
             </div>
 
             {/* Scroll Indicator */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-40">
-                <span className="text-[10px] font-mono text-ivory/50 tracking-[0.2em] uppercase">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-50">
+                <span className="text-[10px] font-mono text-obsidian/60 dark:text-dark-text/60 tracking-[0.2em] uppercase">
                     Scroll
                 </span>
-                <ArrowDown size={14} className="text-ivory/40 animate-bounce" />
+                <ArrowDown size={14} className="text-obsidian/50 dark:text-dark-text/50" />
             </div>
         </section>
     );

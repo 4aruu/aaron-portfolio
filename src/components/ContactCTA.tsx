@@ -75,20 +75,16 @@ export default function ContactCTA() {
             ref={sectionRef}
             className="relative py-32 sm:py-40 lg:py-52 px-6 sm:px-10 lg:px-16 overflow-hidden"
         >
-            {/* Decorative gradient blobs */}
-            <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-champagne/[0.03] blur-[150px] pointer-events-none" />
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-champagne/[0.02] blur-[120px] pointer-events-none" />
-
             <div className="relative z-10 max-w-[900px] mx-auto text-center">
                 {/* Heading */}
-                <span className="cta-element block text-champagne text-xs font-mono tracking-[0.2em] uppercase mb-6">
+                <span className="cta-element block text-signal-blue dark:text-signal-blue-dark text-[12px] font-semibold font-text tracking-[0.2em] uppercase mb-6">
                     Get In Touch
                 </span>
-                <h2 className="cta-element font-heading font-bold text-4xl sm:text-5xl lg:text-6xl text-ivory tracking-[-0.03em] leading-[1.1] mb-6">
+                <h2 className="cta-element font-display font-semibold text-4xl sm:text-5xl lg:text-6xl text-obsidian dark:text-dark-text tracking-[-0.02em] leading-[1.08] mb-6">
                     Let&apos;s build something{" "}
-                    <span className="font-cursive text-shimmer text-[1.15em]">exceptional</span>
+                    <span className="text-signal-blue dark:text-signal-blue-dark">exceptional</span>
                 </h2>
-                <p className="cta-element text-ivory/40 text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-14 font-light">
+                <p className="cta-element text-obsidian/60 dark:text-dark-text/60 text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-14">
                     Whether you need a developer, an architect, or just want to talk about
                     systems — I&apos;m always open to new conversations and collaborations.
                 </p>
@@ -111,16 +107,16 @@ export default function ContactCTA() {
                             <Tag
                                 key={cta.label}
                                 {...(extraProps as React.HTMLAttributes<HTMLElement>)}
-                                className={`cta-element btn-magnetic group flex items-center justify-between gap-4 px-7 py-5 rounded-2xl cursor-pointer no-underline transition-all duration-400 ${cta.primary
-                                        ? "bg-champagne text-obsidian border-none shadow-[0_8px_40px_rgba(201,168,76,0.2)]"
-                                        : "bg-white/[0.03] text-ivory border border-white/[0.08] hover:border-champagne/25 hover:bg-white/[0.05]"
+                                className={`cta-element group flex items-center justify-between gap-4 px-7 py-5 rounded-card cursor-pointer no-underline transition-colors duration-300 ${cta.primary
+                                        ? "bg-signal-blue dark:bg-signal-blue-dark text-white border-none"
+                                        : "bg-canvas dark:bg-dark-canvas text-obsidian dark:text-dark-text border border-fog dark:border-dark-border hover:border-obsidian/25"
                                     }`}
                             >
                                 <div className="flex items-center gap-3">
                                     <Icon
                                         size={18}
                                         className={
-                                            cta.primary ? "text-obsidian/70" : "text-champagne/60"
+                                            cta.primary ? "text-white/80" : "text-signal-blue/70 dark:text-signal-blue-dark/70"
                                         }
                                     />
                                     <span
@@ -132,7 +128,7 @@ export default function ContactCTA() {
                                 </div>
                                 <ArrowUpRight
                                     size={16}
-                                    className={`transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${cta.primary ? "text-obsidian/50" : "text-ivory/30"
+                                    className={`transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${cta.primary ? "text-white/60" : "text-obsidian/30 dark:text-dark-text/30"
                                         }`}
                                 />
                             </Tag>
@@ -141,13 +137,13 @@ export default function ContactCTA() {
                 </div>
 
                 {/* Direct email */}
-                <div className="cta-element mt-12 pt-8 border-t border-white/[0.06]">
-                    <p className="text-ivory/30 text-sm font-light mb-2">
+                <div className="cta-element mt-12 pt-8 border-t border-fog dark:border-dark-border">
+                    <p className="text-obsidian/40 dark:text-dark-text/40 text-sm mb-2">
                         Or reach out directly
                     </p>
                     <a
                         href="mailto:aaronjacobsunil@gmail.com"
-                        className="text-champagne text-sm font-mono link-lift inline-block no-underline hover:text-champagne-light transition-colors duration-300"
+                        className="text-signal-blue dark:text-signal-blue-dark text-sm font-mono inline-block no-underline hover:underline"
                     >
                         aaronjacobsunil@gmail.com
                     </a>

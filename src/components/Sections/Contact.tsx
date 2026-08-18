@@ -1,127 +1,114 @@
 'use client';
 
 import { useState } from 'react';
+import { Github, Linkedin, Mail, Send } from 'lucide-react';
 
 export default function Contact() {
-  const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+    const [formState, setFormState] = useState({ name: '', email: '', message: '' });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormState({
-      ...formState,
-      [e.target.name]: e.target.value
-    });
-  };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormState({ ...formState, [e.target.name]: e.target.value });
+    };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const subject = encodeURIComponent(`Portfolio inquiry from ${formState.name || 'a visitor'}`);
+        const body = encodeURIComponent(
+            `${formState.message}\n\n— ${formState.name}\nReply to: ${formState.email}`
+        );
+        // Opens the visitor's own mail client with the message prefilled.
+        // No backend needed, but does require them to have a mail client configured.
+        window.location.href = `mailto:aaronjacobsunil@gmail.com?subject=${subject}&body=${body}`;
+    };
 
-    // Simulate form submission
-    setTimeout(() => {
-      setSubmitted(true);
-      setLoading(false);
-      setFormState({ name: '', email: '', message: '' });
+    return (
+        <section
+            id="contact"
+            className="min-h-screen bg-canvas dark:bg-dark-canvas pt-28 sm:pt-36 pb-24 px-6 sm:px-10 lg:px-16"
+        >
+            <div className="max-w-content mx-auto">
+                <span className="block text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-5">
+                    Get In Touch
+                </span>
+                <h1 className="font-display font-semibold text-3xl sm:text-4xl lg:text-5xl text-obsidian dark:text-dark-text tracking-[-0.02em] mb-4">
+                    Let&apos;s build something great
+                </h1>
+                <p className="text-obsidian/60 dark:text-dark-text-secondary text-base sm:text-lg mb-14 max-w-xl">
+                    Got an idea? Need a developer? Just want to talk shop? Send a message
+                    and it&apos;ll open straight in your mail client, ready to send.
+                </p>
 
-      setTimeout(() => setSubmitted(false), 3000);
-    }, 1000);
-  };
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16">
+                    {/* Form */}
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Your name"
+                            value={formState.name}
+                            onChange={handleChange}
+                            required
+                            className="w-full rounded-link bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border px-4 py-3 text-obsidian dark:text-dark-text text-sm placeholder:text-obsidian/35 dark:placeholder:text-dark-text-secondary/60 focus:outline-none focus:border-signal-blue dark:focus:border-signal-blue-dark transition-colors"
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="your@email.com"
+                            value={formState.email}
+                            onChange={handleChange}
+                            required
+                            className="w-full rounded-link bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border px-4 py-3 text-obsidian dark:text-dark-text text-sm placeholder:text-obsidian/35 dark:placeholder:text-dark-text-secondary/60 focus:outline-none focus:border-signal-blue dark:focus:border-signal-blue-dark transition-colors"
+                        />
+                        <textarea
+                            name="message"
+                            placeholder="What's on your mind?"
+                            rows={5}
+                            value={formState.message}
+                            onChange={handleChange}
+                            required
+                            className="w-full rounded-card bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border px-4 py-3 text-obsidian dark:text-dark-text text-sm placeholder:text-obsidian/35 dark:placeholder:text-dark-text-secondary/60 focus:outline-none focus:border-signal-blue dark:focus:border-signal-blue-dark transition-colors resize-none"
+                        />
+                        <button type="submit" className="btn-primary-pill inline-flex items-center gap-2.5 text-sm">
+                            <Send size={15} />
+                            Send message
+                        </button>
+                    </form>
 
-  return (
-    <section id="contact" className="section contact">
-      <div className="contact-grid">
-        {/* Left Side - Image/Visual */}
-        <div className="contact-visual">
-          <div className="contact-image-frame">
-            <div className="contact-image-placeholder">
-              <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="200" cy="200" r="180" stroke="rgba(90, 150, 255, 0.3)" strokeWidth="2"/>
-                <circle cx="200" cy="150" r="50" fill="rgba(90, 150, 255, 0.2)"/>
-                <path d="M 150 250 Q 200 280 250 250" stroke="rgba(90, 150, 255, 0.3)" strokeWidth="2" fill="none"/>
-                <circle cx="180" cy="140" r="8" fill="rgba(90, 150, 255, 0.4)"/>
-                <circle cx="220" cy="140" r="8" fill="rgba(90, 150, 255, 0.4)"/>
-                <text x="200" y="380" textAnchor="middle" fill="rgba(90, 150, 255, 0.3)" fontSize="16">Let's Connect</text>
-              </svg>
+                    {/* Direct links */}
+                    <div>
+                        <h3 className="text-obsidian/40 dark:text-dark-text-secondary/60 text-[11px] font-semibold tracking-[0.1em] uppercase mb-5">
+                            Or reach out directly
+                        </h3>
+                        <div className="space-y-3">
+                            <a
+                                href="mailto:aaronjacobsunil@gmail.com"
+                                className="flex items-center gap-3 text-obsidian/70 dark:text-dark-text-secondary text-sm hover:text-signal-blue dark:hover:text-signal-blue-dark no-underline transition-colors"
+                            >
+                                <Mail size={16} />
+                                aaronjacobsunil@gmail.com
+                            </a>
+                            <a
+                                href="https://github.com/4aruu"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 text-obsidian/70 dark:text-dark-text-secondary text-sm hover:text-signal-blue dark:hover:text-signal-blue-dark no-underline transition-colors"
+                            >
+                                <Github size={16} />
+                                GitHub
+                            </a>
+                            <a
+                                href="https://www.linkedin.com/in/aaron-jacob-sunil"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 text-obsidian/70 dark:text-dark-text-secondary text-sm hover:text-signal-blue dark:hover:text-signal-blue-dark no-underline transition-colors"
+                            >
+                                <Linkedin size={16} />
+                                LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="contact-glow"></div>
-          </div>
-        </div>
-
-        {/* Right Side - Form & Links */}
-        <div className="contact-form-section">
-          <div className="contact-intro">
-            <h2 className="section-title">Let's build something great</h2>
-            <p className="section-subtitle">Got an idea? Need a developer? Just want to chat about tech? Let's connect.</p>
-          </div>
-
-          {/* Contact Form */}
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <input
-                type="text"
-                name="name"
-                placeholder="Your name"
-                value={formState.name}
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </div>
-
-            <div className="form-group">
-              <input
-                type="email"
-                name="email"
-                placeholder="your@email.com"
-                value={formState.email}
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </div>
-
-            <div className="form-group">
-              <textarea
-                name="message"
-                placeholder="What's on your mind?"
-                rows={4}
-                value={formState.message}
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </div>
-
-            <button type="submit" className="form-submit" disabled={loading}>
-              {loading ? 'Sending...' : submitted ? '✓ Message sent!' : 'Send message'}
-            </button>
-          </form>
-
-          {/* Direct Links */}
-          <div className="contact-direct">
-            <h3 className="contact-subtitle">Or reach out directly</h3>
-            <div className="contact-links">
-              <a href="mailto:aaronjacobsunil@gmail.com" className="contact-link email">
-                <span className="link-icon">✉</span>
-                <span className="link-text">aaronjacobsunil@gmail.com</span>
-              </a>
-              <a href="https://github.com/4aruu" target="_blank" rel="noopener noreferrer" className="contact-link github">
-                <span className="link-icon">→</span>
-                <span className="link-text">GitHub</span>
-              </a>
-              <a href="https://www.linkedin.com/in/aaron-jacob-sunil" target="_blank" rel="noopener noreferrer" className="contact-link linkedin">
-                <span className="link-icon">in</span>
-                <span className="link-text">LinkedIn</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 }
