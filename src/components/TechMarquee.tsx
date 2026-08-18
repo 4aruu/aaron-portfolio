@@ -25,8 +25,8 @@ function Tile({ name, slug }: { name: string; slug: string }) {
     return (
         <div className="flex items-center gap-3 shrink-0 bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border rounded-card px-5 py-3.5 mx-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={iconUrl(slug)} alt="" width={20} height={20} className="opacity-70" />
-            <span className="text-obsidian/70 dark:text-dark-text/70 text-[13px] font-medium whitespace-nowrap">
+            <img src={iconUrl(slug)} alt="" width={20} height={20} className="block shrink-0 opacity-70" />
+            <span className="text-obsidian/70 dark:text-dark-text/70 text-[13px] font-medium leading-none whitespace-nowrap">
                 {name}
             </span>
         </div>
@@ -39,6 +39,11 @@ export default function TechMarquee() {
 
     return (
         <section className="relative py-14 sm:py-20 bg-canvas dark:bg-dark-canvas border-y border-fog dark:border-dark-border overflow-hidden">
+            {/* Section Heading — centered */}
+            <p className="text-center text-[11px] font-semibold tracking-[0.12em] uppercase text-obsidian/40 dark:text-dark-text/40 mb-6 sm:mb-8">
+                Technologies I Work With
+            </p>
+
             <div className="marquee-track flex w-max">
                 <div className="flex">
                     {row.map((item, i) => (

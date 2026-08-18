@@ -64,7 +64,14 @@ export default function ProjectDetail({ projectId }: Props) {
     return (
         <div ref={pageRef} className="min-h-screen bg-canvas dark:bg-dark-canvas text-obsidian dark:text-dark-text">
             {/* ═══ Hero ═══ */}
-            <section className="relative pt-28 sm:pt-36 pb-16 sm:pb-24 px-6 sm:px-10 lg:px-16 border-b border-fog dark:border-dark-border bg-paper dark:bg-dark-surface">
+            <section className="relative pt-28 sm:pt-36 pb-16 sm:pb-24 px-6 sm:px-10 lg:px-16 border-b border-fog dark:border-dark-border bg-paper dark:bg-dark-surface overflow-hidden">
+                {/* Project artwork — static muted presence (no hover context on a full page) */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                    src={`/projects/bg-${project.id}.png`}
+                    alt=""
+                    className="pointer-events-none absolute -right-20 top-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full object-cover grayscale opacity-[0.12] hidden lg:block"
+                />
                 <div className="detail-hero-content relative z-10 max-w-content mx-auto">
                     {/* Back link */}
                     <Link

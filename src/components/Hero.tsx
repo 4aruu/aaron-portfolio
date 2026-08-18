@@ -137,26 +137,26 @@ export default function Hero() {
                     <div ref={ctaRef} className="flex flex-wrap items-center gap-4 mt-10">
                         <button
                             onClick={() => scrollToSection("#contact")}
-                            className="btn-primary-pill flex items-center gap-2.5 cursor-pointer text-sm"
+                            className="btn-primary-pill flex items-center gap-2.5 cursor-pointer text-sm leading-none"
                         >
-                            <Briefcase size={16} />
-                            Let&apos;s Work Together
+                            <Briefcase size={16} className="shrink-0" />
+                            <span>Let&apos;s Work Together</span>
                         </button>
 
                         <button
                             onClick={() => scrollToSection("#projects")}
-                            className="btn-neutral-pill flex items-center gap-2.5 cursor-pointer text-sm"
+                            className="btn-neutral-pill flex items-center gap-2.5 cursor-pointer text-sm leading-none"
                         >
-                            View Projects
+                            <span>View Projects</span>
                         </button>
 
                         <a
                             href="/resume.pdf"
                             download
-                            className="link-inline flex items-center gap-1.5 text-sm font-medium no-underline hover:underline"
+                            className="btn-neutral-pill flex items-center gap-2 cursor-pointer text-sm leading-none no-underline"
                         >
-                            <FileDown size={14} />
-                            Resume
+                            <FileDown size={14} className="shrink-0" />
+                            <span>Resume</span>
                         </a>
                     </div>
                 </div>

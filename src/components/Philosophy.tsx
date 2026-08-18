@@ -70,7 +70,7 @@ export default function Philosophy() {
                         <span className="phil-word inline-block mr-[0.3em] text-signal-blue dark:text-signal-blue-dark">
                             endure
                         </span>
-                        {splitWords("- fault-tolerant, context-aware, and built for what comes next.")}
+                        {splitWords("— fault-tolerant, context-aware, and built for what comes next.")}
                     </p>
                 </div>
 

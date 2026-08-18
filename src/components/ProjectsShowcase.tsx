@@ -3,23 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { PROJECTS } from "@/data/projects";
-import {
-    ArrowUpRight,
-    Salad,
-    Sparkles,
-    Bot,
-    ListChecks,
-    HeartPulse,
-    type LucideIcon,
-} from "lucide-react";
-
-const PROJECT_ICONS: Record<string, LucideIcon> = {
-    nutriswap: Salad,
-    lumira: Sparkles,
-    infobot: Bot,
-    taskit: ListChecks,
-    pharmacy: HeartPulse,
-};
+import { ArrowUpRight } from "lucide-react";
 
 export default function ProjectsShowcase() {
     const sectionRef = useRef<HTMLElement>(null);
@@ -72,10 +56,9 @@ export default function ProjectsShowcase() {
                     </p>
                 </div>
 
-                {/* Projects Grid — grayscale, alternating paper/canvas tone */}
+                {/* Projects Grid — grayscale by default, project artwork colorizes on hover */}
                 <div className="space-y-5">
                     {PROJECTS.map((project, i) => {
-                        const Icon = PROJECT_ICONS[project.id] ?? Sparkles;
                         return (
                             <Link
                                 key={project.id}
@@ -83,11 +66,12 @@ export default function ProjectsShowcase() {
                                 className={`proj-card reveal-scale group relative rounded-card border border-fog dark:border-dark-border overflow-hidden transition-colors duration-300 hover:border-obsidian/30 no-underline block cursor-pointer ${i % 2 === 0 ? "bg-paper dark:bg-dark-surface" : "bg-canvas dark:bg-dark-canvas"
                                     }`}
                             >
-                                {/* Category icon watermark */}
-                                <Icon
-                                    className="pointer-events-none absolute -right-6 -bottom-6 text-obsidian/10 dark:text-dark-text/10 group-hover:text-signal-blue/[0.07] transition-colors duration-300"
-                                    size={180}
-                                    strokeWidth={1}
+                                {/* Project artwork — muted by default, reveals full color on hover */}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                    src={`/projects/bg-${project.id}.png`}
+                                    alt=""
+                                    className="pointer-events-none absolute -right-10 -bottom-10 w-56 h-56 sm:w-64 sm:h-64 rounded-full object-cover grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-70 transition-all duration-500 ease-out"
                                 />
 
                                 <div className="relative z-10 p-8 sm:p-10 lg:p-12">
