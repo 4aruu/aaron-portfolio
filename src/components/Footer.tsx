@@ -40,11 +40,11 @@ export default function Footer() {
 
     return (
         <footer className="relative bg-paper dark:bg-dark-surface border-t border-fog dark:border-dark-border">
-            <div className="max-w-page mx-auto px-6 sm:px-10 lg:px-16 pt-16 sm:pt-20 pb-8">
+            <div className="max-w-page mx-auto px-5 sm:px-10 lg:px-16 pt-12 sm:pt-16 pb-6 sm:pb-8">
                 {/* Main Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
-                    {/* Brand */}
-                    <div className="lg:col-span-1">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 lg:gap-8 mb-10 sm:mb-16">
+                    {/* Brand — spans both cols on mobile */}
+                    <div className="col-span-2 sm:col-span-1 lg:col-span-1">
                         <h3 className="font-display font-semibold text-xl text-obsidian dark:text-dark-text tracking-[-0.01em] mb-3">
                             Aaron Jacob Sunil
                         </h3>

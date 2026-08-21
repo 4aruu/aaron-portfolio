@@ -73,7 +73,7 @@ export default function ContactCTA() {
         <section
             id="contact"
             ref={sectionRef}
-            className="relative py-32 sm:py-40 lg:py-52 px-6 sm:px-10 lg:px-16 overflow-hidden"
+            className="relative py-20 sm:py-32 lg:py-40 px-5 sm:px-10 lg:px-16 overflow-hidden"
         >
             <div className="relative z-10 max-w-[900px] mx-auto text-center">
                 {/* Heading */}
@@ -90,7 +90,7 @@ export default function ContactCTA() {
                 </p>
 
                 {/* CTA Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-2xl mx-auto">
                     {CTAS.map((cta) => {
                         const Icon = cta.icon;
                         const Tag = cta.href.startsWith("#") ? "button" : "a";

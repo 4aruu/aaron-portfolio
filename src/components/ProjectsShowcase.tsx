@@ -37,7 +37,7 @@ export default function ProjectsShowcase() {
         <section
             id="projects"
             ref={sectionRef}
-            className="relative py-24 sm:py-32 bg-canvas dark:bg-dark-canvas px-6 sm:px-10 lg:px-16"
+            className="relative py-16 sm:py-24 bg-canvas dark:bg-dark-canvas px-5 sm:px-10 lg:px-16"
         >
             <div className="max-w-page mx-auto">
                 {/* Section Header */}
@@ -74,7 +74,7 @@ export default function ProjectsShowcase() {
                                     className="pointer-events-none absolute -right-10 -bottom-10 w-56 h-56 sm:w-64 sm:h-64 rounded-full object-cover grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-70 transition-all duration-500 ease-out"
                                 />
 
-                                <div className="relative z-10 p-8 sm:p-10 lg:p-12">
+                                <div className="relative z-10 p-6 sm:p-8 lg:p-10">
                                     <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 lg:gap-12">
                                         {/* Left: Content */}
                                         <div className="flex-1">

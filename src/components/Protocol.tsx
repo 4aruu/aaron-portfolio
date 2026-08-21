@@ -58,7 +58,7 @@ export default function Protocol() {
             {STEPS.map((step, i) => (
                 <div
                     key={i}
-                    className={`protocol-step relative w-full py-24 sm:py-32 px-6 sm:px-10 lg:px-16 border-t border-fog dark:border-dark-border overflow-hidden ${i % 2 === 0 ? "bg-paper dark:bg-dark-surface" : "bg-canvas dark:bg-dark-canvas"
+                    className={`protocol-step relative w-full py-16 sm:py-24 sm:py-32 px-5 sm:px-10 lg:px-16 border-t border-fog dark:border-dark-border overflow-hidden ${i % 2 === 0 ? "bg-paper dark:bg-dark-surface" : "bg-canvas dark:bg-dark-canvas"
                         }`}
                 >
                     {/* Themed icon filling the empty side */}

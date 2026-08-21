@@ -396,7 +396,7 @@ export default function Features() {
         <section
             id="features"
             ref={sectionRef}
-            className="relative py-24 sm:py-32 lg:py-40 px-6 sm:px-10 lg:px-16 bg-canvas dark:bg-dark-canvas"
+            className="relative py-16 sm:py-24 lg:py-32 px-5 sm:px-10 lg:px-16 bg-canvas dark:bg-dark-canvas"
         >
             <div className="max-w-[1400px] mx-auto">
                 {/* Section Header */}

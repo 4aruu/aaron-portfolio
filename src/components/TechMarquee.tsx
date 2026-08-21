@@ -17,15 +17,32 @@ const STACK = [
     { name: "Git", slug: "git" },
 ];
 
-// Monochrome brand icons via Simple Icons CDN, tinted to the obsidian token
-// so the tiles stay inside the grayscale system — no brand colors.
-const iconUrl = (slug: string) => `https://cdn.simpleicons.org/${slug}/1d1d1f`;
+// Monochrome brand icons via Simple Icons CDN.
+// Two variants: dark for light mode, light for dark mode.
+const iconUrl = (slug: string, color: string) =>
+  `https://cdn.simpleicons.org/${slug}/${color}`;
 
 function Tile({ name, slug }: { name: string; slug: string }) {
     return (
         <div className="flex items-center gap-3 shrink-0 bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border rounded-card px-5 py-3.5 mx-2.5">
+            {/* Light mode icon — hidden in dark */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={iconUrl(slug)} alt="" width={20} height={20} className="block shrink-0 opacity-70" />
+            <img
+                src={iconUrl(slug, "1d1d1f")}
+                alt=""
+                width={20}
+                height={20}
+                className="block shrink-0 opacity-60 dark:hidden"
+            />
+            {/* Dark mode icon — hidden in light */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+                src={iconUrl(slug, "f5f5f7")}
+                alt=""
+                width={20}
+                height={20}
+                className="hidden shrink-0 opacity-70 dark:block"
+            />
             <span className="text-obsidian/70 dark:text-dark-text/70 text-[13px] font-medium leading-none whitespace-nowrap">
                 {name}
             </span>

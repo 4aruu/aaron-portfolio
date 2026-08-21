@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
   title: "Aaron Jacob Sunil — Systems-First Developer",
@@ -14,6 +14,16 @@ export const metadata: Metadata = {
   other: {
     "color-scheme": "light dark",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f7" },
+    { media: "(prefers-color-scheme: dark)",  color: "#000000" },
+  ],
 };
 
 export default function RootLayout({

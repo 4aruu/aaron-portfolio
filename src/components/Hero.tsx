@@ -101,23 +101,23 @@ export default function Hero() {
                 strokeWidth={0.75}
             />
 
-            <div className="relative w-full max-w-page mx-auto px-6 sm:px-10 lg:px-16 pt-24 pb-16">
+            <div className="relative w-full max-w-page mx-auto px-5 sm:px-10 lg:px-16 pt-20 sm:pt-24 pb-16">
                 <div className="max-w-content">
                     {/* Kicker */}
-                    <div ref={kickerRef} className="mb-6">
-                        <span className="font-text text-[12px] font-semibold tracking-[0.08em] uppercase text-obsidian/60 dark:text-dark-text/60">
+                    <div ref={kickerRef} className="mb-5 sm:mb-6">
+                        <span className="font-text text-[11px] sm:text-[12px] font-semibold tracking-[0.08em] uppercase text-obsidian/60 dark:text-dark-text/60">
                             Systems-First Developer
                         </span>
                     </div>
 
                     {/* Hero Typography — left-aligned, single tinted word */}
                     <div ref={line1Ref}>
-                        <span className="hero-title-line1 block font-display font-semibold text-obsidian dark:text-dark-text tracking-[-0.015em] text-[clamp(2rem,5vw,4rem)] leading-[1.06]">
+                        <span className="hero-title-line1 block font-display font-semibold text-obsidian dark:text-dark-text tracking-[-0.015em] text-[clamp(1.75rem,5vw,4rem)] leading-[1.06]">
                             Architecture meets
                         </span>
                     </div>
                     <div ref={line2Ref}>
-                        <span className="hero-title-line2 block font-display font-semibold text-signal-blue dark:text-signal-blue-dark tracking-[-0.015em] text-[clamp(2.5rem,7vw,5.5rem)] leading-[1.04] mt-1 min-h-[1.04em]">
+                        <span className="hero-title-line2 block font-display font-semibold text-signal-blue dark:text-signal-blue-dark tracking-[-0.015em] text-[clamp(2.25rem,7vw,5.5rem)] leading-[1.04] mt-1 min-h-[1.04em]">
                             {typedText}
                             <span className="typewriter-cursor" aria-hidden="true" />
                         </span>
@@ -126,18 +126,18 @@ export default function Hero() {
                     {/* Subtitle */}
                     <p
                         ref={subtitleRef}
-                        className="mt-8 text-obsidian/60 dark:text-dark-text/60 text-base sm:text-[17px] leading-[1.47] max-w-xl font-normal"
+                        className="mt-6 sm:mt-8 text-obsidian/60 dark:text-dark-text/60 text-[15px] sm:text-[17px] leading-[1.5] max-w-xl font-normal"
                     >
                         Crafting intelligent, resilient full-stack applications where every
                         system is fault-tolerant, every interface is intentional, and every
                         line of code is built to endure.
                     </p>
 
-                    {/* CTAs */}
-                    <div ref={ctaRef} className="flex flex-wrap items-center gap-4 mt-10">
+                    {/* CTAs — stack vertically on mobile, row on sm+ */}
+                    <div ref={ctaRef} className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 mt-8 sm:mt-10 w-full max-w-[320px] sm:max-w-none">
                         <button
                             onClick={() => scrollToSection("#contact")}
-                            className="btn-primary-pill flex items-center gap-2.5 cursor-pointer text-sm leading-none"
+                            className="btn-primary-pill flex items-center justify-center gap-2.5 cursor-pointer text-sm leading-none w-full sm:w-auto"
                         >
                             <Briefcase size={16} className="shrink-0" />
                             <span>Let&apos;s Work Together</span>
@@ -145,7 +145,7 @@ export default function Hero() {
 
                         <button
                             onClick={() => scrollToSection("#projects")}
-                            className="btn-neutral-pill flex items-center gap-2.5 cursor-pointer text-sm leading-none"
+                            className="btn-neutral-pill flex items-center justify-center gap-2.5 cursor-pointer text-sm leading-none w-full sm:w-auto"
                         >
                             <span>View Projects</span>
                         </button>
@@ -153,7 +153,7 @@ export default function Hero() {
                         <a
                             href="/resume.pdf"
                             download
-                            className="btn-neutral-pill flex items-center gap-2 cursor-pointer text-sm leading-none no-underline"
+                            className="btn-neutral-pill flex items-center justify-center gap-2 cursor-pointer text-sm leading-none no-underline w-full sm:w-auto"
                         >
                             <FileDown size={14} className="shrink-0" />
                             <span>Resume</span>

@@ -53,7 +53,7 @@ export default function Philosophy() {
     return (
         <section
             ref={sectionRef}
-            className="relative py-32 sm:py-40 lg:py-52 px-6 sm:px-10 lg:px-16 bg-canvas dark:bg-dark-canvas overflow-hidden"
+            className="relative py-20 sm:py-32 lg:py-44 px-5 sm:px-10 lg:px-16 bg-canvas dark:bg-dark-canvas overflow-hidden"
         >
             <div className="relative z-10 max-w-content mx-auto">
                 {/* Neutral statement */}

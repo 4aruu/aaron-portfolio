@@ -41,7 +41,7 @@ export default function Navbar() {
                         : "bg-transparent border-b border-transparent"
                     }`}
             >
-                <div className="max-w-page mx-auto px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
+                <div className="max-w-page mx-auto px-5 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
                     {/* Brand */}
                     <span className="font-text font-semibold text-[14px] tracking-[-0.01em] text-obsidian dark:text-dark-text whitespace-nowrap">
                         Aaron Jacob Sunil
