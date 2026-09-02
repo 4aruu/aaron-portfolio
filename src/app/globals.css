@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════
-   PURE CANVAS — Design System
-   Restrained · White-gallery · One accent color
+   QUIET LUXURY — Design System
+   Warm parchment · Sage accent · Editorial serif
    ═══════════════════════════════════════════ */
 
 @layer base {
@@ -19,29 +19,39 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color-scheme: light dark;
+    /* Prevent horizontal overflow on mobile */
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   body {
-    background: #f5f5f7;
-    color: #1d1d1f;
+    background: #faf9f7;       /* warm parchment */
+    color: #2c2a27;            /* warm charcoal */
     font-family: "Inter", system-ui, sans-serif;
     overflow-x: hidden;
   }
 
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: #0f0e0d;     /* warm near-black */
+      color: #e8e4de;          /* warm off-white */
+    }
+  }
+
   ::selection {
-    background: rgba(0, 113, 227, 0.15);
-    color: #1d1d1f;
+    background: rgba(74, 124, 89, 0.18);   /* sage tint */
+    color: #2c2a27;
   }
 
   @media (prefers-color-scheme: dark) {
     ::selection {
-      background: rgba(41, 151, 255, 0.25);
-      color: #f5f5f7;
+      background: rgba(106, 171, 130, 0.28);
+      color: #e8e4de;
     }
   }
 
   :focus-visible {
-    outline: 2px solid #0071e3;
+    outline: 2px solid #4a7c59;    /* sage */
     outline-offset: 2px;
   }
 }
@@ -94,36 +104,36 @@
 
 /* ═══ PILL BUTTONS ═══ */
 .btn-primary-pill {
-  background: #0071e3;
-  color: #ffffff;
+  background: #4a7c59;       /* sage green */
+  color: #faf9f7;
   border-radius: 980px;
   font-weight: 600;
-  padding: 11px 20px;
-  letter-spacing: -0.022em;
+  padding: 11px 22px;
+  letter-spacing: 0.01em;
   border: none;
   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 .btn-primary-pill:hover {
-  opacity: 0.88;
-  transform: scale(1.035);
+  opacity: 0.85;
+  transform: scale(1.03);
 }
 .btn-primary-pill:active {
   transform: scale(0.98);
 }
 
 .btn-neutral-pill {
-  background: #e2e2e5;
-  color: #333336;
+  background: #e8e2da;       /* warm mist */
+  color: #2e2b27;            /* warm charcoal */
   border-radius: 980px;
   font-weight: 600;
-  padding: 11px 20px;
-  letter-spacing: -0.022em;
+  padding: 11px 22px;
+  letter-spacing: 0.01em;
   border: none;
   transition: background 0.2s ease-out, transform 0.2s ease-out;
 }
 .btn-neutral-pill:hover {
-  background: #d6d6d6;
-  transform: scale(1.035);
+  background: #d9d2c8;       /* warm fog */
+  transform: scale(1.03);
 }
 .btn-neutral-pill:active {
   transform: scale(0.98);
@@ -131,24 +141,24 @@
 
 @media (prefers-color-scheme: dark) {
   .btn-neutral-pill {
-    background: #2c2c2e;
-    color: #f5f5f7;
+    background: #252220;     /* warm dark mist */
+    color: #e8e4de;
   }
   .btn-neutral-pill:hover {
-    background: #38383a;
+    background: #2e2b27;
   }
 }
 
 /* ═══ LINK INLINE ═══ */
 .link-inline {
-  color: #0066cc;
+  color: #3d6b4a;            /* deep sage */
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 @media (prefers-color-scheme: dark) {
   .link-inline {
-    color: #2997ff;
+    color: #6aab82;          /* light sage */
   }
 }
 
@@ -172,12 +182,12 @@
   }
 }
 
-/* ═══ TYPEWRITER CURSOR (opt-in continuous animation, per explicit request) ═══ */
+/* ═══ TYPEWRITER CURSOR ═══ */
 .typewriter-cursor {
   display: inline-block;
   width: 3px;
   height: 0.85em;
-  background: #0071e3;
+  background: #4a7c59;       /* sage */
   margin-left: 4px;
   vertical-align: text-bottom;
   animation: cursor-blink 0.9s step-end infinite;
@@ -185,7 +195,7 @@
 
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  50%       { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -194,18 +204,12 @@
     opacity: 1;
   }
 }
-/* ═══ MOBILE VIEWPORT FIX ═══ */
-/* Prevent horizontal scroll from any element poking out */
-html, body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
 
 /* ═══ PILL BUTTON MOBILE SIZING ═══ */
 @media (max-width: 639px) {
   .btn-primary-pill,
   .btn-neutral-pill {
-    padding: 13px 20px;   /* slightly taller touch target on mobile */
+    padding: 13px 20px;
     min-height: 44px;
     font-size: 14px;
   }

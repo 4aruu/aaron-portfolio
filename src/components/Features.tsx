@@ -81,7 +81,7 @@ function ShufflerCard() {
                                         </div>
                                     </div>
                                     {isTop && (
-                                        <div className="w-2 h-2 rounded-full bg-emerald-400 " />
+                                        <div className="w-2 h-2 rounded-full bg-[#6aab82] dark:bg-[#4a7c59]" />
                                     )}
                                 </div>
                             </div>
@@ -155,7 +155,7 @@ function TypewriterCard() {
 
             {/* Live Feed Label */}
             <div className="flex items-center gap-2 mb-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 " />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#6aab82] dark:bg-[#4a7c59]" />
                 <span className="text-[10px] font-mono text-obsidian/50 dark:text-dark-text/50 tracking-[0.15em] uppercase">
                     Live Feed
                 </span>
@@ -298,7 +298,7 @@ function SchedulerCard() {
                 >
                     <path
                         d="M5 3l14 8-6 2-3 6z"
-                        fill="#0071e3"
+                        fill="#4a7c59"
                         stroke="#0D0D12"
                         strokeWidth="1"
                     />
