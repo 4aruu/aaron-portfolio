@@ -150,7 +150,9 @@ export default function AtlasCube() {
         gsap.set(el.querySelectorAll(".cube-trace"), { clearProps: "all" });
         gsap.set(el.querySelectorAll(".cube-lbl, .cube-guide, .cube-node, .cube-f > :not(.cube-sh)"), { clearProps: "opacity" });
         const sy0 = window.scrollY;
-        window.scrollTo(0, 0); // measure the page as it sits at the top
+        // Measure the page as it sits at the top. "instant", because the site sets
+        // scroll-behavior: smooth, and a smooth jump would measure mid-scroll.
+        window.scrollTo({ top: 0, behavior: "instant" });
 
         const W = window.innerWidth, H = window.innerHeight;
         S = el.querySelector<HTMLElement>(".cube-part")!.offsetWidth || 200; // the base is S wide
@@ -270,13 +272,14 @@ export default function AtlasCube() {
               idle.pause();
               gsap.to(cam, { idle: 0.5, px: 0, py: 0, duration: 0.4, onUpdate: mark });
             } else if (p <= 0.002 && idle?.paused()) idle.resume();
-            el.style.visibility = p >= 0.999 ? "hidden" : "";
+            // by 97% everything on the stage has faded; hide it so nothing can linger
+            el.style.visibility = p >= 0.97 ? "hidden" : "";
           },
         });
         // the pin adds two screen-heights above everything else: re-measure the other triggers
         ScrollTrigger.refresh();
         idle = gsap.to(cam, { idle: 1, duration: 3.6, ease: "sine.inOut", yoyo: true, repeat: -1, startAt: { idle: 0 }, onUpdate: mark });
-        window.scrollTo(0, progress ? trigRef.current.start + progress * (trigRef.current.end - trigRef.current.start) : sy0);
+        window.scrollTo({ top: progress ? trigRef.current.start + progress * (trigRef.current.end - trigRef.current.start) : sy0, behavior: "instant" });
         render();
       };
 
@@ -288,8 +291,14 @@ export default function AtlasCube() {
       }
       gsap.ticker.add(render);
 
+      /* Rebuild only when the width changes (a rotation or a real resize). On
+         phones the address bar shows and hides while you scroll, which changes
+         only the height: rebuilding then would drop the pin mid-swipe. */
       let rt = 0;
+      let lastWidth = window.innerWidth;
       const onResize = () => {
+        if (window.innerWidth === lastWidth) return;
+        lastWidth = window.innerWidth;
         window.clearTimeout(rt);
         rt = window.setTimeout(setup, 200);
       };

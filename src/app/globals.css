@@ -1111,7 +1111,7 @@ html:has(.atlas-index[open]) { overflow: hidden; }
 .cube-part, .cube-f { position: absolute; transform-style: preserve-3d; }
 .cube-part { left: 0; top: 0; }
 .cube-f {
-  left: 50%; top: 50%; overflow: hidden; backface-visibility: hidden; container-type: size;
+  left: 50%; top: 50%; overflow: hidden; -webkit-backface-visibility: hidden; backface-visibility: hidden; container-type: size;
   background: rgb(var(--cube-face)); box-shadow: inset 0 0 0 1px var(--cube-edge);
 }
 .cube-sh { position: absolute; inset: 0; background: rgb(var(--cube-shade)); pointer-events: none; }
