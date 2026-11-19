@@ -1,11 +1,5 @@
-import Skills from '@/components/Sections/Skills';
+import { redirect } from "next/navigation";
 
-export const metadata = { title: 'Skills' };
-
-export default function SkillsPage() {
-  return (
-    <main>
-      <Skills />
-    </main>
-  );
+export default function Page() {
+  redirect("/#toolkit");
 }

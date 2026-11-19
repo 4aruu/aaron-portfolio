@@ -1,48 +1,31 @@
-"use client";
-
-import { useEffect } from "react";
-import Lenis from "lenis";
-
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import TechMarquee from "@/components/TechMarquee";
-import Features from "@/components/Features";
-import Philosophy from "@/components/Philosophy";
-import Protocol from "@/components/Protocol";
-import ProjectsShowcase from "@/components/ProjectsShowcase";
-import ContactCTA from "@/components/ContactCTA";
-import Footer from "@/components/Footer";
+import SiteHeader from "@/components/home/SiteHeader";
+import Hero from "@/components/home/Hero";
+import ExperienceSection from "@/components/home/ExperienceSection";
+import WorkSection from "@/components/home/WorkSection";
+import TimelineSection from "@/components/home/TimelineSection";
+import ToolkitSection from "@/components/home/ToolkitSection";
+import ContactSection from "@/components/home/ContactSection";
+import SiteFooter from "@/components/home/SiteFooter";
 
 export default function Page() {
-  // Smooth scrolling
-  useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.07,
-      smoothWheel: true,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-    return () => lenis.destroy();
-  }, []);
-
   return (
     <>
-      <Navbar />
-      <main>
+      <a
+        href="#main"
+        className="btn btn-primary sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300]"
+      >
+        Skip to content
+      </a>
+      <SiteHeader />
+      <main id="main">
         <Hero />
-        <TechMarquee />
-        <Features />
-        <Philosophy />
-        <Protocol />
-        <ProjectsShowcase />
-        <ContactCTA />
+        <ExperienceSection />
+        <WorkSection />
+        <TimelineSection />
+        <ToolkitSection />
+        <ContactSection />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

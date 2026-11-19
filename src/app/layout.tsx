@@ -1,53 +1,45 @@
+import "@fontsource/ibm-plex-sans/latin-400.css";
+import "@fontsource/ibm-plex-sans/latin-500.css";
+import "@fontsource/ibm-plex-sans/latin-600.css";
+import "@fontsource/ibm-plex-mono/latin-400.css";
+import "@fontsource/ibm-plex-mono/latin-500.css";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 
+const title = "Aaron Jacob Sunil — Cloud & AI Engineer";
+const description =
+  "AWS Certified Solutions Architect – Associate. I build AI systems and the cloud infrastructure they run on: multi-AZ AWS architectures, RAG pipelines and full-stack apps.";
+
 export const metadata: Metadata = {
-  title: "Aaron Jacob Sunil — Systems-First Developer",
-  description:
-    "Systems-first developer crafting intelligent, resilient full-stack applications. Architecture meets intention.",
-  openGraph: {
-    title: "Aaron Jacob Sunil — Systems-First Developer",
-    description:
-      "Systems-first developer crafting intelligent, resilient full-stack applications.",
-    type: "website",
-  },
-  other: {
-    "color-scheme": "light dark",
-  },
+  title,
+  description,
+  openGraph: { title, description, type: "website" },
+  twitter: { card: "summary", title, description },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f5f7" },
-    { media: "(prefers-color-scheme: dark)",  color: "#000000" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f7f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0f11" },
   ],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
+        {/* Theme: "light dark" follows the system; a stored override pins it.
+            Runs before first paint so the page never flashes the wrong theme. */}
+        <meta name="color-scheme" content="light dark" suppressHydrationWarning />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var s=localStorage.getItem("color-scheme");if(s==="light"||s==="dark")document.querySelector('meta[name="color-scheme"]').content=s}catch(e){}`,
+          }}
         />
       </head>
-      <body className="bg-canvas dark:bg-dark-canvas text-obsidian dark:text-dark-text font-text">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

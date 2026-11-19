@@ -2,226 +2,753 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ═══════════════════════════════════════════
-   QUIET LUXURY — Design System
-   Warm parchment · Sage accent · Editorial serif
-   ═══════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   Design system
+   - Type: IBM Plex Sans (UI) + IBM Plex Mono (labels, data). Weights 400/500/600.
+     Minor Third scale from 16px. Nothing below 12px.
+   - Colour: neutral canvas (L0), white/raised structure (L1), one accent.
+     Depth from 1px borders; shadows stay under 0.08 alpha.
+   - Space: 4/8pt. Motion: 100/150/200/300ms, transform + opacity only.
+   Light and dark follow prefers-color-scheme.
+   ════════════════════════════════════════════════════════════════ */
 
 @layer base {
-  * {
+  :root {
+    /* surfaces (R G B, so Tailwind can apply alpha) */
+    --l0: 247 247 245;
+    --l1: 255 255 255;
+    --l2: 255 255 255;
+    /* text */
+    --ink: 22 24 29;
+    --ink-2: 87 92 102;
+    --ink-3: 107 112 122;
+    /* accent: one hue for actions, links, focus */
+    --accent: 194 65 12;
+    --accent-ink: 255 255 255;
+    /* hairlines */
+    --line: 22 24 29;
+    --line-a: 0.09;
+    --line-strong-a: 0.18;
+
+    --shadow-1: 0 1px 2px rgba(22, 24, 29, 0.04);
+    --edge: none;
+
+    --motion-100: 100ms;
+    --motion-150: 150ms;
+    --motion-200: 200ms;
+    --motion-300: 300ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+
+    --font-sans: "IBM Plex Sans";
+    --font-mono: "IBM Plex Mono";
+
+    --vp-wide: 1280px;
+    --header-h: 64px;
+
+    color-scheme: light dark;
+  }
+
+  /* Theme. <meta name="color-scheme"> is the switch: "light dark" follows the
+     system, "light"/"dark" pin one (see ThemeToggle.tsx). Dark tokens are listed
+     twice: once for a pinned dark theme, once for a dark system with no pin. */
+  :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+    --l0: 14 15 17;
+    --l1: 22 24 27;
+    --l2: 28 30 34;
+    --ink: 236 237 239;
+    --ink-2: 163 168 178;
+    --ink-3: 139 144 155;
+    --accent: 251 146 60;
+    --accent-ink: 22 24 29;
+    --line: 236 237 239;
+    --line-a: 0.1;
+    --line-strong-a: 0.2;
+    --shadow-1: none;
+    --edge: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    color-scheme: dark;
+  }
+  :root:has(> head > meta[name="color-scheme"][content="light"]) {
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not(:has(> head > meta[name="color-scheme"][content="light"])) {
+      --l0: 14 15 17;
+      --l1: 22 24 27;
+      --l2: 28 30 34;
+      --ink: 236 237 239;
+      --ink-2: 163 168 178;
+      --ink-3: 139 144 155;
+      --accent: 251 146 60;
+      --accent-ink: 22 24 29;
+      --line: 236 237 239;
+      --line-a: 0.1;
+      --line-strong-a: 0.2;
+      --shadow-1: none;
+      --edge: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      color-scheme: dark;
+    }
+  }
+
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
   }
 
   html {
-    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color-scheme: light dark;
-    /* Prevent horizontal overflow on mobile */
-    max-width: 100%;
-    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 16px);
   }
 
   body {
-    background: #faf9f7;       /* warm parchment */
-    color: #2c2a27;            /* warm charcoal */
-    font-family: "Inter", system-ui, sans-serif;
-    overflow-x: hidden;
+    margin: 0;
+    background: rgb(var(--l0));
+    color: rgb(var(--ink));
+    font-family: var(--font-sans, "IBM Plex Sans"), system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.55;
+    overflow-x: clip;
   }
 
-  @media (prefers-color-scheme: dark) {
-    body {
-      background: #0f0e0d;     /* warm near-black */
-      color: #e8e4de;          /* warm off-white */
-    }
+  h1, h2, h3, h4 {
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.2;
   }
+
+  p { margin: 0; }
 
   ::selection {
-    background: rgba(74, 124, 89, 0.18);   /* sage tint */
-    color: #2c2a27;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    ::selection {
-      background: rgba(106, 171, 130, 0.28);
-      color: #e8e4de;
-    }
+    background: rgb(var(--accent) / 0.18);
+    color: rgb(var(--ink));
   }
 
   :focus-visible {
-    outline: 2px solid #4a7c59;    /* sage */
+    outline: 2px solid rgb(var(--accent));
     outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
   }
 }
 
-/* ═══ SCROLL REVEAL (used by GSAP ScrollTrigger targets) ═══ */
-.reveal-up {
-  opacity: 0;
-  transform: translateY(24px);
-}
-
-.reveal-up.revealed {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-40px);
-}
-.reveal-left.revealed {
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal-right {
-  opacity: 0;
-  transform: translateX(40px);
-}
-.reveal-right.revealed {
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal-scale {
-  opacity: 0;
-  transform: scale(0.96);
-}
-.reveal-scale.revealed {
-  opacity: 1;
-  transform: scale(1);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ═══ PILL BUTTONS ═══ */
-.btn-primary-pill {
-  background: #4a7c59;       /* sage green */
-  color: #faf9f7;
-  border-radius: 980px;
-  font-weight: 600;
-  padding: 11px 22px;
-  letter-spacing: 0.01em;
-  border: none;
-  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
-}
-.btn-primary-pill:hover {
-  opacity: 0.85;
-  transform: scale(1.03);
-}
-.btn-primary-pill:active {
-  transform: scale(0.98);
-}
-
-.btn-neutral-pill {
-  background: #e8e2da;       /* warm mist */
-  color: #2e2b27;            /* warm charcoal */
-  border-radius: 980px;
-  font-weight: 600;
-  padding: 11px 22px;
-  letter-spacing: 0.01em;
-  border: none;
-  transition: background 0.2s ease-out, transform 0.2s ease-out;
-}
-.btn-neutral-pill:hover {
-  background: #d9d2c8;       /* warm fog */
-  transform: scale(1.03);
-}
-.btn-neutral-pill:active {
-  transform: scale(0.98);
-}
-
-@media (prefers-color-scheme: dark) {
-  .btn-neutral-pill {
-    background: #252220;     /* warm dark mist */
-    color: #e8e4de;
+@layer components {
+  /* ── Layout ── */
+  .page {
+    width: 100%;
+    max-width: var(--vp-wide);
+    margin-inline: auto;
+    padding-inline: 24px;
   }
-  .btn-neutral-pill:hover {
-    background: #2e2b27;
+  @media (min-width: 768px) {
+    .page { padding-inline: 48px; }
   }
-}
 
-/* ═══ LINK INLINE ═══ */
-.link-inline {
-  color: #3d6b4a;            /* deep sage */
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-@media (prefers-color-scheme: dark) {
-  .link-inline {
-    color: #6aab82;          /* light sage */
+  /* Sections are separated by space only (about a quarter screen), no rules. */
+  .section { padding-block: 56px; }
+  @media (min-width: 768px) {
+    .section { padding-block: 88px; }
   }
-}
+  /* The hero owns the whole first screen; nothing of the next section shows. */
 
-/* ═══ TECH MARQUEE ═══ */
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
 
-.marquee-track {
-  animation: marquee-scroll 32s linear infinite;
-}
-
-.marquee-track:hover {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
+  /* ── Type roles ── */
+  .t-display {
+    font-size: 2.488rem; /* Minor Third step 5 */
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    font-weight: 600;
   }
-}
-
-/* ═══ TYPEWRITER CURSOR ═══ */
-.typewriter-cursor {
-  display: inline-block;
-  width: 3px;
-  height: 0.85em;
-  background: #4a7c59;       /* sage */
-  margin-left: 4px;
-  vertical-align: text-bottom;
-  animation: cursor-blink 0.9s step-end infinite;
-}
-
-@keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .typewriter-cursor {
-    animation: none;
-    opacity: 1;
+  @media (min-width: 768px) {
+    .t-display { font-size: 3.583rem; line-height: 1.05; } /* step 7 */
   }
-}
+  .t-h2 { font-size: 1.728rem; line-height: 1.2; letter-spacing: -0.01em; font-weight: 600; }
+  .t-h3 { font-size: 1.44rem; line-height: 1.25; font-weight: 600; }
+  .t-h4 { font-size: 1.2rem; line-height: 1.25; font-weight: 500; }
+  .t-body { font-size: 1rem; line-height: 1.55; }
+  .t-secondary { font-size: 0.875rem; line-height: 1.5; }
+  .t-meta {
+    font-family: var(--font-mono, "IBM Plex Mono"), ui-monospace, monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+  }
+  .t-label {
+    font-family: var(--font-mono, "IBM Plex Mono"), ui-monospace, monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(var(--ink-3));
+  }
+  .prose-w { max-width: 68ch; }
 
-/* ═══ PILL BUTTON MOBILE SIZING ═══ */
-@media (max-width: 639px) {
-  .btn-primary-pill,
-  .btn-neutral-pill {
-    padding: 13px 20px;
+  /* ── Surfaces ── */
+  .surface {
+    background: rgb(var(--l1));
+    border: 1px solid rgb(var(--line) / var(--line-a));
+    border-radius: 12px;
+    box-shadow: var(--shadow-1), var(--edge);
+  }
+  .hairline-rows > * + * {
+    border-top: 1px solid rgb(var(--line) / var(--line-a));
+  }
+
+  /* ── Buttons: one pair ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     min-height: 44px;
-    font-size: 14px;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition:
+      background-color var(--motion-150) var(--ease-out),
+      border-color var(--motion-150) var(--ease-out),
+      color var(--motion-150) var(--ease-out),
+      transform var(--motion-100) var(--ease-out);
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary {
+    background: rgb(var(--accent));
+    color: rgb(var(--accent-ink));
+  }
+  .btn-primary:hover { background: rgb(var(--accent) / 0.9); }
+  .btn-secondary {
+    background: rgb(var(--l1));
+    color: rgb(var(--ink));
+    border-color: rgb(var(--line) / var(--line-strong-a));
+  }
+  .btn-secondary:hover { border-color: rgb(var(--ink) / 0.4); }
+
+  /* ── Links ── */
+  .link {
+    color: rgb(var(--ink));
+    text-decoration: underline;
+    text-decoration-color: rgb(var(--line) / var(--line-strong-a));
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-color var(--motion-150) var(--ease-out), color var(--motion-150) var(--ease-out);
+  }
+  .link:hover {
+    color: rgb(var(--accent));
+    text-decoration-color: currentColor;
+  }
+  .link-quiet {
+    color: rgb(var(--ink-2));
+    text-decoration: none;
+    transition: color var(--motion-150) var(--ease-out);
+  }
+  .link-quiet:hover { color: rgb(var(--ink)); }
+
+  /* ── Hero entrance: once, on load ── */
+  .enter {
+    animation: enter var(--motion-300) var(--ease-out) both;
+  }
+  .enter-2 { animation-delay: 100ms; }
+  .enter-3 { animation-delay: 200ms; }
+  @keyframes enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .enter { animation: none; }
+    .btn:active { transform: none; }
+  }
+
+  /* ── Flow diagram (horizontal on medium+, vertical on narrow) ── */
+  .flow {
+    display: grid;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  @media (min-width: 768px) {
+    .flow { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; }
+  }
+  .flow-step {
+    position: relative;
+    padding: 12px;
+    border: 1px solid rgb(var(--line) / var(--line-a));
+    border-radius: 8px;
+    background: rgb(var(--l0));
+  }
+  @media (min-width: 768px) {
+    .flow-step + .flow-step { margin-left: 24px; }
+    .flow-step + .flow-step::before {
+      content: "";
+      position: absolute;
+      left: -24px;
+      top: 50%;
+      width: 24px;
+      height: 1px;
+      background: rgb(var(--ink-3));
+    }
+    .flow-step + .flow-step::after {
+      content: "";
+      position: absolute;
+      left: -6px;
+      top: calc(50% - 4px);
+      border: 4px solid transparent;
+      border-left: 5px solid rgb(var(--ink-3));
+      border-right: 0;
+    }
+  }
+  @media (max-width: 767.98px) {
+    .flow-step + .flow-step { margin-top: 16px; }
+    .flow-step + .flow-step::before {
+      content: "";
+      position: absolute;
+      top: -17px;
+      left: 24px;
+      width: 1px;
+      height: 16px;
+      background: rgb(var(--ink-3));
+    }
   }
 }
 
-/* ═══ HERO TYPOGRAPHY CLAMP OVERRIDES ═══ */
-@media (max-width: 479px) {
-  .hero-title-line1 { font-size: clamp(1.5rem, 7.5vw, 2rem) !important; }
-  .hero-title-line2 { font-size: clamp(2rem, 10vw, 2.5rem) !important; }
+/* ════════════════════════════════════════════════════════════════
+   Legacy classes still used by the project detail pages.
+   Mapped onto the new tokens so those pages match the new system.
+   ════════════════════════════════════════════════════════════════ */
+.btn-primary-pill,
+.btn-neutral-pill {
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: background-color var(--motion-150) var(--ease-out), border-color var(--motion-150) var(--ease-out);
+}
+.btn-primary-pill { background: rgb(var(--accent)); color: rgb(var(--accent-ink)); }
+.btn-primary-pill:hover { background: rgb(var(--accent) / 0.9); }
+.btn-neutral-pill {
+  background: rgb(var(--l1));
+  color: rgb(var(--ink));
+  border-color: rgb(var(--line) / var(--line-strong-a));
+}
+.btn-neutral-pill:hover { border-color: rgb(var(--ink) / 0.4); }
+
+.link-inline {
+  color: rgb(var(--accent));
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-@media (min-width: 480px) and (max-width: 639px) {
-  .hero-title-line1 { font-size: clamp(1.75rem, 6vw, 2.5rem) !important; }
-  .hero-title-line2 { font-size: clamp(2.25rem, 8vw, 3.25rem) !important; }
+/* Detail pages reveal sections on intersection; keep them visible. */
+.reveal-up, .reveal-left, .reveal-right, .reveal-scale { opacity: 1; transform: none; }
+
+/* ════════════════════════════════════════════════════════════════
+   Theme switch. Thumb position and icons come from CSS (the meta tag and
+   the system preference), so the switch is right before React hydrates.
+   ════════════════════════════════════════════════════════════════ */
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 999px;
 }
+.theme-switch-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 52px;
+  height: 28px;
+  padding: 0 7px;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--line) / var(--line-strong-a));
+  background: rgb(var(--l1));
+  transition: border-color var(--motion-150) var(--ease-out);
+}
+.theme-switch:hover .theme-switch-track { border-color: rgb(var(--ink) / 0.4); }
+.theme-switch-icon { position: relative; color: rgb(var(--ink-3)); }
+.theme-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgb(var(--ink));
+  transition: transform var(--motion-200) var(--ease-out);
+}
+/* light: thumb covers the sun side's opposite, moon side shows */
+.theme-switch-sun { color: rgb(var(--accent)); }
+.theme-switch-thumb { transform: translateX(24px); }
+
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-switch-thumb { transform: translateX(0); }
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-switch-sun { color: rgb(var(--ink-3)); }
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-switch-moon { color: rgb(var(--accent)); }
+@media (prefers-color-scheme: dark) {
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .theme-switch-thumb { transform: translateX(0); }
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .theme-switch-sun { color: rgb(var(--ink-3)); }
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .theme-switch-moon { color: rgb(var(--accent)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch-thumb { transition: none; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Timeline. Phone: one column on a left rail. Medium+: two columns either
+   side of a centre rail; each entry spans two grid rows, so entries
+   interlock instead of each taking a full row.
+   ════════════════════════════════════════════════════════════════ */
+.tl {
+  --rail-x: 7px;
+  --gap: 20px;
+  position: relative;
+  display: grid;
+  gap: 16px;
+}
+.tl::before,
+.tl::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  bottom: 24px;
+  left: var(--rail-x);
+  width: 2px;
+  border-radius: 2px;
+  background: rgb(var(--line) / var(--line-strong-a));
+}
+.tl::after {
+  background: rgb(var(--accent));
+  transform-origin: top;
+}
+.tl-item { position: relative; padding-left: 36px; }
+.tl-dot {
+  position: absolute;
+  top: 22px;
+  left: 0;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: rgb(var(--l0));
+  border: 2px solid rgb(var(--accent));
+}
+.tl-dot::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 999px;
+  background: rgb(var(--accent));
+}
+.tl-item[data-kind="Now"] .tl-dot { box-shadow: 0 0 0 4px rgb(var(--accent) / 0.18); }
+
+@media (min-width: 768px) {
+  .tl {
+    --gap: 64px;
+    --rail-x: calc(50% - 1px);
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--gap);
+    row-gap: 0;
+  }
+  .tl-item {
+    padding: 0 0 16px;
+    grid-row: var(--row) / span 2;
+  }
+  .tl-item:nth-child(odd) { grid-column: 1; }
+  .tl-item:nth-child(even) { grid-column: 2; }
+  .tl-item:nth-child(odd) .tl-dot { left: auto; right: calc(var(--gap) / -2 - 8px); }
+  .tl-item:nth-child(even) .tl-dot { left: calc(var(--gap) / -2 - 8px); }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Scroll-driven motion. Progressive enhancement: without support, or with
+   reduced motion, everything is simply visible and the rail is full.
+   Only transform and opacity animate.
+   ════════════════════════════════════════════════════════════════ */
+.scroll-progress { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes reveal-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes grow-y {
+      from { transform: scaleY(0); }
+      to { transform: scaleY(1); }
+    }
+    @keyframes dot-on {
+      from { opacity: 0; transform: scale(0.4); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes grow-x {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    /* Sections and cards rise into place as they enter. Entry only: nothing
+       fades out while you are reading it. */
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 80%;
+    }
+
+    /* Pipeline steps arrive one after another. */
+    .flow-step {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 12%) entry calc(60% + var(--i, 0) * 12%);
+    }
+
+    /* The timeline rail fills to wherever the middle of the screen is. */
+    .tl { view-timeline: --tl block; }
+    .tl::after {
+      animation: grow-y linear both;
+      animation-timeline: --tl;
+      animation-range: cover 50vh cover calc(100% - 50vh);
+    }
+    /* Each dot lights up as its entry reaches the middle of the screen. */
+    .tl-dot::after {
+      animation: dot-on linear both;
+      animation-timeline: view();
+      animation-range: cover calc(50vh - 48px) cover 50vh;
+    }
+
+    /* Reading progress under the header. */
+    .scroll-progress {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: rgb(var(--accent));
+      transform-origin: 0 50%;
+      animation: grow-x linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Hero stage
+   The first-load sequence is the one place motion runs longer than the
+   300ms product token: it plays once, then everything rests.
+   ════════════════════════════════════════════════════════════════ */
+.hero { isolation: isolate; }
+
+/* Blueprint grid, fading out from the top centre. */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgb(var(--line) / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--line) / 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+/* One soft accent glow behind the system map. Single hue, low alpha. */
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  z-index: -1;
+  width: min(960px, 90vw);
+  height: 360px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgb(var(--accent) / 0.10), transparent);
+  pointer-events: none;
+}
+
+.hero-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px 0 14px;
+  border: 1px solid rgb(var(--line) / var(--line-strong-a));
+  border-radius: 999px;
+  background: rgb(var(--l1));
+  color: rgb(var(--ink));
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color var(--motion-150) var(--ease-out);
+}
+.hero-notice:hover { border-color: rgb(var(--accent) / 0.6); }
+.hero-notice svg { color: rgb(var(--ink-3)); transition: transform var(--motion-150) var(--ease-out); }
+.hero-notice:hover svg { transform: translateX(2px); color: rgb(var(--accent)); }
+.hero-notice-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgb(var(--accent));
+  box-shadow: 0 0 0 3px rgb(var(--accent) / 0.18);
+}
+
+.t-hero {
+  font-size: clamp(2.6rem, 6.4vw + 0.5rem, 5.75rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+  color: rgb(var(--ink));
+  text-wrap: balance;
+}
+.t-lead { font-size: 1.125rem; line-height: 1.55; }
+@media (min-width: 768px) { .t-lead { font-size: 1.25rem; } }
+
+.hero-word { display: inline-block; white-space: pre; }
+
+.enter-d4 { animation-delay: 520ms; }
+.enter-d5 { animation-delay: 620ms; }
+.enter-d6 { animation-delay: 1500ms; }
+
+/* ── System map (SVG) ── */
+.system-map svg { overflow: visible; }
+.sm-frame { fill: rgb(var(--l1)); stroke: rgb(var(--line) / var(--line-strong-a)); stroke-width: 1; }
+.sm-zone { fill: none; stroke: rgb(var(--accent) / 0.45); stroke-width: 1; stroke-dasharray: 4 4; }
+.sm-title {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  fill: rgb(var(--ink-3));
+}
+.sm-box { fill: rgb(var(--l0)); stroke: rgb(var(--line) / var(--line-strong-a)); stroke-width: 1; }
+.sm-box-accent { stroke: rgb(var(--accent)); }
+.sm-label { font-size: 14px; font-weight: 500; fill: rgb(var(--ink)); }
+.sm-note { font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; fill: rgb(var(--ink-3)); }
+.sm-wire { fill: none; stroke: rgb(var(--ink-3)); stroke-width: 1.5; }
+.sm-pulse { fill: rgb(var(--accent)); opacity: 0; offset-rotate: 0deg; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes word-rise {
+    from { opacity: 0; transform: translateY(0.35em); filter: blur(6px); }
+    to { opacity: 1; transform: none; filter: none; }
+  }
+  .hero-word { animation: word-rise 700ms var(--ease-out) both; }
+
+  .enter { animation-duration: 600ms; }
+
+  @keyframes sm-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+  .sm-frame-g { animation: sm-in 600ms var(--ease-out) 400ms both; }
+  .sm-node { animation: sm-in 500ms var(--ease-out) both; transform-box: fill-box; }
+
+  /* Wires draw in. pathLength=1 is set in markup, so 1 = the full path. */
+  @keyframes wire-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  .sm-wire { stroke-dasharray: 1; stroke-dashoffset: 1; animation: wire-draw 500ms var(--ease-out) both; }
+
+  /* Request pulses: run through each system twice, then rest. */
+  @keyframes pulse-run {
+    0% { offset-distance: 0%; opacity: 0; }
+    8% { opacity: 1; }
+    92% { opacity: 1; }
+    100% { offset-distance: 100%; opacity: 0; }
+  }
+  .sm-pulse { animation: pulse-run 1600ms cubic-bezier(0.45, 0, 0.25, 1) 2 both; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Editorial section heads: big title left, lead right.
+   ════════════════════════════════════════════════════════════════ */
+.t-section {
+  font-size: clamp(2rem, 3vw + 1rem, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+.section-index {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: rgb(var(--accent));
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Scroll statement: words light up in reading order as it scrolls through.
+   Without support (or with reduced motion) it is simply full contrast.
+   ════════════════════════════════════════════════════════════════ */
+.statement {
+  font-size: clamp(1.75rem, 2.6vw + 1rem, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+  color: rgb(var(--ink));
+  text-wrap: pretty;
+  max-width: 28ch;
+}
+.statement em { font-style: normal; color: rgb(var(--accent)); }
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes word-lit { from { opacity: 0.16; } to { opacity: 1; } }
+    .statement { view-timeline: --stmt block; }
+    .statement-word {
+      animation: word-lit linear both;
+      animation-timeline: --stmt;
+      animation-range:
+        cover calc(20% + var(--i) * (35% / var(--n)))
+        cover calc(20% + (var(--i) + 1) * (35% / var(--n)));
+    }
+  }
+}
+
+/* ── Case study lead number ── */
+.t-metric {
+  font-size: clamp(3rem, 4vw + 1rem, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  color: rgb(var(--accent));
+}
+
+/* ── Toolkit bento: the lead card carries the accent edge ── */
+.bento-lead { box-shadow: inset 0 2px 0 rgb(var(--accent)), var(--shadow-1); }
+
+/* ── Closing band: inverted surface in both themes ── */
+.cta-band {
+  border-radius: 20px;
+  background: rgb(var(--ink));
+  color: rgb(var(--l0));
+}
+.cta-band .section-index { color: rgb(var(--l0) / 0.72); }
+.cta-muted { color: rgb(var(--l0) / 0.72); }
+.cta-card {
+  border-radius: 12px;
+  border: 1px solid rgb(var(--l0) / 0.16);
+}
+.cta-card > * + * { border-top-color: rgb(var(--l0) / 0.16) !important; }
+.cta-card .t-label { color: rgb(var(--l0) / 0.6); }
+.cta-card dd, .cta-card .link { color: rgb(var(--l0)); }
+.cta-card .link { text-decoration-color: rgb(var(--l0) / 0.4); }
+.cta-card .link:hover { color: rgb(var(--accent)); }
+.btn-inverse {
+  background: transparent;
+  color: rgb(var(--l0));
+  border-color: rgb(var(--l0) / 0.3);
+}
+.btn-inverse:hover { border-color: rgb(var(--l0) / 0.7); }

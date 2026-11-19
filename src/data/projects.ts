@@ -1,231 +1,231 @@
+/**
+ * Project content. Every claim here should be traceable to the repo or the
+ * résumé — if a number cannot be explained in an interview, it does not go in.
+ */
+
 export interface ProjectHighlight {
   label: string;
   value: string;
 }
 
+export interface ProjectMetric {
+  value: string;
+  label: string;
+}
+
+export interface FlowStep {
+  label: string;
+  detail?: string;
+}
+
 export interface Project {
   id: string;
   title: string;
+  /** One-line, outcome-first summary used on cards and in metadata. */
   description: string;
+  /** Short line under the title on the homepage. */
+  tagline: string;
+  period: string;
+  /** Who built it. Never claim sole ownership of team work. */
+  context: string;
   longDescription: string;
+  problem?: string;
+  architecture?: string;
+  /** The one engineering trade-off worth asking about in an interview. */
+  decision?: { title: string; body: string };
+  flow: FlowStep[];
+  metrics: ProjectMetric[];
+  features: string[];
+  highlights: ProjectHighlight[];
   tech: string[];
   github?: string;
   live?: string;
-  featured: boolean;
-  subtitle?: string;
-  icon?: string;
-  image?: string;
-  // Detail page fields
-  problem?: string;
-  architecture?: string;
-  features: string[];
-  highlights: ProjectHighlight[];
   role?: string;
-  // Exotic styling
-  accentColor: string;
-  gradientClass: string;
+  tier: "featured" | "earlier";
 }
 
 export const PROJECTS: Project[] = [
   {
-    id: "nutriswap",
-    accentColor: "#2DD4BF",
-    gradientClass: "nutriswap",
-    title: "Nutriswap",
+    id: "lumira",
+    tier: "featured",
+    title: "Lumira",
+    tagline: "A voice assistant for exhibition booths that answers only from the exhibitor's own documents.",
     description:
-      "AI-powered nutrition platform with hybrid recommendation engine",
+      "Voice-driven RAG assistant for exhibitions: speech in, grounded answer out, with retrieval and the LLM on local hardware.",
+    period: "Nov 2025 – Apr 2026",
+    context: "Final-year project · team of four",
     longDescription:
-      "A full-stack nutritional intelligence platform designed to help users identify healthier food alternatives based on specific health goals (e.g., Diabetic-friendly, Heart Health, Muscle Gain). The system processes complex nutritional data to provide real-time, context-aware food swaps using a React + FastAPI architecture.",
+      "Exhibitors upload their project documents (PDF, TXT or DOCX) and get a QR code for their booth. Visitors scan it and ask questions by voice or text. Lumira transcribes the question, retrieves the relevant passages from a ChromaDB vector store and has LLaMA 3.2 answer from that context alone, then reads the answer back with neural text-to-speech.",
     problem:
-      "People with specific dietary needs — diabetes, heart conditions, muscle-building goals — struggle to find food alternatives that actually match their nutritional requirements. Existing tools are either too generic or require manual research across scattered databases.",
+      "At project expos, visitors ask detailed questions faster than a team can answer them, and the answers live in a long report nobody can search on the spot.",
     architecture:
-      "React 18 frontend built with Vite for fast HMR, backed by a FastAPI Python server connected to PostgreSQL via SQLAlchemy. The frontend leverages Redux Toolkit for state management, D3.js and Recharts for data visualization, React Hook Form for efficient search input, and Framer Motion for UI animations. The backend exposes RESTful endpoints through organized routers, with Pydantic schemas for validation and a seed script to populate the nutritional database.",
+      "React (Vite) frontend served to visitors' phones. A FastAPI backend exposes /api/stt, /api/chat and /api/speak. Speech is transcribed with faster-whisper on the GPU; the RAG engine uses LangChain retrievers over ChromaDB and calls LLaMA 3.2 through Ollama; answers are synthesised with edge-tts. Exhibitors sign in with an OTP, manage files, and can pause, destroy or regenerate the booth QR code. Session analytics are stored in SQLite in WAL mode.",
+    decision: {
+      title: "Run the model locally",
+      body: "LLaMA 3.2 runs through Ollama on the exhibitor's own machine, so the documents and the model never leave it and a question costs nothing to answer. Only the finished answer goes to edge-tts for speech. The price is hardware: speech-to-text needs a GPU to stay responsive.",
+    },
+    flow: [
+      { label: "Voice", detail: "visitor's phone" },
+      { label: "faster-whisper", detail: "speech to text" },
+      { label: "ChromaDB", detail: "retrieve context" },
+      { label: "LLaMA 3.2", detail: "answer via Ollama" },
+      { label: "edge-tts", detail: "text to speech" },
+    ],
+    metrics: [
+      { value: "92%", label: "semantic relevance on our evaluation set" },
+    ],
     features: [
-      "Intelligent food substitution engine with health-goal filtering",
-      "Interactive nutrition explorer with D3.js data visualization",
-      "Side-by-side food comparison tool with real-time data",
-      "Aurora-animated landing page with responsive grid layout",
-      "Redux Toolkit state management for complex search flows",
-      "Framer Motion micro-animations across all UI components",
+      "QR code per booth; exhibitors can pause, destroy or regenerate it",
+      "Voice and text questions from a visitor's phone",
+      "Answers grounded in the uploaded documents only",
+      "OTP sign-in and file management for exhibitors",
+      "Per-session analytics stored in SQLite",
     ],
     highlights: [
-      { label: "Tech Layers", value: "Full-Stack" },
-      { label: "Data Points", value: "100+" },
-      { label: "Visualizations", value: "D3.js + Recharts" },
-      { label: "API Framework", value: "FastAPI" },
+      { label: "LLM", value: "LLaMA 3.2 (Ollama)" },
+      { label: "Vector store", value: "ChromaDB" },
+      { label: "Speech", value: "faster-whisper · edge-tts" },
+      { label: "Relevance", value: "92% on eval set" },
     ],
-    tech: [
-      "React",
-      "FastAPI",
-      "PostgreSQL",
-      "Docker",
-      "Tailwind CSS",
-      "Framer Motion",
-      "SQLAlchemy",
-      "Redux Toolkit",
-      "D3.js",
-      "Recharts",
-      "Vite",
-    ],
-    github: "https://github.com/4aruu/food_alternate",
-    image: "/projects/bg-nutriswap.png",
-    featured: true,
-    role: "Sole developer — designed the database schema, built the FastAPI backend with seed scripts, and developed the full React frontend including data visualizations and comparison logic.",
+    tech: ["Python", "FastAPI", "LangChain", "ChromaDB", "Ollama", "LLaMA 3.2", "faster-whisper", "edge-tts", "React", "SQLite"],
+    github: "https://github.com/4aruu/Lumira",
   },
   {
-    id: "lumira",
-    accentColor: "#C084FC",
-    gradientClass: "lumira",
-    title: "Lumira",
+    id: "nutriswap",
+    tier: "featured",
+    title: "NutriSwap",
+    tagline: "Find a healthier swap for a dish you already eat, filtered by health goal and allergen.",
     description:
-      "Voice-activated AI guide for exhibitions with context-locking architecture",
+      "Full-stack food alternatives finder for 231 Kerala and international dishes, with fail-closed allergen filtering.",
+    period: "Dec 2025 – Apr 2026",
+    context: "Solo project",
     longDescription:
-      "LUMIRA is a context-aware AI-powered project assistant built for expos and exhibitions. Give it a PDF, it studies the content, vectorizes it, and answers questions like a pro — with zero hallucinations. Built on a RAG (Retrieval-Augmented Generation) pipeline using LangChain, Llama 3.2, and ChromaDB.",
+      "A search over 231 curated dishes, Kerala cuisine first, with nutrition, allergen and sustainability data for each. Pick a goal such as Diabetic, Heart-Safe or Weight Loss, mark what you avoid, and NutriSwap suggests alternatives from the same food group and compares any two side by side.",
     problem:
-      "At project expos and viva presentations, students panic when asked unexpected questions about their own projects. Documentation is scattered, and there's no fast way to query specific technical details from your own project report.",
+      "Generic nutrition apps rarely know Kerala dishes, and allergen data is often missing. Treating missing data as safe is the dangerous default.",
     architecture:
-      "PDF → Vector → LLM pipeline. PyPDFLoader extracts and sections the PDF (Executive Summary, Methodology, etc.). mxbai-embed-large creates vector embeddings of each section. ChromaDB stores the vectorized content. At query time, relevant context is retrieved from the vector store and fed to Llama 3.2 via LangChain, which generates responses based strictly on the project PDF — no hallucinations.",
+      "React 18 (Vite, Redux Toolkit, Recharts, D3) on Vercel. FastAPI with SQLAlchemy and Pydantic on Render, backed by PostgreSQL on Aiven. Frontend and backend each ship as a Docker image. GitHub Actions runs unit tests, pytest and a production build on every push, and a separate pipeline scans the image with Trivy and runs an OWASP ZAP baseline scan against the running container. The API applies rate limits per endpoint with SlowAPI.",
+    decision: {
+      title: "Fail closed on allergens",
+      body: "A dish is shown for an avoided allergen only when the data records that allergen as absent. Unknown counts as unsafe, so the list is shorter, and it is never wrong in the direction that hurts someone.",
+    },
+    flow: [
+      { label: "PostgreSQL", detail: "Aiven" },
+      { label: "FastAPI", detail: "Docker on Render" },
+      { label: "14.8 KB JSON", detail: "one fetch" },
+      { label: "React", detail: "filters in the browser" },
+    ],
+    metrics: [
+      { value: "231", label: "curated dishes with nutrition and allergen data" },
+      { value: "14.8 KB", label: "one payload; every filter runs client-side" },
+    ],
     features: [
-      "PDF ingestion with automatic section extraction",
-      "Vector embedding using mxbai-embed-large model",
-      "ChromaDB vector store for fast similarity search",
-      "Context-locked responses — answers only from your PDF data",
-      "Zero-hallucination Llama 3.2 inference via Ollama",
-      "Lightweight, local, and fully private — no cloud dependencies",
+      "Health-goal presets: Diabetic, Heart-Safe, Weight Loss",
+      "Fail-closed allergen filtering",
+      "Side-by-side comparison of any two dishes",
+      "Sustainability scores: carbon, water and land use",
+      "CI on every push; Trivy and OWASP ZAP security scans",
     ],
     highlights: [
-      { label: "LLM", value: "Llama 3.2" },
-      { label: "Embeddings", value: "mxbai-embed-large" },
-      { label: "Vector DB", value: "ChromaDB" },
-      { label: "Hallucination Rate", value: "Zero" },
+      { label: "Dishes", value: "231" },
+      { label: "Payload", value: "14.8 KB, one fetch" },
+      { label: "Hosting", value: "Vercel · Render · Aiven" },
+      { label: "Security CI", value: "Trivy + OWASP ZAP" },
     ],
-    tech: [
-      "Python",
-      "LangChain",
-      "Ollama",
-      "Llama 3.2",
-      "ChromaDB",
-      "mxbai-embed-large",
-      "PyPDFLoader",
-      "FastAPI",
-      "React",
-      "TypeScript",
-    ],
-    github: "https://github.com/4aruu/Lumira",
-    image: "/projects/bg-lumira.png",
-    featured: true,
-    role: "Sole developer — designed the RAG pipeline, built the vectorization engine, integrated Llama 3.2 via Ollama, and developed both the Python backend and React frontend.",
+    tech: ["React", "Redux Toolkit", "FastAPI", "SQLAlchemy", "PostgreSQL", "Docker", "GitHub Actions", "Vercel", "Render", "Aiven"],
+    github: "https://github.com/4aruu/food_alternate",
+    live: "https://food-alternate.vercel.app",
+    role: "Sole developer: database schema, FastAPI backend and seed data, React frontend, Docker images, CI/CD and deployment.",
   },
   {
     id: "infobot",
-    accentColor: "#FF6B9D",
-    gradientClass: "infobot",
-    title: "INFOBOT",
-    description: "Intelligent academic management system with AI chatbot",
+    tier: "featured",
+    title: "InfoBot",
+    tagline: "A campus assistant that answers timetable and grade questions and generates the timetable itself.",
+    description:
+      "Campus assistant whose timetable generator cut multi-staff scheduling from weeks of coordination to under two minutes.",
+    period: "Feb 2025 – Apr 2025",
+    context: "Academic project",
     longDescription:
-      "InfoBot is an intelligent chatbot system designed to streamline academic management for students and teachers. It provides instant access to syllabi, study materials, timetables, and facilitates tasks like multi-batch scheduling and exam tracking — all powered by a Claude Sonnet AI chatbot.",
+      "Students ask InfoBot about timetables, syllabi and grades in plain language. Behind it, a generator turns course data (teachers, subjects, lecture and practical hours per semester) into weekly timetables for several semesters at once, inside the college's fixed period and break structure.",
     problem:
-      "Students and faculty waste hours navigating complex academic systems to find syllabi, timetables, and study materials. Scheduling across multiple batches creates conflicts, and there's no unified system to query academic information conversationally.",
+      "Building timetables for three semesters meant weeks of back-and-forth between staff, and every change restarted the negotiation.",
     architecture:
-      "React frontend connected to a Node.js/Express backend with dual database architecture — MySQL for structured academic data (syllabi, timetables, student records) and MongoDB for flexible chatbot conversation storage. The Claude Sonnet AI powers the conversational interface, processing natural language queries against the academic database to provide instant, relevant answers.",
+      "React frontend on a FastAPI backend with async endpoints, so concurrent student sessions do not block each other. Academic data lives in MySQL, administered through phpMyAdmin. The timetable generator feeds structured course data and the period rules to a language model and receives the timetables back as CSV.",
+    decision: {
+      title: "Keep the timetable rules in data",
+      body: "Period times, breaks and per-subject hours are passed to the generator as structured input. When the college changes its schedule, only the rules change; the program stays the same.",
+    },
+    flow: [
+      { label: "Course data", detail: "MySQL" },
+      { label: "FastAPI", detail: "async endpoints" },
+      { label: "Generator", detail: "rules + course load" },
+      { label: "Timetables", detail: "CSV per semester" },
+    ],
+    metrics: [
+      { value: "< 2 min", label: "to generate timetables that took weeks to agree" },
+      { value: "50+", label: "student queries on timetables and grades" },
+    ],
     features: [
-      "Claude Sonnet AI-powered conversational chatbot",
-      "Instant access to syllabi, study materials, and timetables",
-      "Automated multi-batch scheduling with conflict resolution",
-      "Exam tracking and academic calendar management",
-      "Smart search across academic resources",
-      "Secure role-based access for students and faculty",
+      "Natural-language questions on timetables, syllabi and grades",
+      "Timetables for multiple semesters generated together",
+      "Period and break rules supplied as data",
+      "Async FastAPI endpoints for concurrent sessions",
     ],
     highlights: [
-      { label: "AI Model", value: "Claude Sonnet" },
-      { label: "Databases", value: "MySQL + MongoDB" },
-      { label: "Semesters", value: "8 Supported" },
-      { label: "User Roles", value: "Student + Faculty" },
+      { label: "Generation time", value: "< 2 minutes" },
+      { label: "Backend", value: "FastAPI (async)" },
+      { label: "Database", value: "MySQL" },
+      { label: "Users", value: "Students and staff" },
     ],
-    tech: [
-      "React",
-      "Node.js",
-      "Express",
-      "MySQL",
-      "MongoDB",
-      "Claude AI",
-      "PhpMyAdmin",
-    ],
+    tech: ["Python", "FastAPI", "React", "MySQL", "phpMyAdmin"],
     github: "https://github.com/4aruu/InfoBot",
-    image: "/projects/bg-infobot.png",
-    featured: true,
-    role: "Sole developer — designed the dual-database architecture, integrated Claude Sonnet AI, built the automated timetable generator, and developed the full-stack application.",
   },
   {
     id: "taskit",
-    accentColor: "#FBBF24",
-    gradientClass: "taskit",
+    tier: "earlier",
     title: "TaskIT",
-    description: "Task management web app with priority-based organization",
+    tagline: "Priority-based task manager with a REST API.",
+    description: "Task manager with a Node.js and Express REST API on MongoDB.",
+    period: "2024",
+    context: "Solo project",
     longDescription:
-      "A web application for managing tasks efficiently by prioritizing them based on importance and tracking their completion status. Built using Node.js, Express.js, and MongoDB for the backend, with a clean HTML/CSS/JavaScript frontend for interactive task management.",
-    problem:
-      "Daily productivity suffers when tasks pile up without clear prioritization. Generic to-do apps don't distinguish between urgency levels, leading to important tasks getting buried under less critical ones.",
+      "A task manager that sorts work by priority (low, medium, high) and status. Node.js and Express expose CRUD endpoints over MongoDB; the frontend is plain HTML, CSS and JavaScript talking to the API with fetch.",
     architecture:
-      "Node.js server with Express.js handling RESTful API routes for CRUD operations. MongoDB provides persistent storage for tasks with priority and status metadata. The frontend uses vanilla HTML, CSS, and JavaScript for a lightweight, responsive interface that communicates with the backend via fetch API calls.",
-    features: [
-      "Full CRUD operations — add, view, update, and delete tasks",
-      "Three-tier priority system — Low, Medium, High",
-      "Status tracking — Pending, Completed, Incomplete",
-      "Persistent storage with MongoDB",
-      "RESTful API architecture with Express.js middleware",
-      "Responsive frontend with clean, minimal UI",
-    ],
+      "Express routes for create, read, update and delete over a MongoDB collection that stores priority and status with each task. Vanilla JavaScript frontend.",
+    flow: [],
+    metrics: [],
+    features: ["CRUD over a REST API", "Three priority levels", "Status tracking", "MongoDB persistence"],
     highlights: [
-      { label: "Architecture", value: "RESTful API" },
+      { label: "API", value: "REST (Express)" },
       { label: "Database", value: "MongoDB" },
-      { label: "Priority Levels", value: "3 Tiers" },
-      { label: "Stack", value: "MERN-lite" },
     ],
-    tech: [
-      "Node.js",
-      "Express",
-      "MongoDB",
-      "JavaScript",
-      "HTML",
-      "CSS",
-    ],
+    tech: ["Node.js", "Express", "MongoDB", "JavaScript"],
     github: "https://github.com/4aruu/TaskIT",
-    image: "/projects/bg-taskit.png",
-    featured: true,
-    role: "Sole developer — designed the REST API, implemented MongoDB schemas for task prioritization, and built the interactive frontend.",
   },
   {
     id: "pharmacy",
-    accentColor: "#FB923C",
-    gradientClass: "pharmacy",
+    tier: "earlier",
     title: "Pharmacy Management System",
-    description:
-      "Admin appointment booking system with MySQL database integration",
+    tagline: "Desktop appointment booking for a clinic, in Java Swing and MySQL.",
+    description: "Admin desktop app for booking doctor appointments, built with Java Swing and MySQL over JDBC.",
+    period: "2024",
+    context: "Academic project",
     longDescription:
-      "An admin-use-only system designed to streamline the scheduling and management of doctor appointments. Built using Java in Eclipse IDE, with all doctor and patient data managed directly in a MySQL database for secure and centralized record-keeping.",
-    problem:
-      "Small clinics and pharmacies rely on paper-based or spreadsheet records for managing appointments, leading to scheduling conflicts, lost patient records, and inefficient daily operations.",
+      "An admin-only desktop application for booking, updating and cancelling doctor appointments, with doctor and patient records stored in MySQL.",
     architecture:
-      "Desktop application built with Java Swing for the UI layer, connected to a MySQL database via MySQL Connector/J (JDBC). The system follows a traditional MVC pattern — Java handles business logic and UI rendering, while MySQL stores and manages all persistent data for doctors, patients, and appointments.",
-    features: [
-      "Book appointments based on doctor availability",
-      "Update or delete existing appointments",
-      "View all appointment records with filtering",
-      "Direct MySQL data management for doctors and patients",
-      "Secure admin-only access control",
-      "Centralized database for all clinic records",
-    ],
+      "Java Swing user interface; MySQL over JDBC (Connector/J) for doctors, patients and appointments.",
+    flow: [],
+    metrics: [],
+    features: ["Book by doctor availability", "Update and cancel appointments", "Admin-only access"],
     highlights: [
-      { label: "Platform", value: "Desktop (Java)" },
-      { label: "Database", value: "MySQL" },
-      { label: "Pattern", value: "MVC" },
-      { label: "Access", value: "Admin-Only" },
+      { label: "Platform", value: "Java desktop" },
+      { label: "Database", value: "MySQL (JDBC)" },
     ],
-    tech: ["Java", "MySQL", "Java Swing", "Eclipse", "JDBC"],
+    tech: ["Java", "Swing", "MySQL", "JDBC"],
     github: "https://github.com/4aruu/Pharmacy-Management-System",
-    image: "/projects/bg-pharmacy.png",
-    featured: true,
-    role: "Sole developer — designed the database schema, built the Java Swing interface, and implemented the appointment management logic.",
   },
 ];
+
+export const FEATURED = PROJECTS.filter((p) => p.tier === "featured");
+export const EARLIER = PROJECTS.filter((p) => p.tier === "earlier");
