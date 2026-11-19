@@ -1,8 +1,8 @@
-import "@fontsource/ibm-plex-sans/latin-400.css";
-import "@fontsource/ibm-plex-sans/latin-500.css";
-import "@fontsource/ibm-plex-sans/latin-600.css";
-import "@fontsource/ibm-plex-mono/latin-400.css";
-import "@fontsource/ibm-plex-mono/latin-500.css";
+// The Systems Atlas type: Young Serif (titles), Schibsted Grotesk (text),
+// Martian Mono (annotation). Self-hosted variable fonts; the site uses 400–600.
+import "@fontsource/young-serif/latin-400.css";
+import "@fontsource-variable/schibsted-grotesk/wght.css";
+import "@fontsource-variable/martian-mono/wght.css";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 
@@ -21,8 +21,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f7f5" },
-    { media: "(prefers-color-scheme: dark)", color: "#0e0f11" },
+    { media: "(prefers-color-scheme: light)", color: "#efe9dd" },
+    { media: "(prefers-color-scheme: dark)", color: "#161513" },
   ],
 };
 

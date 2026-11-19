@@ -1,7 +1,6 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { Moon, Sun } from "lucide-react";
 
 /*
  * Two-state theme switch.
@@ -69,19 +68,22 @@ export default function ThemeToggle() {
     }
   };
 
+  // Atlas style: the two words are the switch; the active one is in orange.
   return (
     <button
       type="button"
       role="switch"
       aria-checked={dark ?? undefined}
-      aria-label="Dark theme"
+      aria-label="Night theme"
       onClick={toggle}
-      className="theme-switch"
+      className="atlas-switch"
     >
-      <span className="theme-switch-track" aria-hidden>
-        <Sun size={14} className="theme-switch-icon theme-switch-sun" />
-        <Moon size={14} className="theme-switch-icon theme-switch-moon" />
-        <span className="theme-switch-thumb" />
+      <span className="atlas-switch-day" aria-hidden>
+        Day
+      </span>
+      <span aria-hidden> · </span>
+      <span className="atlas-switch-night" aria-hidden>
+        Night
       </span>
     </button>
   );

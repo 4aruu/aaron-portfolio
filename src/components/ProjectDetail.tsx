@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
-import SiteHeader from "@/components/home/SiteHeader";
+import AtlasChrome from "@/components/atlas/AtlasChrome";
+import { PLATES } from "@/data/plates";
 import SiteFooter from "@/components/home/SiteFooter";
 import FlowDiagram from "@/components/home/FlowDiagram";
 
@@ -25,9 +26,11 @@ export default function ProjectDetail({ projectId }: Props) {
   const prev = idx > 0 ? PROJECTS[idx - 1] : null;
   const next = idx < PROJECTS.length - 1 ? PROJECTS[idx + 1] : null;
 
+  // Lumira, NutriSwap and InfoBot have plates of their own; the others do not.
+  const plate = PLATES.findIndex((pl) => pl.anchor === project.id);
+
   return (
-    <>
-      <SiteHeader />
+    <AtlasChrome fixedPlate={plate >= 0 ? plate : null}>
       <main id="main" className="page pb-16">
         <div className="pt-8 md:pt-12">
           <Link href="/#work" className="link-quiet t-secondary inline-flex min-h-[44px] items-center gap-2">
@@ -158,6 +161,6 @@ export default function ProjectDetail({ projectId }: Props) {
         </nav>
       </main>
       <SiteFooter />
-    </>
+    </AtlasChrome>
   );
 }

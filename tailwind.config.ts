@@ -19,6 +19,7 @@ const config: Config = {
         "ink-2": v("ink-2"),
         "ink-3": v("ink-3"),
         accent: v("accent"),
+        signal: v("signal"),
         line: v("line"),
 
         /* legacy aliases */
@@ -41,10 +42,11 @@ const config: Config = {
         "signal-blue-dark": v("accent"),
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "IBM Plex Sans", "system-ui", "sans-serif"],
-        text: ["var(--font-sans)", "IBM Plex Sans", "system-ui", "sans-serif"],
-        display: ["var(--font-sans)", "IBM Plex Sans", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "IBM Plex Mono", "ui-monospace", "monospace"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        text: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-serif)", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       fontWeight: {
         /* three weights only; bold/extrabold collapse to semibold */

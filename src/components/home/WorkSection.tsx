@@ -7,7 +7,7 @@ import FlowDiagram from "./FlowDiagram";
 function CaseStudy({ project, n }: { project: Project; n: number }) {
   const titleId = `case-${project.id}`;
   return (
-    <article aria-labelledby={titleId} className="surface reveal overflow-hidden">
+    <article id={project.id} aria-labelledby={titleId} className="surface reveal overflow-hidden">
       <div className="grid gap-10 p-6 md:grid-cols-12 md:gap-8 md:p-10">
         <div className={n % 2 === 0 ? "md:order-2 md:col-span-7" : "md:col-span-7"}>
           <p className="t-meta text-ink-3">

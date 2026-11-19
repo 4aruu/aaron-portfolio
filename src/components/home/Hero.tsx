@@ -14,7 +14,7 @@ const FACTS: { k: string; v: string }[] = [
 export default function Hero() {
   const words = HEADLINE.split(" ");
   return (
-    <section aria-labelledby="hero-title" className="hero relative overflow-hidden">
+    <section id="frontispiece" aria-labelledby="hero-title" className="hero relative overflow-hidden">
       <div className="hero-grid" aria-hidden />
 
       <div className="page relative pb-8 pt-16 text-center md:pb-12 md:pt-24">
@@ -50,7 +50,7 @@ export default function Hero() {
           </a>
         </div>
 
-        <div className="mt-16 md:mt-20">
+        <div id="territories" className="mt-16 md:mt-20">
           <SystemMap />
         </div>
 

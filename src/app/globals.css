@@ -4,9 +4,10 @@
 
 /* ════════════════════════════════════════════════════════════════
    Design system
-   - Type: IBM Plex Sans (UI) + IBM Plex Mono (labels, data). Weights 400/500/600.
-     Minor Third scale from 16px. Nothing below 12px.
-   - Colour: neutral canvas (L0), white/raised structure (L1), one accent.
+   - Type: Young Serif (titles), Schibsted Grotesk (text), Martian Mono
+     (annotation). Weights 400/500/600. Nothing below 12px.
+   - Colour: The Systems Atlas. Warm paper (L0), plate (L1), raised ivory (L2),
+     charcoal ink, text-safe orange accent, bright signal orange for graphics.
      Depth from 1px borders; shadows stay under 0.08 alpha.
    - Space: 4/8pt. Motion: 100/150/200/300ms, transform + opacity only.
    Light and dark follow prefers-color-scheme.
@@ -15,20 +16,22 @@
 @layer base {
   :root {
     /* surfaces (R G B, so Tailwind can apply alpha) */
-    --l0: 247 247 245;
-    --l1: 255 255 255;
-    --l2: 255 255 255;
-    /* text */
-    --ink: 22 24 29;
-    --ink-2: 87 92 102;
-    --ink-3: 107 112 122;
-    /* accent: one hue for actions, links, focus */
-    --accent: 194 65 12;
-    --accent-ink: 255 255 255;
+    --l0: 239 233 221;     /* #EFE9DD warm paper */
+    --l1: 227 219 203;     /* #E3DBCB plate */
+    --l2: 245 239 228;     /* #F5EFE4 raised ivory */
+    /* text: every pair below is at least 4.5:1 on l0, l1 and l2 */
+    --ink: 28 27 25;       /* #1C1B19 charcoal */
+    --ink-2: 94 88 78;     /* #5E584E */
+    --ink-3: 99 93 82;     /* #635D52, 4.74:1 on l1 */
+    /* accent: orange that is safe for text (#AD330C, 5.34:1 on paper) */
+    --accent: 173 51 12;
+    --accent-ink: 239 233 221;
+    /* signal: the bright graphic orange; never for text (2.95:1) */
+    --signal: 242 78 30;
     /* hairlines */
-    --line: 22 24 29;
-    --line-a: 0.09;
-    --line-strong-a: 0.18;
+    --line: 28 27 25;
+    --line-a: 0.14;
+    --line-strong-a: 0.26;
 
     --shadow-1: 0 1px 2px rgba(22, 24, 29, 0.04);
     --edge: none;
@@ -40,8 +43,9 @@
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
 
-    --font-sans: "IBM Plex Sans";
-    --font-mono: "IBM Plex Mono";
+    --font-serif: "Young Serif";
+    --font-sans: "Schibsted Grotesk Variable";
+    --font-mono: "Martian Mono Variable";
 
     --vp-wide: 1280px;
     --header-h: 64px;
@@ -53,17 +57,18 @@
      system, "light"/"dark" pin one (see ThemeToggle.tsx). Dark tokens are listed
      twice: once for a pinned dark theme, once for a dark system with no pin. */
   :root:has(> head > meta[name="color-scheme"][content="dark"]) {
-    --l0: 14 15 17;
-    --l1: 22 24 27;
-    --l2: 28 30 34;
-    --ink: 236 237 239;
-    --ink-2: 163 168 178;
-    --ink-3: 139 144 155;
-    --accent: 251 146 60;
-    --accent-ink: 22 24 29;
-    --line: 236 237 239;
-    --line-a: 0.1;
-    --line-strong-a: 0.2;
+    --l0: 22 21 19;        /* #161513 night paper */
+    --l1: 34 31 28;        /* #221F1C night plate */
+    --l2: 43 39 35;        /* #2B2723 raised */
+    --ink: 237 230 216;    /* #EDE6D8 */
+    --ink-2: 167 159 145;  /* #A79F91, 6.96:1 on l0 */
+    --ink-3: 149 141 128;  /* #958D80, 4.52:1 on l2 */
+    --accent: 255 90 38;   /* #FF5A26, text-safe at night (5.86:1) */
+    --accent-ink: 22 21 19;
+    --signal: 255 90 38;
+    --line: 237 230 216;
+    --line-a: 0.12;
+    --line-strong-a: 0.24;
     --shadow-1: none;
     --edge: inset 0 1px 0 rgba(255, 255, 255, 0.04);
     color-scheme: dark;
@@ -73,17 +78,18 @@
   }
   @media (prefers-color-scheme: dark) {
     :root:not(:has(> head > meta[name="color-scheme"][content="light"])) {
-      --l0: 14 15 17;
-      --l1: 22 24 27;
-      --l2: 28 30 34;
-      --ink: 236 237 239;
-      --ink-2: 163 168 178;
-      --ink-3: 139 144 155;
-      --accent: 251 146 60;
-      --accent-ink: 22 24 29;
-      --line: 236 237 239;
-      --line-a: 0.1;
-      --line-strong-a: 0.2;
+      --l0: 22 21 19;        /* #161513 night paper */
+      --l1: 34 31 28;        /* #221F1C night plate */
+      --l2: 43 39 35;        /* #2B2723 raised */
+      --ink: 237 230 216;    /* #EDE6D8 */
+      --ink-2: 167 159 145;  /* #A79F91, 6.96:1 on l0 */
+      --ink-3: 149 141 128;  /* #958D80, 4.52:1 on l2 */
+      --accent: 255 90 38;   /* #FF5A26, text-safe at night (5.86:1) */
+      --accent-ink: 22 21 19;
+      --signal: 255 90 38;
+      --line: 237 230 216;
+      --line-a: 0.12;
+      --line-strong-a: 0.24;
       --shadow-1: none;
       --edge: inset 0 1px 0 rgba(255, 255, 255, 0.04);
       color-scheme: dark;
@@ -108,7 +114,7 @@
     margin: 0;
     background: rgb(var(--l0));
     color: rgb(var(--ink));
-    font-family: var(--font-sans, "IBM Plex Sans"), system-ui, sans-serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.55;
@@ -175,13 +181,13 @@
   .t-body { font-size: 1rem; line-height: 1.55; }
   .t-secondary { font-size: 0.875rem; line-height: 1.5; }
   .t-meta {
-    font-family: var(--font-mono, "IBM Plex Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.75rem;
     line-height: 1.4;
     letter-spacing: 0.02em;
   }
   .t-label {
-    font-family: var(--font-mono, "IBM Plex Mono"), ui-monospace, monospace;
+    font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.75rem;
     line-height: 1.4;
     letter-spacing: 0.06em;
@@ -752,3 +758,161 @@
   border-color: rgb(var(--l0) / 0.3);
 }
 .btn-inverse:hover { border-color: rgb(var(--l0) / 0.7); }
+
+/* ── The Systems Atlas type (M1) ─────────────────────────────────
+   Titles are set in Young Serif, which has a single weight: forcing 600
+   would make the browser fake a bold, so titles stay at 400. */
+h1, h2,
+.t-display, .t-h2, .t-hero, .t-section, .t-metric {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+}
+.t-hero { letter-spacing: -0.03em; }
+.t-section, .t-display { letter-spacing: -0.02em; }
+
+/* ── The Systems Atlas chrome (M2) ───────────────────────────────
+   Running head (sticky), index rail (fixed, ≥1024px), plate index (dialog). */
+:root { --header-h: 56px; --rail-w: 72px; }
+
+.atlas-skip {
+  position: fixed; left: 16px; top: -80px; z-index: 60;
+  min-height: 44px; padding: 0 16px; display: inline-flex; align-items: center;
+  background: rgb(var(--ink)); color: rgb(var(--l0)); text-decoration: none;
+}
+.atlas-skip:focus { top: 8px; }
+
+.atlas-head {
+  position: sticky; top: 0; z-index: 30;
+  height: var(--header-h);
+  display: flex; align-items: center; gap: 24px;
+  padding: 0 12px 0 20px;
+  background: rgb(var(--l0));
+  border-bottom: 1px solid rgb(var(--line) / var(--line-a));
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.atlas-head .scroll-progress { background: rgb(var(--signal)); }
+.atlas-head-title { display: inline-flex; align-items: center; min-height: 44px; color: rgb(var(--ink)); text-decoration: none; white-space: nowrap; }
+.atlas-head-short { display: none; font-family: var(--font-serif), Georgia, serif; font-size: 1.125rem; letter-spacing: 0; text-transform: none; }
+.atlas-head-plate { margin: 0; color: rgb(var(--ink-2)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.atlas-head-count { display: none; margin: 0; color: rgb(var(--ink-2)); white-space: nowrap; }
+.atlas-head-count b { color: rgb(var(--accent)); font-weight: 500; }
+.atlas-head-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; flex: none; }
+.atlas-head-btn,
+.atlas-switch {
+  min-height: 44px; padding: 0 14px;
+  display: inline-flex; align-items: center; gap: 0;
+  border: 1px solid rgb(var(--line) / var(--line-strong-a)); border-radius: 0;
+  background: none; color: rgb(var(--ink));
+  font: inherit; letter-spacing: inherit; text-transform: inherit;
+  text-decoration: none; cursor: pointer; white-space: pre;
+  transition: border-color var(--motion-150) var(--ease-out);
+}
+.atlas-head-btn:hover, .atlas-switch:hover { border-color: rgb(var(--ink)); }
+
+/* Day · Night: the active word is orange. Keyed to the theme meta tag, so the
+   state is right before JavaScript runs. */
+.atlas-switch-day { color: rgb(var(--accent)); }
+.atlas-switch-night { color: rgb(var(--ink-3)); }
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .atlas-switch-day { color: rgb(var(--ink-3)); }
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .atlas-switch-night { color: rgb(var(--accent)); }
+@media (prefers-color-scheme: dark) {
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .atlas-switch-day { color: rgb(var(--ink-3)); }
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .atlas-switch-night { color: rgb(var(--accent)); }
+}
+
+/* Index rail */
+.atlas-rail { display: none; }
+@media (min-width: 1024px) {
+  .atlas-frame { padding-left: var(--rail-w); }
+  .atlas-rail {
+    display: block; position: fixed; z-index: 25;
+    top: var(--header-h); bottom: 0; left: 0; width: var(--rail-w);
+    padding-top: 20px;
+    background: rgb(var(--l0));
+    border-right: 1px solid rgb(var(--line) / var(--line-a));
+  }
+  .atlas-rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .atlas-rail-link {
+    position: relative; min-width: 44px; min-height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem;
+    color: rgb(var(--ink-3)); text-decoration: none;
+  }
+  .atlas-rail-link:hover { color: rgb(var(--ink)); }
+  .atlas-rail-link[aria-current] { background: rgb(var(--signal)); color: #1c1b19; }
+  .atlas-rail-flag {
+    position: absolute; left: calc(100% + 10px); top: 50%; translate: 0 -50%;
+    padding: 6px 10px; white-space: nowrap;
+    background: rgb(var(--ink)); color: rgb(var(--l0));
+    font-family: var(--font-sans), system-ui, sans-serif; font-size: 0.8125rem;
+    clip-path: inset(0 100% 0 0); opacity: 0; pointer-events: none;
+    transition: clip-path var(--motion-200) var(--ease-out), opacity var(--motion-150) var(--ease-out);
+  }
+  .atlas-rail-link:focus-visible .atlas-rail-flag { clip-path: inset(0); opacity: 1; }
+  @media (hover: hover) {
+    .atlas-rail-link:hover .atlas-rail-flag { clip-path: inset(0); opacity: 1; }
+  }
+}
+
+/* Narrow: monogram, plate counter and Index only; the switch and résumé move into the index. */
+@media (max-width: 767.98px) {
+  .atlas-head { gap: 12px; }
+  .atlas-head-full, .atlas-head-plate, .atlas-head-resume, .atlas-head-actions > .atlas-switch { display: none; }
+  .atlas-head-short, .atlas-head-count { display: inline; }
+}
+
+/* Plate index */
+.atlas-index {
+  position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none;
+  margin: 0; padding: 0; border: 0; background: transparent; color: #ede6d8;
+}
+.atlas-index::backdrop { background: rgb(22 21 19 / 0.55); }
+html:has(.atlas-index[open]) { overflow: hidden; }
+.atlas-index-panel {
+  position: absolute; top: 0; right: 0; bottom: 0; width: min(560px, 100%);
+  display: flex; flex-direction: column; overflow-y: auto;
+  padding: 0 24px; background: #1c1b19;
+}
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .atlas-index-panel { background: #221f1c; }
+@media (prefers-color-scheme: dark) {
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .atlas-index-panel { background: #221f1c; }
+}
+.atlas-index-top { flex: none; height: var(--header-h); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgb(237 230 216 / 0.16); }
+.atlas-index-title { margin: 0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: #a79f91; }
+.atlas-index-close,
+.atlas-index .atlas-switch {
+  min-height: 44px; padding: 0 14px; border: 1px solid rgb(237 230 216 / 0.24);
+  background: none; color: #ede6d8; cursor: pointer;
+  font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.atlas-index-list { list-style: none; margin: 0; padding: 8px 0; }
+.atlas-index-list a {
+  display: grid; grid-template-columns: 56px minmax(0, 1fr); align-items: baseline; gap: 12px;
+  min-height: 48px; padding: 14px 0;
+  border-bottom: 1px solid rgb(237 230 216 / 0.12);
+  color: #ede6d8; text-decoration: none;
+}
+.atlas-index-num { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; color: #a79f91; }
+.atlas-index-name { font-family: var(--font-serif), Georgia, serif; font-size: clamp(1.375rem, 2.4vw, 1.875rem); line-height: 1.1; }
+.atlas-index-list a:hover .atlas-index-name,
+.atlas-index-list a[aria-current] .atlas-index-name,
+.atlas-index-list a[aria-current] .atlas-index-num { color: #ff5a26; }
+.atlas-index-foot { margin-top: auto; padding: 20px 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; border-top: 1px solid rgb(237 230 216 / 0.16); }
+.atlas-index-resume { min-height: 44px; display: inline-flex; align-items: center; color: #ede6d8; text-underline-offset: 4px; }
+/* inside the charcoal panel the orange text accent would be too dark: use the night orange */
+.atlas-index .atlas-switch-day { color: #ff5a26; }
+.atlas-index .atlas-switch-night { color: #a79f91; }
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .atlas-index .atlas-switch-day { color: #a79f91; }
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .atlas-index .atlas-switch-night { color: #ff5a26; }
+@media (prefers-color-scheme: dark) {
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .atlas-index .atlas-switch-day { color: #a79f91; }
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .atlas-index .atlas-switch-night { color: #ff5a26; }
+}
+.atlas-index :focus-visible { outline-color: #ff5a26; }
+@media (prefers-reduced-motion: no-preference) {
+  .atlas-index[open] .atlas-index-panel { animation: atlas-panel-in var(--motion-200) var(--ease-out); }
+  .atlas-index[open]::backdrop { animation: atlas-fade-in var(--motion-200) var(--ease-out); }
+}
+@keyframes atlas-panel-in { from { opacity: 0; transform: translateX(24px); } }
+@keyframes atlas-fade-in { from { opacity: 0; } }

@@ -1,4 +1,4 @@
-import SiteHeader from "@/components/home/SiteHeader";
+import AtlasChrome from "@/components/atlas/AtlasChrome";
 import Hero from "@/components/home/Hero";
 import ExperienceSection from "@/components/home/ExperienceSection";
 import WorkSection from "@/components/home/WorkSection";
@@ -9,14 +9,7 @@ import SiteFooter from "@/components/home/SiteFooter";
 
 export default function Page() {
   return (
-    <>
-      <a
-        href="#main"
-        className="btn btn-primary sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300]"
-      >
-        Skip to content
-      </a>
-      <SiteHeader />
+    <AtlasChrome onHome>
       <main id="main">
         <Hero />
         <ExperienceSection />
@@ -26,6 +19,6 @@ export default function Page() {
         <ContactSection />
       </main>
       <SiteFooter />
-    </>
+    </AtlasChrome>
   );
 }
