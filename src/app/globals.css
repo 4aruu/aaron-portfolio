@@ -1048,3 +1048,107 @@ html:has(.atlas-index[open]) { overflow: hidden; }
   .tmap-spot { width: 100%; min-height: 48px; white-space: normal; text-align: left; }
   .tmap-note { position: static; width: auto; margin: 0 0 14px; box-shadow: 4px 4px 0 rgb(var(--signal)); }
 }
+
+/* ── Opening cube (M3b) ──────────────────────────────────────────
+   Shown only when the pre-paint script set html.atlas-intro. While it is up,
+   the chrome and Plate 00's contents wait hidden; GSAP reveals them as the
+   cube unbuilds, and drops the cube when the plate is complete. */
+.cube { display: none; }
+.atlas-intro .cube {
+  --s: clamp(110px, min(42vw, 30vh), 260px);
+  --cube-face: 245 239 228; --cube-shade: 59 42 20;
+  --cube-edge: rgb(var(--ink) / 0.3); --cube-engrave: rgb(var(--ink) / 0.5); --cube-emboss: rgb(255 255 255 / 0.7);
+  --cube-cyc: linear-gradient(180deg, #f3eee6 0%, #ece4d7 40%, #dfd3bf 57%, #d6c7ae 61%, #e6dccb 70%, #eee7dc 100%);
+  display: block; position: fixed; inset: 0; z-index: 40; pointer-events: none;
+}
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .cube {
+  --cube-face: 43 39 35; --cube-shade: 0 0 0; --cube-emboss: rgb(0 0 0 / 0.6);
+  --cube-cyc: linear-gradient(180deg, #22201c 0%, #1c1a17 40%, #12110f 58%, #0e0d0c 61%, #171513 72%, #161513 100%);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .cube {
+    --cube-face: 43 39 35; --cube-shade: 0 0 0; --cube-emboss: rgb(0 0 0 / 0.6);
+    --cube-cyc: linear-gradient(180deg, #22201c 0%, #1c1a17 40%, #12110f 58%, #0e0d0c 61%, #171513 72%, #161513 100%);
+  }
+}
+.atlas-intro .atlas-head, .atlas-intro .atlas-rail,
+.atlas-intro .p00 .plate-kicker, .atlas-intro .p00-lede, .atlas-intro .p00-actions, .atlas-intro .p00-id,
+.atlas-intro .fig0, .atlas-intro .fig0-layer, .atlas-intro .fig0-caption, .atlas-intro .fig0-enter { visibility: hidden; }
+.atlas-intro .p00-name .c { transform: translateY(110%); }
+.p00-rebuild { display: none; }
+.atlas-intro .p00-rebuild {
+  display: inline-flex; visibility: hidden; align-self: flex-start; min-height: 44px; padding: 0; align-items: center; gap: 8px;
+  background: none; border: 0; color: rgb(var(--ink-2)); cursor: pointer;
+  font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+  text-decoration: underline; text-underline-offset: 4px;
+}
+.p00-line { display: block; overflow: hidden; padding-bottom: 0.06em; }
+.p00-name .c { display: inline-block; }
+
+.cube-cyc { position: absolute; inset: 0; background: var(--cube-cyc); }
+.cube-head {
+  position: absolute; inset: 0 0 auto 0; z-index: 3;
+  display: flex; justify-content: space-between; align-items: flex-start; padding: 24px clamp(16px, 4vw, 48px);
+}
+.cube-title { margin: 0; display: flex; flex-direction: column; gap: 6px; transform-origin: 0 0; }
+.cube-title-main { font-family: var(--font-serif), Georgia, serif; font-size: clamp(1.625rem, 3.2vw, 2.5rem); line-height: 1; }
+.cube-title-sub { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--ink-2)); }
+.cube-skip, .cube-prompt { pointer-events: auto; cursor: pointer; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.cube-skip { min-height: 44px; padding: 0 16px; border: 1px solid rgb(var(--ink)); background: transparent; color: rgb(var(--ink)); }
+.cube-prompt {
+  position: absolute; left: 50%; bottom: clamp(28px, 7vh, 72px); transform: translateX(-50%); z-index: 3;
+  min-height: 48px; padding: 0 22px; display: flex; align-items: center; gap: 14px; white-space: nowrap;
+  border: 0; background: rgb(var(--ink)); color: rgb(var(--l0));
+}
+.cube-prompt-arrow { color: rgb(var(--signal)); transition: transform var(--motion-200) var(--ease-out); }
+.cube-prompt:hover .cube-prompt-arrow { transform: translateY(4px); }
+.cube-hint {
+  position: absolute; left: 50%; bottom: clamp(8px, 3vh, 32px); transform: translateX(-50%); z-index: 3; margin: 0; white-space: nowrap;
+  font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--ink-2));
+}
+.cube-stage { position: absolute; inset: 0; z-index: 1; perspective: 1400px; perspective-origin: 50% 40%; pointer-events: auto; cursor: pointer; }
+.cube-world { position: absolute; left: 50%; top: 52%; width: 0; height: 0; transform-style: preserve-3d; }
+.cube-part, .cube-f { position: absolute; transform-style: preserve-3d; }
+.cube-part { left: 0; top: 0; }
+.cube-f {
+  left: 50%; top: 50%; overflow: hidden; backface-visibility: hidden; container-type: size;
+  background: rgb(var(--cube-face)); box-shadow: inset 0 0 0 1px var(--cube-edge);
+}
+.cube-sh { position: absolute; inset: 0; background: rgb(var(--cube-shade)); pointer-events: none; }
+.cube-f svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.cube-f svg * { vector-effect: non-scaling-stroke; fill: none; }
+.cube-mark { stroke: rgb(var(--signal)); stroke-width: 1.5; }
+.cube-trace { stroke: rgb(var(--signal)); stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.cube-eng {
+  position: absolute; white-space: nowrap;
+  font-family: var(--font-mono), ui-monospace, monospace; font-size: max(9px, 4.6cqw); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--cube-engrave); text-shadow: 0 1px 0 var(--cube-emboss);
+}
+.cube-lbl { opacity: 0; }
+.cube-name { position: absolute; font-family: var(--font-serif), Georgia, serif; font-size: 15cqw; line-height: 0.9; color: rgb(var(--ink)); }
+.cube-numerals { position: absolute; inset: 6% 0 auto 0; display: flex; flex-direction: column; align-items: center; gap: 2.6cqw; }
+.cube-numerals .cube-eng { position: static; }
+.cube-layer { left: 5%; top: 50%; transform: translateY(-50%); font-size: max(9px, 4cqw); }
+.cube-layer.is-signal { color: rgb(var(--accent)); }
+.cube-square { position: absolute; right: 7%; top: 9%; width: 5cqw; height: 5cqw; background: rgb(var(--signal)); }
+.cube-bar { position: absolute; left: 7%; bottom: 9%; width: 14cqw; height: 1.5px; background: rgb(var(--signal)); }
+.cube-shadow {
+  position: absolute; width: calc(var(--s) * 1.9); height: calc(var(--s) * 1.9);
+  left: calc(var(--s) * -0.83); top: calc(var(--s) * -0.87);
+  background: radial-gradient(closest-side, rgb(45 30 10 / 0.42), rgb(45 30 10 / 0.14) 60%, transparent);
+}
+.cube-guide { position: absolute; left: 0; top: 0; background: rgb(var(--ink) / 0.45); opacity: 0; }
+.cube-node { position: absolute; left: 0; top: 0; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: rgb(var(--signal)); opacity: 0; }
+.cube-layer-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+.cube-hand { fill: none; stroke: rgb(var(--ink)); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.cube-hand-faint { stroke-opacity: 0.35; }
+.cube-rule { stroke: rgb(var(--signal)); stroke-width: 1.5; }
+
+/* ── Timeline spacing (2026-11-20) ───────────────────────────────
+   Every block gets its own row, alternating sides of the rail, with room
+   between them, so each one arrives on its own as you scroll. */
+.tl { row-gap: 40px; }
+@media (min-width: 768px) {
+  .tl { row-gap: clamp(64px, 12vh, 128px); }
+  .tl-item { grid-row: var(--row); padding: 0; }
+}

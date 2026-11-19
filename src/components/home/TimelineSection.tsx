@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import SectionHead from "./SectionHead";
 import Statement from "./Statement";
 import { TIMELINE, type Milestone } from "@/data/profile";
+import TimelineReveal from "@/components/atlas/motion/TimelineReveal";
 
 function ItemLink({ m }: { m: Milestone }) {
   if (!m.href) return null;
@@ -49,7 +50,7 @@ export default function TimelineSection() {
           {TIMELINE.map((m, i) => (
             <li
               key={`${m.when}-${m.title}`}
-              className="tl-item reveal"
+              className="tl-item"
               data-kind={m.kind}
               style={{ "--row": i + 1 } as React.CSSProperties}
             >
@@ -68,6 +69,7 @@ export default function TimelineSection() {
             </li>
           ))}
         </ol>
+        <TimelineReveal />
       </div>
     </section>
   );
