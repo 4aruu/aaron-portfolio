@@ -916,3 +916,135 @@ html:has(.atlas-index[open]) { overflow: hidden; }
 }
 @keyframes atlas-panel-in { from { opacity: 0; transform: translateX(24px); } }
 @keyframes atlas-fade-in { from { opacity: 0; } }
+
+/* ── Plates (M3): shared ─────────────────────────────────────── */
+.plate { position: relative; padding: clamp(40px, 7vh, 88px) clamp(20px, 4vw, 56px); }
+.plate-kicker {
+  margin: 0; font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--accent));
+}
+.plate-title { margin: 0; font-size: clamp(2.25rem, 3.6vw, 3.5rem); line-height: 1; letter-spacing: -0.02em; text-wrap: balance; }
+.atlas-btn {
+  min-height: 48px; padding: 0 20px; display: inline-flex; align-items: center; gap: 12px;
+  border: 1px solid rgb(var(--ink)); color: rgb(var(--ink)); background: none;
+  font-weight: 500; text-decoration: none; cursor: pointer;
+  transition: background-color var(--motion-150) var(--ease-out);
+}
+.atlas-btn:hover { background: rgb(var(--ink) / 0.06); }
+.atlas-btn-primary { background: rgb(var(--ink)); color: rgb(var(--l0)); }
+.atlas-btn-primary:hover { background: rgb(var(--ink) / 0.88); }
+.atlas-btn-arrow { color: rgb(var(--signal)); transition: transform var(--motion-200) var(--ease-out); }
+.atlas-btn:hover .atlas-btn-arrow { transform: translateX(6px); }
+@media (prefers-reduced-motion: reduce) { .atlas-btn-arrow { transition: none; } }
+
+/* Dark plates: charcoal by day, the night plate tone at night */
+.plate-dark {
+  --pd-bg: 28 27 25; --pd-ink: 237 230 216; --pd-ink2: 167 159 145; --pd-line: 58 54 49; --pd-accent: 255 90 38;
+  background: rgb(var(--pd-bg)); color: rgb(var(--pd-ink));
+}
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .plate-dark { --pd-bg: 34 31 28; }
+@media (prefers-color-scheme: dark) {
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .plate-dark { --pd-bg: 34 31 28; }
+}
+.plate-dark .plate-kicker { color: rgb(var(--pd-accent)); }
+.plate-dark :focus-visible { outline-color: rgb(var(--pd-accent)); }
+
+/* ── Plate 00 · Frontispiece ── */
+.p00 {
+  min-height: calc(100svh - var(--header-h));
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 40px;
+  align-content: center; max-width: 1400px;
+}
+.p00-text { grid-column: 1 / span 7; display: flex; flex-direction: column; gap: 24px; }
+.p00-name { margin: 0; font-size: clamp(4rem, 10vw, 10.5rem); line-height: 0.88; letter-spacing: -0.035em; }
+.p00-name > span { display: block; }
+.p00-name-indent { padding-left: 0.8em; }
+.p00-lede { margin: 0; max-width: 46ch; font-size: clamp(1.0625rem, 1.3vw, 1.25rem); line-height: 1.5; }
+.p00-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.p00-id { margin: 0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.04em; color: rgb(var(--ink-2)); }
+.p00 .fig0 { grid-column: 8 / span 5; align-self: center; }
+
+/* Fig. 0 */
+.fig0 { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.fig0-section { position: relative; border: 1px solid rgb(var(--ink)); }
+.fig0-layers { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.fig0-layer {
+  display: grid; grid-template-columns: 34px minmax(0, 1fr); column-gap: 8px; row-gap: 2px;
+  padding: 10px 12px; min-height: clamp(54px, 7.4vh, 70px);
+  border-bottom: 1px solid rgb(var(--line) / var(--line-a));
+}
+.fig0-layer:last-child { border-bottom: 0; }
+.fig0-layer:nth-child(odd) { background: repeating-linear-gradient(45deg, rgb(var(--ink) / 0.06) 0 1px, transparent 1px 9px); }
+.fig0-n, .fig0-name { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.fig0-n { grid-row: span 2; color: rgb(var(--ink-3)); }
+.fig0-stack { font-size: 0.8125rem; color: rgb(var(--ink-2)); padding-right: 30%; }
+.fig0-layer.is-signal .fig0-name, .fig0-layer.is-signal .fig0-n { color: rgb(var(--accent)); }
+.fig0-signal { position: absolute; left: 76%; top: 0; bottom: 0; width: 2px; background: rgb(var(--signal)); }
+.fig0-enter {
+  position: absolute; right: calc(24% + 8px); top: -22px;
+  font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; color: rgb(var(--accent)); white-space: nowrap;
+}
+.fig0-caption { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; line-height: 1.6; color: rgb(var(--ink-2)); }
+
+@media (max-width: 1023.98px) {
+  .p00 { align-content: start; }
+  .p00-text, .p00 .fig0 { grid-column: 1 / -1; }
+  .fig0-section { margin-top: 18px; }
+}
+
+/* ── Plate I · The four territories ── */
+.p01 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 40px; }
+.p01-text { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: 20px; }
+.p01-lede { margin: 0; font-size: 1.0625rem; line-height: 1.55; color: rgb(var(--pd-ink2)); max-width: 40ch; }
+.p01-legend { list-style: none; margin: 16px 0 0; padding: 0; border-top: 1px solid rgb(var(--pd-line)); }
+.p01-legend li { display: flex; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgb(var(--pd-line)); }
+.p01-count { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; color: rgb(var(--pd-ink2)); }
+
+.tmap { grid-column: 5 / span 8; margin: 0; position: relative; height: clamp(520px, 72vh, 660px); border: 1px solid rgb(var(--pd-line)); }
+.tmap-area { position: absolute; border: 1px dashed rgb(var(--pd-ink) / 0.28); pointer-events: none; }
+.is-experimental .tmap-area { border-color: rgb(var(--pd-accent) / 0.5); }
+.tmap-label {
+  position: absolute; margin: 0; font-family: var(--font-mono), ui-monospace, monospace; font-weight: 400;
+  font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--pd-ink2));
+}
+.is-experimental .tmap-label { color: rgb(var(--pd-accent)); }
+.tmap-places { list-style: none; margin: 0; padding: 0; }
+.tmap-place { position: absolute; }
+.tmap-place:has(.tmap-spot[aria-expanded="true"]) { z-index: 5; }
+.tmap-spot {
+  min-height: 44px; padding: 0; display: flex; align-items: center; gap: 8px;
+  background: none; border: 0; color: rgb(var(--pd-ink)); font: inherit; font-size: 0.9375rem; cursor: pointer; white-space: nowrap;
+}
+.tmap-dot { width: 10px; height: 10px; flex: none; border: 1.5px solid currentColor; border-radius: 50%; transition: box-shadow var(--motion-150) var(--ease-out); }
+.is-experimental .tmap-dot { border-color: rgb(var(--pd-accent)); }
+.tmap-spot[aria-expanded="true"] { color: rgb(var(--pd-accent)); }
+.tmap-spot[aria-expanded="true"] .tmap-dot { background: rgb(var(--pd-accent)); border-color: rgb(var(--pd-accent)); box-shadow: 0 0 0 5px rgb(var(--pd-accent) / 0.2); }
+.tmap-note {
+  position: absolute; top: calc(100% + 4px); left: 0; width: 260px;
+  display: flex; flex-direction: column; gap: 6px; padding: 16px;
+  background: rgb(var(--pd-ink)); color: #1c1b19; box-shadow: 8px 8px 0 rgb(var(--signal));
+}
+.tmap-note[hidden] { display: none; }
+.tmap-place[data-side="left"] .tmap-note { left: auto; right: 0; }
+.tmap-place[data-v="up"] .tmap-note { top: auto; bottom: calc(100% + 4px); }
+.tmap-note-t { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: #ad330c; }
+.tmap-note-name { font-weight: 500; }
+.tmap-note-body { font-size: 0.875rem; line-height: 1.45; }
+.tmap-note-link { min-height: 32px; display: flex; align-items: center; gap: 6px; font-size: 0.875rem; color: #ad330c; text-underline-offset: 3px; }
+.tmap-note :focus-visible { outline-color: #ad330c; }
+
+@media (max-width: 1023.98px) {
+  .p01-text { grid-column: 1 / -1; }
+  .tmap { grid-column: 1 / -1; }
+}
+/* Phones: the map becomes a list, grouped by territory */
+@media (max-width: 767.98px) {
+  .tmap { height: auto; border: 0; display: flex; flex-direction: column; gap: 28px; }
+  .tmap-area { display: none; }
+  .tmap-label, .tmap-place { position: static; }
+  .tmap-label { margin-bottom: 4px; }
+  .tmap-places { border-top: 1px solid rgb(var(--pd-line)); }
+  .tmap-place { border-bottom: 1px solid rgb(var(--pd-line)); }
+  .tmap-spot { width: 100%; min-height: 48px; white-space: normal; text-align: left; }
+  .tmap-note { position: static; width: auto; margin: 0 0 14px; box-shadow: 4px 4px 0 rgb(var(--signal)); }
+}

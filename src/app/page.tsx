@@ -1,5 +1,6 @@
 import AtlasChrome from "@/components/atlas/AtlasChrome";
-import Hero from "@/components/home/Hero";
+import Plate00 from "@/components/atlas/plates/Plate00";
+import Plate01 from "@/components/atlas/plates/Plate01";
 import ExperienceSection from "@/components/home/ExperienceSection";
 import WorkSection from "@/components/home/WorkSection";
 import TimelineSection from "@/components/home/TimelineSection";
@@ -11,7 +12,8 @@ export default function Page() {
   return (
     <AtlasChrome onHome>
       <main id="main">
-        <Hero />
+        <Plate00 />
+        <Plate01 />
         <ExperienceSection />
         <WorkSection />
         <TimelineSection />
