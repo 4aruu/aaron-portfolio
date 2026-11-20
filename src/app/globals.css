@@ -1181,7 +1181,7 @@ html:has(.atlas-index[open]) { overflow: hidden; }
 .f2-wire-h { height: 1px; flex: 1 1 40px; min-width: 24px; }
 .f2-num {
   display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 4px; border-radius: 999px;
-  background: rgb(var(--signal)); color: #1c1b19; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.6875rem;
+  background: rgb(var(--signal)); color: #1c1b19; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem;
 }
 .f2-vpc { width: 100%; border: 1px dashed rgb(var(--ink) / 0.5); padding: 18px; display: flex; flex-direction: column; gap: 14px; }
 .f2-vpc-label { margin: 0; display: flex; align-items: center; gap: 8px; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--ink-2)); }
@@ -1573,3 +1573,6 @@ p.cs-idea-k { margin: 0 0 6px; font-family: var(--font-mono), ui-monospace, mono
   .cs-idea-n { padding-top: 0; }
   .cs-idea-title, .cs-idea-why, .cs-idea-how { grid-column: 1; }
 }
+
+/* The skip link moves focus to <main>; it needs no ring of its own. */
+main:focus { outline: none; }

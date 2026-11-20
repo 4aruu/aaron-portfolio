@@ -98,7 +98,7 @@ export default function ProjectDetail({ projectId }: Props) {
 
   return (
     <AtlasChrome fixedPlate={plate >= 0 ? plate : null}>
-      <main id="main" className="cs">
+      <main id="main" className="cs" tabIndex={-1}>
         <Link href={plate >= 0 ? `/#${project.id}` : "/#timeline"} className="cs-back">
           <span aria-hidden>←</span> {num ? `Plate ${num} · ` : ""}Back to the atlas
         </Link>

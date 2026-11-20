@@ -13,7 +13,7 @@ import Plate08 from "@/components/atlas/plates/Plate08";
 export default function Page() {
   return (
     <AtlasChrome onHome>
-      <main id="main">
+      <main id="main" tabIndex={-1}>
         <Plate00 />
         <Plate01 />
         <Plate02 />
