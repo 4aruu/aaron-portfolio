@@ -59,7 +59,7 @@ export const PROJECTS: Project[] = [
     problem:
       "At project expos, visitors ask detailed questions faster than a team can answer them, and the answers live in a long report nobody can search on the spot.",
     architecture:
-      "React (Vite) frontend served to visitors' phones. A FastAPI backend exposes /api/stt, /api/chat and /api/speak. Speech is transcribed with faster-whisper on the GPU; the RAG engine uses LangChain retrievers over ChromaDB and calls LLaMA 3.2 through Ollama; answers are synthesised with edge-tts. Exhibitors sign in with an OTP, manage files, and can pause, destroy or regenerate the booth QR code. Session analytics are stored in SQLite in WAL mode.",
+      "React (Vite) frontend served to visitors' phones. A FastAPI backend exposes /api/stt, /api/chat and /api/speak. Speech is transcribed with faster-whisper on the GPU; the RAG engine uses LangChain retrievers over ChromaDB and calls LLaMA 3.2 through Ollama; answers are synthesised with edge-tts. Exhibitors sign in with an OTP, manage files, and can activate or deactivate the booth QR code, destroy it, or regenerate it. Session analytics are stored in SQLite in WAL mode.",
     decision: {
       title: "Run the model locally",
       body: "LLaMA 3.2 runs through Ollama on the exhibitor's own machine, so the documents and the model never leave it and a question costs nothing to answer. Only the finished answer goes to edge-tts for speech. The price is hardware: speech-to-text needs a GPU to stay responsive.",
@@ -72,10 +72,10 @@ export const PROJECTS: Project[] = [
       { label: "edge-tts", detail: "text to speech" },
     ],
     metrics: [
-      { value: "92%", label: "semantic relevance on our evaluation set" },
+      { value: "3", label: "API endpoints: /api/stt, /api/chat and /api/speak" },
     ],
     features: [
-      "QR code per booth; exhibitors can pause, destroy or regenerate it",
+      "QR code per booth; exhibitors can activate, deactivate, destroy or regenerate it",
       "Voice and text questions from a visitor's phone",
       "Answers grounded in the uploaded documents only",
       "OTP sign-in and file management for exhibitors",
@@ -85,10 +85,11 @@ export const PROJECTS: Project[] = [
       { label: "LLM", value: "LLaMA 3.2 (Ollama)" },
       { label: "Vector store", value: "ChromaDB" },
       { label: "Speech", value: "faster-whisper · edge-tts" },
-      { label: "Relevance", value: "92% on eval set" },
+      { label: "Answers", value: "From the booth’s documents only" },
     ],
     tech: ["Python", "FastAPI", "LangChain", "ChromaDB", "Ollama", "LLaMA 3.2", "faster-whisper", "edge-tts", "React", "SQLite"],
     github: "https://github.com/4aruu/Lumira",
+    role: "Wrote the code, end to end, in a team of four.",
   },
   {
     id: "nutriswap",
@@ -107,17 +108,17 @@ export const PROJECTS: Project[] = [
       "React 18 (Vite, Redux Toolkit, Recharts, D3) on Vercel. FastAPI with SQLAlchemy and Pydantic on Render, backed by PostgreSQL on Aiven. Frontend and backend each ship as a Docker image. GitHub Actions runs unit tests, pytest and a production build on every push, and a separate pipeline scans the image with Trivy and runs an OWASP ZAP baseline scan against the running container. The API applies rate limits per endpoint with SlowAPI.",
     decision: {
       title: "Fail closed on allergens",
-      body: "A dish is shown for an avoided allergen only when the data records that allergen as absent. Unknown counts as unsafe, so the list is shorter, and it is never wrong in the direction that hurts someone.",
+      body: "A dish is shown for an avoided allergen only when both its recipe and its preparation are recorded as free of it. Possible or unknown counts as unsafe, so the list is shorter, and it is never wrong in the direction that hurts someone.",
     },
     flow: [
       { label: "PostgreSQL", detail: "Aiven" },
       { label: "FastAPI", detail: "Docker on Render" },
-      { label: "14.8 KB JSON", detail: "one fetch" },
+      { label: "231 foods", detail: "one fetch" },
       { label: "React", detail: "filters in the browser" },
     ],
     metrics: [
       { value: "231", label: "curated dishes with nutrition and allergen data" },
-      { value: "14.8 KB", label: "one payload; every filter runs client-side" },
+      { value: "1", label: "request for the whole catalogue; every filter runs in the browser" },
     ],
     features: [
       "Health-goal presets: Diabetic, Heart-Safe, Weight Loss",
@@ -128,7 +129,7 @@ export const PROJECTS: Project[] = [
     ],
     highlights: [
       { label: "Dishes", value: "231" },
-      { label: "Payload", value: "14.8 KB, one fetch" },
+      { label: "Catalogue", value: "231 foods, one fetch" },
       { label: "Hosting", value: "Vercel · Render · Aiven" },
       { label: "Security CI", value: "Trivy + OWASP ZAP" },
     ],
@@ -141,15 +142,15 @@ export const PROJECTS: Project[] = [
     id: "infobot",
     tier: "featured",
     title: "InfoBot",
-    tagline: "A campus assistant that answers timetable and grade questions and generates the timetable itself.",
+    tagline: "A campus assistant that answers timetable and syllabus questions and generates the timetable itself.",
     description:
-      "Campus assistant whose timetable generator cut multi-staff scheduling from weeks of coordination to under two minutes.",
+      "Campus assistant whose timetable generator cut multi-staff scheduling from two weeks of coordination to under two minutes.",
     period: "Feb 2025 – Apr 2025",
     context: "Academic project",
     longDescription:
-      "Students ask InfoBot about timetables, syllabi and grades in plain language. Behind it, a generator turns course data (teachers, subjects, lecture and practical hours per semester) into weekly timetables for several semesters at once, inside the college's fixed period and break structure.",
+      "Students ask InfoBot about timetables, syllabi and study materials in plain language. Behind it, a generator turns course data (teachers, subjects, lecture and practical hours per semester) into weekly timetables for several semesters at once, inside the college's fixed period and break structure.",
     problem:
-      "Building timetables for three semesters meant weeks of back-and-forth between staff, and every change restarted the negotiation.",
+      "Building timetables for three semesters meant two weeks of back-and-forth between staff, and every change restarted the negotiation.",
     architecture:
       "React frontend on a FastAPI backend with async endpoints, so concurrent student sessions do not block each other. Academic data lives in MySQL, administered through phpMyAdmin. The timetable generator feeds structured course data and the period rules to a language model and receives the timetables back as CSV.",
     decision: {
@@ -163,11 +164,11 @@ export const PROJECTS: Project[] = [
       { label: "Timetables", detail: "CSV per semester" },
     ],
     metrics: [
-      { value: "< 2 min", label: "to generate timetables that took weeks to agree" },
-      { value: "50+", label: "student queries on timetables and grades" },
+      { value: "< 2 min", label: "to generate timetables that took two weeks to agree" },
+      { value: "50+", label: "student queries answered" },
     ],
     features: [
-      "Natural-language questions on timetables, syllabi and grades",
+      "Natural-language questions on timetables, syllabi and study materials",
       "Timetables for multiple semesters generated together",
       "Period and break rules supplied as data",
       "Async FastAPI endpoints for concurrent sessions",
@@ -209,8 +210,8 @@ export const PROJECTS: Project[] = [
     title: "Pharmacy Management System",
     tagline: "Desktop appointment booking for a clinic, in Java Swing and MySQL.",
     description: "Admin desktop app for booking doctor appointments, built with Java Swing and MySQL over JDBC.",
-    period: "2024",
-    context: "Academic project",
+    period: "2023",
+    context: "Academic project · first Java project",
     longDescription:
       "An admin-only desktop application for booking, updating and cancelling doctor appointments, with doctor and patient records stored in MySQL.",
     architecture:

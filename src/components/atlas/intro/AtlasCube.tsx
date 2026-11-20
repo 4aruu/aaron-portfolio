@@ -173,7 +173,11 @@ export default function AtlasCube() {
         $$(".fig0-layer").forEach((e, i) => (T[`s${i}`] = rectOf(e)));
 
         /* the page layout in miniature, as world coordinates for a top-down camera */
-        const M = 0.6, ox = W / 2, oy = H * 0.52, cx = W / 2, cy = H / 2;
+        /* At most 60% size, smaller when the plate is taller than the screen (phones),
+           so the whole miniature is always in view */
+        const lowest = Math.max(...Object.entries(T).filter(([k]) => k !== "base").map(([, r]) => r.y + r.h));
+        const M = Math.max(0.3, Math.min(0.6, (0.44 * H) / Math.max(1, lowest - H / 2)));
+        const ox = W / 2, oy = H * 0.52, cx = W / 2, cy = H / 2;
         const order: Record<string, number> = { base: 0, lid: 3, left: 3, back: 3, front: 3, right: 2 };
         const plan = PARTS.map((d) => {
           const r = T[d.k];
@@ -209,33 +213,53 @@ export default function AtlasCube() {
 
         const io = { ease: "power2.inOut" };
         const t = gsap.timeline({ paused: true, defaults: { ease: "none" }, onUpdate: mark });
+        const sequence = ["lid", "front", "right", "back", "left", "base", ...LAYERS.map((_, i) => `s${i}`)];
+        const each = (fn: (pi: number, i: number) => void) => sequence.forEach((k, i) => fn(PARTS.findIndex((d) => d.k === k), i));
+
         /* 1 · the seams show: the monolith is an assembly */
         t.to(el.querySelectorAll(".cube-prompt, .cube-hint"), { autoAlpha: 0, duration: 0.3 }, 0)
-          .to(el.querySelectorAll(".cube-trace"), { strokeDashoffset: 0, duration: 0.55, stagger: { each: 0.004, from: "random" } }, 0.05)
-          /* 2 · exploded view along its own axes */
-          .to(cam, { sc: 0.8, y: S * 0.2, guide: 1, duration: 1.3, ...io }, 0.4)
-          .to(el.querySelectorAll(".cube-guide"), { opacity: 1, duration: 0.4 }, 0.6)
-          .to(el.querySelectorAll(".cube-node"), { opacity: 1, duration: 0.3, stagger: 0.05 }, 1.0)
-          .to(el.querySelectorAll(".cube-lbl"), { opacity: 1, duration: 0.4, stagger: 0.03 }, 0.95);
-        const sequence = ["lid", "front", "right", "back", "left", "base", ...LAYERS.map((_, i) => `s${i}`)];
-        sequence.forEach((k, i) => {
-          const pi = PARTS.findIndex((d) => d.k === k), d = PARTS[pi];
-          t.to(states[pi], { x: (d.p[0] + d.ex[0]) * S, y: (d.p[1] + d.ex[1]) * S, z: (d.p[2] + d.ex[2]) * S, duration: 0.9, ease: "power3.inOut" }, 0.45 + (i < 6 ? i * 0.07 : 0.42 + (i - 6) * 0.04));
+          .to(el.querySelectorAll(".cube-trace"), { strokeDashoffset: 0, duration: 0.55, stagger: { each: 0.004, from: "random" } }, 0.05);
+
+        /* 2 · exploded view along its own axes, while the camera turns slowly */
+        t.to(cam, { sc: 0.7, y: S * 0.15, tz: CAMERA.tz + 10, guide: 1, duration: 1.4, ...io }, 0.4)
+          .to(el.querySelectorAll(".cube-guide"), { opacity: 1, duration: 0.4 }, 0.7)
+          .to(el.querySelectorAll(".cube-node"), { opacity: 1, duration: 0.3, stagger: 0.05 }, 1.15)
+          .to(el.querySelectorAll(".cube-lbl"), { opacity: 1, duration: 0.4, stagger: 0.03 }, 1.1);
+        each((pi, i) => {
+          const d = PARTS[pi];
+          t.to(states[pi], { x: (d.p[0] + d.ex[0]) * S, y: (d.p[1] + d.ex[1]) * S, z: (d.p[2] + d.ex[2]) * S, duration: 0.9, ease: "power3.inOut" }, i < 6 ? 0.5 + i * 0.08 : 1.0 + (i - 6) * 0.05);
         });
-        /* 3 · every part lies flat and slides into the page layout, in miniature */
-        t.to(el.querySelectorAll(".cube-f > :not(.cube-sh):not(.cube-trace-svg)"), { opacity: 0, duration: 0.3 }, 1.85)
-          .to(el.querySelectorAll(".cube-guide, .cube-node"), { opacity: 0, duration: 0.4 }, 1.85)
-          .to(el.querySelectorAll(".cube-trace"), { opacity: 0, duration: 0.4 }, 1.9)
-          .to(cam, { tx: 0, tz: 0, sc: 1, y: 0, light: 1, duration: 1.25, ...io }, 1.85)
-          .to(el.querySelector(".cube-cyc"), { autoAlpha: 0, duration: 1 }, 1.95);
-        sequence.forEach((k, i) => {
-          const pi = PARTS.findIndex((d) => d.k === k), q = plan[pi];
-          t.to(states[pi], { x: q.x, y: q.y, z: q.z, rx: 0, ry: 0, sx: q.sx, sy: q.sy, sz: q.sz, duration: 1.15, ease: "power3.inOut" }, 1.9 + i * 0.025);
+        /* …and a hold on the exploded view (2.2 → 2.5) */
+
+        /* 3a · each part tips flat and settles on the floor where it is, at its
+           own size, while the camera rises to look straight down. Nothing grows
+           yet, so perspective has nothing large to magnify. */
+        const c1 = 2.5;
+        // the parts lying flat at their exploded spots span about ±1.7 S: keep that on screen
+        const flatScale = Math.min(0.85, (W * 0.46) / (1.7 * S), (H * 0.46) / (1.7 * S));
+        t.to(el.querySelectorAll(".cube-f > :not(.cube-sh):not(.cube-trace-svg), .cube-guide, .cube-node"), { opacity: 0, duration: 0.35 }, c1)
+          .to(el.querySelectorAll(".cube-trace"), { opacity: 0, duration: 0.4 }, c1 + 0.1)
+          .to(cam, { tx: 0, tz: 0, sc: flatScale, y: 0, light: 0.6, duration: 1.0, ...io }, c1);
+        each((pi, i) => {
+          const d = PARTS[pi], q = plan[pi];
+          t.to(states[pi], { x: (d.p[0] + d.ex[0]) * S, y: (d.p[1] + d.ex[1]) * S, z: q.z, rx: 0, ry: 0, sz: q.sz, duration: 1.0, ease: "power2.inOut" }, c1 + i * 0.02);
         });
-        /* 4 · the plan grows into the page */
-        const h0 = 3.35;
-        t.set(layer, { autoAlpha: 1 }, h0)
-          .to(el.querySelector(".cube-stage"), { autoAlpha: 0, duration: 0.25 }, h0)
+
+        /* 3b · now flat and facing the camera, the parts slide and resize into the
+           page layout in miniature: a plain 2D move */
+        const c2 = 3.55;
+        t.to(cam, { sc: 1, light: 1, duration: 1.05, ...io }, c2)
+          .to(el.querySelector(".cube-cyc"), { autoAlpha: 0, duration: 1 }, c2 - 0.15);
+        each((pi, i) => {
+          const q = plan[pi];
+          t.to(states[pi], { x: q.x, y: q.y, sx: q.sx, sy: q.sy, duration: 1.05, ease: "power3.inOut" }, c2 + i * 0.02);
+        });
+
+        /* 4 · the plan grows into the page. The outlines appear over the solid
+           parts first, then the parts fade under them: an overlap, not a swap. */
+        const h0 = 4.7;
+        t.set(layer, { autoAlpha: 1 }, h0 - 0.05)
+          .to(el.querySelector(".cube-stage"), { autoAlpha: 0, duration: 0.5 }, h0 + 0.05)
           .to(hl, { attr: { x1: 0, x2: W }, duration: 0.9, ...io }, h0);
         if (vl) t.to(vl, { attr: { y1: T.left.y, y2: H }, duration: 0.9, ...io }, h0 + 0.05);
         t.to(el.querySelector(".cube-title-sub"), { autoAlpha: 0, duration: 0.25 }, h0)
@@ -262,9 +286,9 @@ export default function AtlasCube() {
         trigRef.current = ScrollTrigger.create({
           trigger: frontis,
           start: `top ${startTop}px`,
-          end: "+=200%",
+          end: "+=300%", // three screen-heights: each wheel notch moves the cube a little, not a lot
           pin: true,
-          scrub: 0.6,
+          scrub: 1, // eases between wheel notches instead of jumping
           animation: t,
           onUpdate: (self) => {
             const p = self.progress;
