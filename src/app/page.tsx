@@ -6,10 +6,9 @@ import Plate03 from "@/components/atlas/plates/Plate03";
 import Plate04 from "@/components/atlas/plates/Plate04";
 import Plate05 from "@/components/atlas/plates/Plate05";
 import PlateMotion from "@/components/atlas/motion/PlateMotion";
-import TimelineSection from "@/components/home/TimelineSection";
-import ToolkitSection from "@/components/home/ToolkitSection";
-import ContactSection from "@/components/home/ContactSection";
-import SiteFooter from "@/components/home/SiteFooter";
+import Plate06 from "@/components/atlas/plates/Plate06";
+import Plate07 from "@/components/atlas/plates/Plate07";
+import Plate08 from "@/components/atlas/plates/Plate08";
 
 export default function Page() {
   return (
@@ -21,12 +20,11 @@ export default function Page() {
         <Plate03 />
         <Plate04 />
         <Plate05 />
-        <TimelineSection />
-        <ToolkitSection />
-        <ContactSection />
+        <Plate06 />
+        <Plate07 />
+        <Plate08 />
         <PlateMotion />
       </main>
-      <SiteFooter />
     </AtlasChrome>
   );
 }

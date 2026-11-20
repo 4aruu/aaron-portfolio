@@ -1450,3 +1450,91 @@ html:has(.atlas-index[open]) { overflow: hidden; }
   .tl-go:focus-visible { outline: none; }
   .tl-card:has(.tl-go:focus-visible) { outline: 2px solid rgb(var(--accent)); outline-offset: 3px; }
 }
+
+/* ── Plate VI · The route (2026-11-20) ── */
+.p06-head { display: flex; flex-direction: column; gap: 16px; max-width: 760px; margin-bottom: clamp(40px, 7vh, 72px); }
+.p06 .tl { max-width: 1200px; margin-inline: auto; }
+
+/* ── Plate VII · Gazetteer ── */
+.p07 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 40px; align-items: start; }
+.p07-text { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: 16px; }
+.p07-index { grid-column: 6 / span 7; min-width: 0; }
+.p07-creds { margin-top: 16px; }
+.p07-creds-title { margin: 0 0 8px; font-family: var(--font-mono), ui-monospace, monospace; font-weight: 400; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--ink-2)); }
+.p07-creds ul { list-style: none; margin: 0; padding: 0; }
+.p07-creds li { display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-top: 1px solid rgb(var(--line) / var(--line-strong-a)); }
+.p07-cred-name { font-size: 0.9375rem; line-height: 1.4; }
+.p07-cred-meta { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; color: rgb(var(--ink-2)); }
+.gz-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.gz-filter { min-height: 44px; padding: 0 16px; border: 1px solid rgb(var(--ink)); background: none; color: rgb(var(--ink)); font: inherit; font-size: 0.875rem; cursor: pointer; transition: background-color var(--motion-150) var(--ease-out), color var(--motion-150) var(--ease-out); }
+.gz-filter[aria-pressed="true"] { background: rgb(var(--ink)); color: rgb(var(--l0)); }
+@media (hover: hover) { .gz-filter[aria-pressed="false"]:hover { background: rgb(var(--ink) / 0.06); } }
+.gz-list { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 40px; border-top: 2px solid rgb(var(--ink)); }
+.gz-entry { break-inside: avoid; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 0 0 8px; border-bottom: 1px solid rgb(var(--line) / var(--line-strong-a)); transition: background-color var(--motion-150) var(--ease-out); }
+.gz-name { padding: 10px 0; font-size: 1rem; line-height: 1.4; }
+.gz-plates { display: flex; flex: none; }
+.gz-plate { min-width: 40px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; color: rgb(var(--ink-2)); text-decoration: none; }
+.gz-plate:hover { color: rgb(var(--accent)); text-decoration: underline; text-underline-offset: 4px; }
+.gz-entry:focus-within { background: rgb(var(--signal) / 0.12); }
+.gz-entry:focus-within .gz-plate { color: rgb(var(--accent)); }
+@media (hover: hover) {
+  .gz-entry:hover { background: rgb(var(--signal) / 0.12); }
+  .gz-entry:hover .gz-plate { color: rgb(var(--accent)); }
+}
+/* Light the plates of the entry under the pointer (or holding focus) in the index rail. */
+.atlas-rail-link[data-num] { transition: background-color var(--motion-150) var(--ease-out), color var(--motion-150) var(--ease-out), box-shadow var(--motion-150) var(--ease-out); }
+
+body:has(.gz-entry[data-lights~="00"]:focus-within) .atlas-rail-link[data-num="00"],
+body:has(.gz-entry[data-lights~="I"]:focus-within) .atlas-rail-link[data-num="I"],
+body:has(.gz-entry[data-lights~="II"]:focus-within) .atlas-rail-link[data-num="II"],
+body:has(.gz-entry[data-lights~="III"]:focus-within) .atlas-rail-link[data-num="III"],
+body:has(.gz-entry[data-lights~="IV"]:focus-within) .atlas-rail-link[data-num="IV"],
+body:has(.gz-entry[data-lights~="V"]:focus-within) .atlas-rail-link[data-num="V"],
+body:has(.gz-entry[data-lights~="VI"]:focus-within) .atlas-rail-link[data-num="VI"],
+body:has(.gz-entry[data-lights~="VII"]:focus-within) .atlas-rail-link[data-num="VII"],
+body:has(.gz-entry[data-lights~="VIII"]:focus-within) .atlas-rail-link[data-num="VIII"] { color: rgb(var(--ink)); box-shadow: inset 0 0 0 2px rgb(var(--signal)); }
+@media (hover: hover) {
+  body:has(.gz-entry[data-lights~="00"]:hover) .atlas-rail-link[data-num="00"],
+  body:has(.gz-entry[data-lights~="I"]:hover) .atlas-rail-link[data-num="I"],
+  body:has(.gz-entry[data-lights~="II"]:hover) .atlas-rail-link[data-num="II"],
+  body:has(.gz-entry[data-lights~="III"]:hover) .atlas-rail-link[data-num="III"],
+  body:has(.gz-entry[data-lights~="IV"]:hover) .atlas-rail-link[data-num="IV"],
+  body:has(.gz-entry[data-lights~="V"]:hover) .atlas-rail-link[data-num="V"],
+  body:has(.gz-entry[data-lights~="VI"]:hover) .atlas-rail-link[data-num="VI"],
+  body:has(.gz-entry[data-lights~="VII"]:hover) .atlas-rail-link[data-num="VII"],
+  body:has(.gz-entry[data-lights~="VIII"]:hover) .atlas-rail-link[data-num="VIII"] { color: rgb(var(--ink)); box-shadow: inset 0 0 0 2px rgb(var(--signal)); }
+}
+
+/* ── Plate VIII · Colophon ── */
+.p08 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 56px; padding-top: clamp(72px, 12vh, 128px); }
+.p08-main { grid-column: 1 / span 8; display: flex; flex-direction: column; gap: 24px; }
+.p08-title { margin: 0; font-size: clamp(4rem, 9vw, 8.5rem); line-height: 0.9; letter-spacing: -0.035em; }
+.p08-address { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+.p08-email { min-height: 44px; display: inline-flex; align-items: center; color: rgb(var(--pd-ink)); font-size: clamp(1.25rem, 2.4vw, 2rem); text-decoration: underline; text-decoration-color: rgb(var(--pd-accent)); text-decoration-thickness: 2px; text-underline-offset: 8px; overflow-wrap: anywhere; }
+.p08-copy { display: flex; align-items: center; gap: 12px; }
+.p08-copy-btn { min-height: 44px; padding: 0 14px; border: 1px solid rgb(var(--pd-line)); background: none; color: rgb(var(--pd-ink)); cursor: pointer; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; transition: border-color var(--motion-150) var(--ease-out); }
+.p08-copy-btn:hover { border-color: rgb(var(--pd-ink)); }
+.p08-status { margin: 0; min-height: 1.5em; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; color: rgb(var(--pd-accent)); }
+.p08-note { margin: 0; max-width: 48ch; font-size: 1.0625rem; line-height: 1.55; color: rgb(var(--pd-ink2)); }
+.p08-links { grid-column: 10 / span 3; align-self: end; list-style: none; margin: 0; padding: 0; border-top: 1px solid rgb(var(--pd-line)); }
+.p08-links a { min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid rgb(var(--pd-line)); color: rgb(var(--pd-ink)); text-decoration: none; }
+.p08-links a > span[aria-hidden] { color: rgb(var(--pd-accent)); transition: transform var(--motion-200) var(--ease-out); }
+@media (hover: hover) { .p08-links a:hover > span[aria-hidden] { transform: translateX(4px); } }
+.p08-links li:last-child a:hover > span[aria-hidden] { transform: translateY(3px); }
+.p08-colophon { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 32px; padding-top: 24px; border-top: 1px solid rgb(var(--pd-line)); }
+.p08-colophon p { margin: 0; max-width: 90ch; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; line-height: 1.6; color: rgb(var(--pd-ink2)); }
+.p08-replay { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; padding: 0; background: none; border: 0; color: rgb(var(--pd-ink)); cursor: pointer; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 4px; }
+.p08-replay-intro { display: none; }
+.atlas-intro .p08-replay-intro { display: inline; }
+.atlas-intro .p08-replay-top { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .p08-links a > span[aria-hidden] { transition: none; }
+}
+
+@media (max-width: 1023.98px) {
+  .p07-text, .p07-index { grid-column: 1 / -1; }
+  .p08-main, .p08-links { grid-column: 1 / -1; }
+}
+@media (max-width: 639.98px) {
+  .gz-list { columns: 1; }
+}

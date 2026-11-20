@@ -1,8 +1,6 @@
 import Link from "next/link";
-import SectionHead from "./SectionHead";
-import Statement from "./Statement";
 import { TIMELINE, type Milestone } from "@/data/profile";
-import TimelineReveal from "@/components/atlas/motion/TimelineReveal";
+import TimelineReveal from "../motion/TimelineReveal";
 
 /* Where a card leads, in plain words, and the line it rolls over to on hover:
    something that reads like a small win. */
@@ -58,22 +56,23 @@ function CardLink({ m }: { m: Milestone }) {
   );
 }
 
-export default function TimelineSection() {
+/* Plate VI · The route. School to now, oldest first; every stop is from the
+   résumé or a GitHub push date. */
+export default function Plate06() {
   return (
-    <section id="timeline" aria-labelledby="timeline-title" className="section">
-      <div className="page">
-        <div className="mb-16 md:mb-24">
-          <Statement text="In *August 2024* I wrote my first web page by hand. Two years later I passed *SAA-C03* and built a web tier on AWS that heals itself." />
-        </div>
-        <SectionHead
-          id="timeline-title"
-          index="03 / Timeline"
-          title="From school to now"
-          lead="Everything I have built, in order. The line under each project shows what was new at that step."
-        />
+    <section id="timeline" className="plate plate-ruled p06" aria-labelledby="p06-title">
+      <header className="p06-head">
+        <p className="plate-kicker">Plate VI · The route</p>
+        <h2 id="p06-title" className="plate-title">
+          From a school in Kuwait to SAA-C03
+        </h2>
+        <p className="plate-lede">
+          Every stop is real, in order. The tags under each project show what was new at that step.
+        </p>
+      </header>
 
-        <ol className="tl m-0 list-none p-0">
-          {TIMELINE.map((m, i) => (
+      <ol className="tl m-0 list-none p-0">
+        {TIMELINE.map((m, i) => (
             <li
               key={`${m.when}-${m.title}`}
               className="tl-item"
@@ -107,9 +106,8 @@ export default function TimelineSection() {
               </article>
             </li>
           ))}
-        </ol>
-        <TimelineReveal />
-      </div>
+      </ol>
+      <TimelineReveal />
     </section>
   );
 }

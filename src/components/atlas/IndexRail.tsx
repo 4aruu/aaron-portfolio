@@ -16,6 +16,7 @@ export default function IndexRail({ current, onHome }: Props) {
             <a
               href={onHome ? `#${p.anchor}` : `/#${p.anchor}`}
               className="atlas-rail-link"
+              data-num={p.numeral}
               aria-current={i === current ? "location" : undefined}
             >
               <span className="atlas-rail-num">{p.numeral}</span>
