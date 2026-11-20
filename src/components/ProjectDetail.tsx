@@ -1,299 +1,301 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Link from "next/link";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import { PROJECTS } from "@/data/projects";
-import {
-    ArrowLeft,
-    ArrowRight,
-    Github,
-    ExternalLink,
-    ChevronRight,
-} from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
+import { PROJECTS, type Project } from "@/data/projects";
+import AtlasChrome from "@/components/atlas/AtlasChrome";
+import { PLATES } from "@/data/plates";
+import SiteFooter from "@/components/home/SiteFooter";
 
 interface Props {
-    projectId: string;
+  projectId: string;
+}
+
+/*
+ * A case study, read in the order a reviewer asks:
+ *   1. What is it, and what came of it?   → the opener and "By the numbers"
+ *   2. The facts at a glance              → one ruled strip
+ *   3. Why it exists                      → the problem, what it demanded, the constraint
+ *   4. What's different                   → each idea: why it matters, then how it's built
+ *   5. How it works                       → what it does, the pipeline, the decision
+ *   6. Credits                            → my role, the stack
+ * Sections are numbered from the project's plate (III.1, III.2…) so the page
+ * reads as part of the atlas.
+ */
+
+function Chapter({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+  const id = `ch-${n}`;
+  return (
+    <section className="cs-chapter" aria-labelledby={id}>
+      <header className="cs-chapter-head">
+        <span className="cs-chapter-n" aria-hidden>
+          {n}
+        </span>
+        <h2 id={id} className="cs-chapter-title">
+          {title}
+        </h2>
+      </header>
+      <div className="cs-chapter-body">{children}</div>
+    </section>
+  );
+}
+
+function Sec({ tag, title, children, wide = false }: { tag: string; title: string; children: React.ReactNode; wide?: boolean }) {
+  return (
+    <div className={wide ? "cs-sec is-wide" : "cs-sec"}>
+      <h3 className="cs-sec-title">
+        <span className="cs-sec-tag">{tag}</span> {title}
+      </h3>
+      {children}
+    </div>
+  );
+}
+
+/* Next / previous. On hover or focus the label rolls over to a line that
+   reads like a small win, and the arrow loops. Screen readers always hear the
+   plain label: the rolled-in line is hidden from them. */
+function TurnLink({ p, dir }: { p: Project; dir: "next" | "prev" }) {
+  const isNext = dir === "next";
+  return (
+    <Link href={`/projects/${p.id}`} className={isNext ? "cs-turn win-host is-next" : "cs-turn win-host is-prev"} rel={dir}>
+      <span className="cs-turn-label">
+        <span className="win-roll">
+          <span className="win-a">{isNext ? "Next case study" : "Previous case study"}</span>
+          <span className="win-b" aria-hidden>
+            {isNext ? "Onward — you’re on a roll" : "Back for another look"}
+          </span>
+        </span>
+        <span className={isNext ? "win-arrow" : "win-arrow is-back"} aria-hidden>
+          <span>{isNext ? "→" : "←"}</span>
+        </span>
+      </span>
+      <span className="cs-turn-title">{p.title}</span>
+      <span className="cs-turn-sub">{p.tagline}</span>
+    </Link>
+  );
 }
 
 export default function ProjectDetail({ projectId }: Props) {
-    const pageRef = useRef<HTMLDivElement>(null);
+  const idx = PROJECTS.findIndex((p) => p.id === projectId);
+  const project = PROJECTS[idx];
+  if (!project) return null;
+  const prev = idx > 0 ? PROJECTS[idx - 1] : null;
+  const next = idx < PROJECTS.length - 1 ? PROJECTS[idx + 1] : null;
 
-    const idx = PROJECTS.findIndex((p) => p.id === projectId);
-    const project = PROJECTS[idx];
-    const prev = idx > 0 ? PROJECTS[idx - 1] : null;
-    const next = idx < PROJECTS.length - 1 ? PROJECTS[idx + 1] : null;
+  // Lumira, NutriSwap and InfoBot have plates of their own; the others do not.
+  const plate = PLATES.findIndex((pl) => pl.anchor === project.id);
+  const num = plate >= 0 ? PLATES[plate].numeral : null;
+  const tag = (i: number) => (num ? `${num}.${i}` : `§${i}`);
+  let s = 0;
+  const nextTag = () => tag(++s);
+  let ch = 0;
+  const nextCh = () => String(++ch).padStart(2, "0");
+  const hasWhy = Boolean(project.problem || (project.needs && project.needs.length));
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
+  const glance = [
+    { k: "Period", v: project.period },
+    { k: "Team", v: project.context },
+    ...project.highlights.map((h) => ({ k: h.label, v: h.value })),
+    ...(project.facts ?? []),
+  ];
 
-        const ctx = gsap.context(() => {
-            gsap.from(".detail-hero-content > *", {
-                y: 32,
-                opacity: 0,
-                duration: 0.7,
-                ease: "power2.out",
-                stagger: 0.08,
-            });
+  return (
+    <AtlasChrome fixedPlate={plate >= 0 ? plate : null}>
+      <main id="main" className="cs" tabIndex={-1}>
+        <Link href={plate >= 0 ? `/#${project.id}` : "/#timeline"} className="cs-back">
+          <span aria-hidden>←</span> {num ? `Plate ${num} · ` : ""}Back to the atlas
+        </Link>
 
-            const sections = pageRef.current?.querySelectorAll(".detail-section");
-            sections?.forEach((section) => {
-                const observer = new IntersectionObserver(
-                    (entries) => {
-                        entries.forEach((entry) => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add("revealed");
-                                observer.unobserve(entry.target);
-                            }
-                        });
-                    },
-                    { threshold: 0.1 }
-                );
-                observer.observe(section);
-            });
-        }, pageRef);
+        {/* 1 · the opener: what it is, and what came of it */}
+        <header className="cs-open">
+          <div className="cs-open-text">
+            <p className="plate-kicker">Case study{num ? ` · Plate ${num}` : ""}</p>
+            <h1 className="cs-title">{project.title}</h1>
+            <p className="cs-lede">{project.tagline}</p>
+            <div className="cs-actions">
+              {project.live && (
+                <a href={project.live} target="_blank" rel="noopener noreferrer" className="atlas-btn atlas-btn-primary">
+                  Open the live app <span className="atlas-btn-arrow" aria-hidden>↗</span>
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+              )}
+              {project.github && (
+                <a href={project.github} target="_blank" rel="noopener noreferrer" className={project.live ? "atlas-btn" : "atlas-btn atlas-btn-primary"}>
+                  Source on GitHub <span className={project.live ? undefined : "atlas-btn-arrow"} aria-hidden>↗</span>
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+              )}
+            </div>
+          </div>
+          {project.metrics.length > 0 && (
+            <aside className="cs-numbers" aria-labelledby="cs-numbers-title">
+              <h2 id="cs-numbers-title" className="cs-numbers-title">
+                By the numbers
+              </h2>
+              <dl>
+                {project.metrics.map((m) => (
+                  <div key={m.label} className="cs-number">
+                    <dt className="cs-number-v">{m.value}</dt>
+                    <dd className="cs-number-l">{m.label}</dd>
+                  </div>
+                ))}
+              </dl>
+            </aside>
+          )}
+        </header>
 
-        return () => ctx.revert();
-    }, []);
+        {/* 2 · the facts at a glance */}
+        <dl className="cs-glance" aria-label="At a glance">
+          {glance.map((g) => (
+            <div key={g.k}>
+              <dt>{g.k}</dt>
+              <dd>{g.v}</dd>
+            </div>
+          ))}
+        </dl>
 
-    if (!project) return null;
+        {/* 3 · why it exists: the problem, what it demanded, what constrained it */}
+        {hasWhy ? (
+          <Chapter n={nextCh()} title="Why it exists">
+            {project.problem && (
+              <Sec tag={nextTag()} title="The problem" wide>
+                <blockquote className="cs-quote">
+                  <p>{project.problem}</p>
+                </blockquote>
+              </Sec>
+            )}
+            {project.needs && project.needs.length > 0 && (
+              <Sec tag={nextTag()} title="So it had to" wide>
+                <ol className="cs-needs">
+                  {project.needs.map((n, i) => (
+                    <li key={n}>
+                      <span className="cs-needs-n" aria-hidden>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {n}
+                    </li>
+                  ))}
+                </ol>
+                {project.constraint && (
+                  <p className="cs-constraint">
+                    <span className="cs-constraint-k">The constraint that shaped it</span>
+                    {project.constraint}
+                  </p>
+                )}
+              </Sec>
+            )}
+          </Chapter>
+        ) : null}
 
-    return (
-        <div ref={pageRef} className="min-h-screen bg-canvas dark:bg-dark-canvas text-obsidian dark:text-dark-text">
-            {/* ═══ Hero ═══ */}
-            <section className="relative pt-28 sm:pt-36 pb-16 sm:pb-24 px-6 sm:px-10 lg:px-16 border-b border-fog dark:border-dark-border bg-paper dark:bg-dark-surface overflow-hidden">
-                {/* Project artwork — static muted presence (no hover context on a full page) */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                    src={`/projects/bg-${project.id}.png`}
-                    alt=""
-                    className="pointer-events-none absolute -right-20 top-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full object-cover grayscale opacity-[0.12] hidden lg:block"
-                />
-                <div className="detail-hero-content relative z-10 max-w-content mx-auto">
-                    {/* Back link */}
-                    <Link
-                        href="/"
-                        className="inline-flex items-center gap-2 text-obsidian/50 dark:text-dark-text/50 text-sm hover:text-signal-blue transition-colors duration-200 mb-10 no-underline"
-                    >
-                        <ArrowLeft size={14} />
-                        Back to Home
-                    </Link>
-
-                    {/* Number + Title */}
-                    <div className="flex items-start gap-5 mb-6">
-                        <span className="text-obsidian/20 dark:text-dark-text/20 font-mono text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-none mt-1">
-                            {String(idx + 1).padStart(2, "0")}
-                        </span>
-                        <div>
-                            <h1 className="font-display font-semibold text-3xl sm:text-4xl lg:text-5xl tracking-[-0.02em] leading-[1.08] text-obsidian dark:text-dark-text">
-                                {project.title}
-                            </h1>
-                            <p className="text-obsidian/60 dark:text-dark-text/60 text-base sm:text-lg mt-3 max-w-2xl leading-relaxed">
-                                {project.description}
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Tech pills */}
-                    <div className="flex flex-wrap gap-2 mt-8">
-                        {project.tech.map((t, i) => (
-                            <span
-                                key={i}
-                                className="px-3 py-1.5 rounded-pill bg-mist dark:bg-dark-mist text-charcoal dark:text-dark-text-secondary text-[11px] font-mono font-medium"
-                            >
-                                {t}
-                            </span>
+        {/* 4 · what is different: each idea's why first, then its tech */}
+        {project.ideas && project.ideas.length > 0 && (
+          <Chapter n={nextCh()} title="What’s different">
+            <ol className="cs-ideas">
+              {project.ideas.map((idea, i) => (
+                <li key={idea.title} className="cs-idea">
+                  <span className="cs-idea-n" aria-hidden>
+                    {nextTag()}
+                  </span>
+                  <h3 className="cs-idea-title">{idea.title}</h3>
+                  <div className="cs-idea-why">
+                    <p className="cs-idea-k">Why</p>
+                    <p>{idea.why}</p>
+                  </div>
+                  <div className="cs-idea-how">
+                    <p className="cs-idea-k">How</p>
+                    <p>{idea.how}</p>
+                    {idea.tech && idea.tech.length > 0 && (
+                      <ul className="cs-stack" aria-label={`Used for idea ${i + 1}`}>
+                        {idea.tech.map((t) => (
+                          <li key={t}>{t}</li>
                         ))}
-                    </div>
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </Chapter>
+        )}
 
-                    {/* Action Links */}
-                    <div className="flex items-center gap-4 mt-8">
-                        {project.github && project.github !== "#" && (
-                            <a
-                                href={project.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn-neutral-pill inline-flex items-center gap-2.5 text-sm no-underline"
-                            >
-                                <Github size={15} />
-                                View Source
-                            </a>
-                        )}
-                        {project.live && (
-                            <a
-                                href={project.live}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn-primary-pill inline-flex items-center gap-2.5 text-sm no-underline"
-                            >
-                                <ExternalLink size={15} />
-                                Live Demo
-                            </a>
-                        )}
-                    </div>
-                </div>
-            </section>
+        {/* 5 · how it works: what it does, the pipeline, the trade-off */}
+        <Chapter n={nextCh()} title={hasWhy ? "How it works" : "What it is"}>
+          <Sec tag={nextTag()} title="What it does" wide>
+            <div className="cs-does">
+              <p className="cs-body">{project.longDescription}</p>
+              {project.features.length > 0 && (
+                <ul className="cs-checks" aria-label="Features">
+                  {project.features.map((f) => (
+                    <li key={f}>
+                      <span className="cs-check" aria-hidden>
+                        ✓
+                      </span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </Sec>
+          {(project.flow.length > 0 || project.architecture) && (
+            <Sec tag={nextTag()} title="Architecture" wide>
+              {project.flow.length > 0 && (
+                <ol className="cs-pipe" aria-label={`${project.title} pipeline, in order`}>
+                  {project.flow.map((step, i) => (
+                    <li key={step.label}>
+                      <span className="cs-pipe-n" aria-hidden>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="cs-pipe-name">{step.label}</span>
+                      {step.detail && <span className="cs-pipe-detail">{step.detail}</span>}
+                    </li>
+                  ))}
+                </ol>
+              )}
+              {project.architecture && <p className="cs-body cs-arch">{project.architecture}</p>}
+            </Sec>
+          )}
+          {project.decision && (
+            <Sec tag={nextTag()} title="The decision" wide>
+              <div className="cs-decision plate-dark">
+                <p className="cs-decision-title">{project.decision.title}</p>
+                <p className="cs-decision-body">{project.decision.body}</p>
+                {project.decision.points && (
+                  <dl className="cs-decision-points">
+                    {project.decision.points.map((pt) => (
+                      <div key={pt.k}>
+                        <dt>{pt.k}</dt>
+                        <dd>{pt.v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+              </div>
+            </Sec>
+          )}
+        </Chapter>
 
-            {/* ═══ Highlights Strip ═══ */}
-            {project.highlights.length > 0 && (
-                <section className="detail-section reveal-up border-b border-fog dark:border-dark-border bg-paper dark:bg-dark-surface">
-                    <div className="max-w-content mx-auto px-6 sm:px-10 lg:px-16 py-10 sm:py-14">
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
-                            {project.highlights.map((h, i) => (
-                                <div key={i} className="text-center sm:text-left">
-                                    <p className="text-xl sm:text-2xl font-display font-semibold tracking-tight text-signal-blue dark:text-signal-blue-dark">
-                                        {h.value}
-                                    </p>
-                                    <p className="text-obsidian/40 dark:text-dark-text/40 text-[11px] font-mono tracking-[0.1em] uppercase mt-1">
-                                        {h.label}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* ═══ Overview ═══ */}
-            <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16">
-                <div className="max-w-content mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-                        {project.problem && (
-                            <div>
-                                <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-5">
-                                    The Problem
-                                </h2>
-                                <p className="text-obsidian/70 dark:text-dark-text/70 text-base leading-relaxed">
-                                    {project.problem}
-                                </p>
-                            </div>
-                        )}
-
-                        <div>
-                            <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-5">
-                                The Solution
-                            </h2>
-                            <p className="text-obsidian/70 dark:text-dark-text/70 text-base leading-relaxed">
-                                {project.longDescription}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══ Architecture ═══ */}
-            {project.architecture && (
-                <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-paper dark:bg-dark-surface border-y border-fog dark:border-dark-border">
-                    <div className="max-w-content mx-auto">
-                        <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-8">
-                            System Architecture
-                        </h2>
-
-                        <div className="relative rounded-card bg-canvas dark:bg-dark-canvas border border-fog dark:border-dark-border p-8 sm:p-10 lg:p-12">
-                            <p className="text-obsidian/70 dark:text-dark-text/70 text-base sm:text-lg leading-[1.8] max-w-3xl">
-                                {project.architecture}
-                            </p>
-
-                            {/* Pipeline visualization */}
-                            <div className="relative z-10 mt-10 flex flex-wrap items-center gap-3">
-                                {project.tech.slice(0, 5).map((t, i) => (
-                                    <span key={i} className="flex items-center gap-2">
-                                        <span className="px-3 py-1.5 rounded-link bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border text-obsidian/70 dark:text-dark-text/70 text-[11px] font-mono font-medium">
-                                            {t}
-                                        </span>
-                                        {i < Math.min(4, project.tech.length - 1) && (
-                                            <ChevronRight size={12} className="text-obsidian/25 dark:text-dark-text/25" />
-                                        )}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* ═══ Features ═══ */}
-            {project.features.length > 0 && (
-                <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16">
-                    <div className="max-w-content mx-auto">
-                        <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-10">
-                            Key Features
-                        </h2>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {project.features.map((feature, i) => (
-                                <div
-                                    key={i}
-                                    className="group rounded-card bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border p-6 transition-colors duration-300 hover:border-obsidian/25"
-                                >
-                                    <span className="text-obsidian/25 dark:text-dark-text/25 font-mono text-[11px] font-semibold block mb-3">
-                                        {String(i + 1).padStart(2, "0")}
-                                    </span>
-                                    <p className="text-obsidian/70 dark:text-dark-text/70 text-sm leading-relaxed">
-                                        {feature}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* ═══ My Role ═══ */}
+        {/* 6 · credits */}
+        <Chapter n={nextCh()} title="Credits">
+          <div className="cs-credits">
             {project.role && (
-                <section className="detail-section reveal-up py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-paper dark:bg-dark-surface border-y border-fog dark:border-dark-border">
-                    <div className="max-w-content mx-auto">
-                        <h2 className="text-signal-blue dark:text-signal-blue-dark text-xs font-semibold font-text tracking-[0.15em] uppercase mb-6">
-                            My Role
-                        </h2>
-                        <p className="text-obsidian/70 dark:text-dark-text/70 text-lg sm:text-xl leading-relaxed max-w-3xl">
-                            {project.role}
-                        </p>
-                    </div>
-                </section>
+              <Sec tag={nextTag()} title="My role">
+                <p className="cs-body">{project.role}</p>
+              </Sec>
             )}
+            <Sec tag={nextTag()} title="Stack">
+              <ul className="cs-stack">
+                {project.tech.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            </Sec>
+          </div>
+        </Chapter>
 
-            {/* ═══ Previous / Next Navigation ═══ */}
-            <section className="border-t border-fog dark:border-dark-border py-12 sm:py-16 px-6 sm:px-10 lg:px-16">
-                <div className="max-w-content mx-auto flex items-stretch justify-between gap-6">
-                    {prev ? (
-                        <Link
-                            href={`/projects/${prev.id}`}
-                            className="group flex-1 max-w-[45%] rounded-card bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border p-6 sm:p-8 transition-colors duration-300 hover:border-obsidian/25 no-underline"
-                        >
-                            <span className="flex items-center gap-2 text-obsidian/40 dark:text-dark-text/40 text-[11px] font-mono tracking-[0.15em] uppercase mb-3">
-                                <ArrowLeft size={12} />
-                                Previous
-                            </span>
-                            <h3 className="font-display font-semibold text-base sm:text-lg text-obsidian dark:text-dark-text group-hover:text-signal-blue transition-colors duration-200 tracking-tight">
-                                {prev.title}
-                            </h3>
-                        </Link>
-                    ) : (
-                        <div className="flex-1" />
-                    )}
-
-                    {next ? (
-                        <Link
-                            href={`/projects/${next.id}`}
-                            className="group flex-1 max-w-[45%] rounded-card bg-paper dark:bg-dark-surface border border-fog dark:border-dark-border p-6 sm:p-8 transition-colors duration-300 hover:border-obsidian/25 no-underline text-right"
-                        >
-                            <span className="flex items-center justify-end gap-2 text-obsidian/40 dark:text-dark-text/40 text-[11px] font-mono tracking-[0.15em] uppercase mb-3">
-                                Next
-                                <ArrowRight size={12} />
-                            </span>
-                            <h3 className="font-display font-semibold text-base sm:text-lg text-obsidian dark:text-dark-text group-hover:text-signal-blue transition-colors duration-200 tracking-tight">
-                                {next.title}
-                            </h3>
-                        </Link>
-                    ) : (
-                        <div className="flex-1" />
-                    )}
-                </div>
-            </section>
-        </div>
-    );
+        <nav aria-label="More case studies" className="cs-turns">
+          {prev ? <TurnLink p={prev} dir="prev" /> : <span />}
+          {next && <TurnLink p={next} dir="next" />}
+        </nav>
+      </main>
+      <SiteFooter />
+    </AtlasChrome>
+  );
 }

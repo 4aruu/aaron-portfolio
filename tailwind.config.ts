@@ -1,55 +1,68 @@
 import type { Config } from "tailwindcss";
 
+/* Colours resolve to CSS variables in globals.css, so light/dark switching
+   happens in one place. The legacy names (canvas, obsidian, signal-blue, …)
+   are kept as aliases so the project detail pages pick up the new system;
+   their dark-* variants resolve to the same variables. */
+const v = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+
 const config: Config = {
   darkMode: "media",
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       colors: {
-        /* ── Light mode ── */
-        canvas:       "#faf9f7",   // warm off-white (was cool #f5f5f7)
-        paper:        "#f4f1ec",   // warm linen surface (was #ffffff)
-        obsidian:     "#2c2a27",   // warm charcoal (was cool #1d1d1f)
-        "iron-gray":  "#6b6459",   // warm mid-gray
-        slate:        "#4a433c",   // warm slate
-        charcoal:     "#2e2b27",   // warm dark
-        mist:         "#e8e2da",   // warm mist (was #e2e2e5)
-        fog:          "#d9d2c8",   // warm fog (was #d6d6d6)
-        void:         "#0f0e0d",   // warm near-black
+        l0: v("l0"),
+        l1: v("l1"),
+        l2: v("l2"),
+        ink: v("ink"),
+        "ink-2": v("ink-2"),
+        "ink-3": v("ink-3"),
+        accent: v("accent"),
+        signal: v("signal"),
+        line: v("line"),
 
-        /* ── Accent: sage green ── */
-        "signal-blue":  "#4a7c59",  // sage green (replaces electric blue)
-        "link-blue":    "#3d6b4a",  // deeper sage for links
-        "pulse-green":  "#4a7c59",
-        "deep-green":   "#3a6248",
-        ultraviolet:    "#7d6b8a",  // muted mauve
-        "ember-orange": "#b8622a",  // warm amber
-        "lagoon-teal":  "#4a7c72",  // muted teal
-
-        /* ── Dark mode ── */
-        "dark-canvas":          "#0f0e0d",   // warm near-black
-        "dark-surface":         "#1a1815",   // warm lifted surface
-        "dark-text":            "#e8e4de",   // warm off-white text
-        "dark-text-secondary":  "#9b9188",   // warm secondary
-        "dark-border":          "#2e2b27",   // warm border
-        "dark-mist":            "#252220",   // warm mist surface
-        "signal-blue-dark":     "#6aab82",   // lighter sage for dark mode
+        /* legacy aliases */
+        canvas: v("l0"),
+        paper: v("l1"),
+        obsidian: v("ink"),
+        "iron-gray": v("ink-2"),
+        slate: v("ink-2"),
+        charcoal: v("ink"),
+        mist: v("l0"),
+        fog: v("line"),
+        "signal-blue": v("accent"),
+        "link-blue": v("accent"),
+        "dark-canvas": v("l0"),
+        "dark-surface": v("l1"),
+        "dark-text": v("ink"),
+        "dark-text-secondary": v("ink-2"),
+        "dark-border": v("line"),
+        "dark-mist": v("l0"),
+        "signal-blue-dark": v("accent"),
       },
       fontFamily: {
-        /* DM Serif Display for editorial headings — Inter for body */
-        display: ['"DM Serif Display"', "Georgia", "serif"],
-        text:    ['"Inter"', "system-ui", "sans-serif"],
-        mono:    ['"JetBrains Mono"', "monospace"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        text: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-serif)", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+      },
+      fontWeight: {
+        /* three weights only; bold/extrabold collapse to semibold */
+        bold: "600",
+        extrabold: "600",
+        black: "600",
       },
       borderRadius: {
-        link:        "10px",
-        card:        "20px",   // slightly less rounded — more restrained
-        pill:        "980px",
-        "button-lg": "36px",
+        link: "8px",
+        card: "12px",
+        pill: "8px",
+        "button-lg": "8px",
       },
       maxWidth: {
-        page:    "1440px",
-        content: "980px",
+        page: "1280px",
+        content: "960px",
       },
     },
   },
@@ -57,4 +70,3 @@ const config: Config = {
 };
 
 export default config;
-

@@ -1,48 +1,30 @@
-"use client";
-
-import { useEffect } from "react";
-import Lenis from "lenis";
-
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import TechMarquee from "@/components/TechMarquee";
-import Features from "@/components/Features";
-import Philosophy from "@/components/Philosophy";
-import Protocol from "@/components/Protocol";
-import ProjectsShowcase from "@/components/ProjectsShowcase";
-import ContactCTA from "@/components/ContactCTA";
-import Footer from "@/components/Footer";
+import AtlasChrome from "@/components/atlas/AtlasChrome";
+import Plate00 from "@/components/atlas/plates/Plate00";
+import Plate01 from "@/components/atlas/plates/Plate01";
+import Plate02 from "@/components/atlas/plates/Plate02";
+import Plate03 from "@/components/atlas/plates/Plate03";
+import Plate04 from "@/components/atlas/plates/Plate04";
+import Plate05 from "@/components/atlas/plates/Plate05";
+import PlateMotion from "@/components/atlas/motion/PlateMotion";
+import Plate06 from "@/components/atlas/plates/Plate06";
+import Plate07 from "@/components/atlas/plates/Plate07";
+import Plate08 from "@/components/atlas/plates/Plate08";
 
 export default function Page() {
-  // Smooth scrolling
-  useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.07,
-      smoothWheel: true,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-    return () => lenis.destroy();
-  }, []);
-
   return (
-    <>
-      <Navbar />
-      <main>
-        <Hero />
-        <TechMarquee />
-        <Features />
-        <Philosophy />
-        <Protocol />
-        <ProjectsShowcase />
-        <ContactCTA />
+    <AtlasChrome onHome>
+      <main id="main" tabIndex={-1}>
+        <Plate00 />
+        <Plate01 />
+        <Plate02 />
+        <Plate03 />
+        <Plate04 />
+        <Plate05 />
+        <Plate06 />
+        <Plate07 />
+        <Plate08 />
+        <PlateMotion />
       </main>
-      <Footer />
-    </>
+    </AtlasChrome>
   );
 }
