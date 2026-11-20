@@ -12,9 +12,10 @@ interface Props {
  * A case study, read in the order a reviewer asks:
  *   1. What is it, and what came of it?   → the opener and "By the numbers"
  *   2. The facts at a glance              → one ruled strip
- *   3. The story                          → the problem, what it does
- *   4. How it works                       → the pipeline, the architecture, the decision
- *   5. Credits                            → my role, the stack
+ *   3. Why it exists                      → the problem, what it demanded, the constraint
+ *   4. What's different                   → each idea: why it matters, then how it's built
+ *   5. How it works                       → what it does, the pipeline, the decision
+ *   6. Credits                            → my role, the stack
  * Sections are numbered from the project's plate (III.1, III.2…) so the page
  * reads as part of the atlas.
  */
@@ -84,11 +85,15 @@ export default function ProjectDetail({ projectId }: Props) {
   const tag = (i: number) => (num ? `${num}.${i}` : `§${i}`);
   let s = 0;
   const nextTag = () => tag(++s);
+  let ch = 0;
+  const nextCh = () => String(++ch).padStart(2, "0");
+  const hasWhy = Boolean(project.problem || (project.needs && project.needs.length));
 
   const glance = [
     { k: "Period", v: project.period },
     { k: "Team", v: project.context },
     ...project.highlights.map((h) => ({ k: h.label, v: h.value })),
+    ...(project.facts ?? []),
   ];
 
   return (
@@ -146,15 +151,72 @@ export default function ProjectDetail({ projectId }: Props) {
           ))}
         </dl>
 
-        {/* 3 · the story */}
-        <Chapter n="01" title="The story">
-          {project.problem && (
-            <Sec tag={nextTag()} title="The problem" wide>
-              <blockquote className="cs-quote">
-                <p>{project.problem}</p>
-              </blockquote>
-            </Sec>
-          )}
+        {/* 3 · why it exists: the problem, what it demanded, what constrained it */}
+        {hasWhy ? (
+          <Chapter n={nextCh()} title="Why it exists">
+            {project.problem && (
+              <Sec tag={nextTag()} title="The problem" wide>
+                <blockquote className="cs-quote">
+                  <p>{project.problem}</p>
+                </blockquote>
+              </Sec>
+            )}
+            {project.needs && project.needs.length > 0 && (
+              <Sec tag={nextTag()} title="So it had to" wide>
+                <ol className="cs-needs">
+                  {project.needs.map((n, i) => (
+                    <li key={n}>
+                      <span className="cs-needs-n" aria-hidden>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {n}
+                    </li>
+                  ))}
+                </ol>
+                {project.constraint && (
+                  <p className="cs-constraint">
+                    <span className="cs-constraint-k">The constraint that shaped it</span>
+                    {project.constraint}
+                  </p>
+                )}
+              </Sec>
+            )}
+          </Chapter>
+        ) : null}
+
+        {/* 4 · what is different: each idea's why first, then its tech */}
+        {project.ideas && project.ideas.length > 0 && (
+          <Chapter n={nextCh()} title="What’s different">
+            <ol className="cs-ideas">
+              {project.ideas.map((idea, i) => (
+                <li key={idea.title} className="cs-idea">
+                  <span className="cs-idea-n" aria-hidden>
+                    {nextTag()}
+                  </span>
+                  <h3 className="cs-idea-title">{idea.title}</h3>
+                  <div className="cs-idea-why">
+                    <p className="cs-idea-k">Why</p>
+                    <p>{idea.why}</p>
+                  </div>
+                  <div className="cs-idea-how">
+                    <p className="cs-idea-k">How</p>
+                    <p>{idea.how}</p>
+                    {idea.tech && idea.tech.length > 0 && (
+                      <ul className="cs-stack" aria-label={`Used for idea ${i + 1}`}>
+                        {idea.tech.map((t) => (
+                          <li key={t}>{t}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </Chapter>
+        )}
+
+        {/* 5 · how it works: what it does, the pipeline, the trade-off */}
+        <Chapter n={nextCh()} title={hasWhy ? "How it works" : "What it is"}>
           <Sec tag={nextTag()} title="What it does" wide>
             <div className="cs-does">
               <p className="cs-body">{project.longDescription}</p>
@@ -172,42 +234,46 @@ export default function ProjectDetail({ projectId }: Props) {
               )}
             </div>
           </Sec>
+          {(project.flow.length > 0 || project.architecture) && (
+            <Sec tag={nextTag()} title="Architecture" wide>
+              {project.flow.length > 0 && (
+                <ol className="cs-pipe" aria-label={`${project.title} pipeline, in order`}>
+                  {project.flow.map((step, i) => (
+                    <li key={step.label}>
+                      <span className="cs-pipe-n" aria-hidden>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="cs-pipe-name">{step.label}</span>
+                      {step.detail && <span className="cs-pipe-detail">{step.detail}</span>}
+                    </li>
+                  ))}
+                </ol>
+              )}
+              {project.architecture && <p className="cs-body cs-arch">{project.architecture}</p>}
+            </Sec>
+          )}
+          {project.decision && (
+            <Sec tag={nextTag()} title="The decision" wide>
+              <div className="cs-decision plate-dark">
+                <p className="cs-decision-title">{project.decision.title}</p>
+                <p className="cs-decision-body">{project.decision.body}</p>
+                {project.decision.points && (
+                  <dl className="cs-decision-points">
+                    {project.decision.points.map((pt) => (
+                      <div key={pt.k}>
+                        <dt>{pt.k}</dt>
+                        <dd>{pt.v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+              </div>
+            </Sec>
+          )}
         </Chapter>
 
-        {/* 4 · how it works */}
-        {(project.flow.length > 0 || project.architecture || project.decision) && (
-          <Chapter n="02" title="How it works">
-            {(project.flow.length > 0 || project.architecture) && (
-              <Sec tag={nextTag()} title="Architecture" wide>
-                {project.flow.length > 0 && (
-                  <ol className="cs-pipe" aria-label={`${project.title} pipeline, in order`}>
-                    {project.flow.map((step, i) => (
-                      <li key={step.label}>
-                        <span className="cs-pipe-n" aria-hidden>
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="cs-pipe-name">{step.label}</span>
-                        {step.detail && <span className="cs-pipe-detail">{step.detail}</span>}
-                      </li>
-                    ))}
-                  </ol>
-                )}
-                {project.architecture && <p className="cs-body cs-arch">{project.architecture}</p>}
-              </Sec>
-            )}
-            {project.decision && (
-              <Sec tag={nextTag()} title="The decision" wide>
-                <div className="cs-decision plate-dark">
-                  <p className="cs-decision-title">{project.decision.title}</p>
-                  <p className="cs-decision-body">{project.decision.body}</p>
-                </div>
-              </Sec>
-            )}
-          </Chapter>
-        )}
-
-        {/* 5 · credits */}
-        <Chapter n={project.flow.length > 0 || project.architecture || project.decision ? "03" : "02"} title="Credits">
+        {/* 6 · credits */}
+        <Chapter n={nextCh()} title="Credits">
           <div className="cs-credits">
             {project.role && (
               <Sec tag={nextTag()} title="My role">

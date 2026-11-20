@@ -18,6 +18,14 @@ export interface FlowStep {
   detail?: string;
 }
 
+/** One thing the project does differently: why it matters, then how it is built. */
+export interface ProjectIdea {
+  title: string;
+  why: string;
+  how: string;
+  tech?: string[];
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -30,9 +38,17 @@ export interface Project {
   context: string;
   longDescription: string;
   problem?: string;
+  /** What the problem demanded of a solution. */
+  needs?: string[];
+  /** The constraint that shaped the design, if one did. */
+  constraint?: string;
+  /** What is different about it: the "why" first, then the tech. */
+  ideas?: ProjectIdea[];
   architecture?: string;
   /** The one engineering trade-off worth asking about in an interview. */
-  decision?: { title: string; body: string };
+  decision?: { title: string; body: string; points?: { k: string; v: string }[] };
+  /** Extra facts for the at-a-glance strip. */
+  facts?: { k: string; v: string }[];
   flow: FlowStep[];
   metrics: ProjectMetric[];
   features: string[];
@@ -58,11 +74,42 @@ export const PROJECTS: Project[] = [
       "Exhibitors upload their project documents (PDF, TXT or DOCX) and get a QR code for their booth. Visitors scan it and ask questions by voice or text. Lumira transcribes the question, retrieves the relevant passages from a ChromaDB vector store and has LLaMA 3.2 answer from that context alone, then reads the answer back with neural text-to-speech.",
     problem:
       "At project expos, visitors ask detailed questions faster than a team can answer them, and the answers live in a long report nobody can search on the spot.",
+    needs: [
+      "Know the project as well as its report does",
+      "Answer in seconds, out loud",
+      "Never make things up",
+    ],
+    constraint: "The documents belong to the exhibitor, so they could not be sent anywhere to be answered.",
+    ideas: [
+      {
+        title: "It is allowed to say “I don’t know”",
+        why: "At a booth, a confident wrong answer is worse than none. When the documents don’t cover a question, Lumira says “I don’t have that information right now” instead of guessing.",
+        how: "The model sees only the question and the passages retrieval returns, and its prompt forbids any name or term the documents don’t contain.",
+        tech: ["LangChain retrievers", "ChromaDB", "LLaMA 3.2"],
+      },
+      {
+        title: "Scan, speak, listen",
+        why: "Nobody installs an app at a stall. A QR code opens a web page on the visitor’s own phone, and the whole exchange can happen by voice.",
+        how: "A React web app records the question, faster-whisper transcribes it on the exhibitor’s GPU, and edge-tts reads the answer back.",
+        tech: ["React", "faster-whisper", "edge-tts"],
+      },
+      {
+        title: "The exhibitor controls the code",
+        why: "Printed QR codes outlive the event they were printed for. An exhibitor can switch a booth off and on, destroy its code so every printed copy stops working, or issue a new one for the next expo.",
+        how: "OTP sign-in to an exhibitor portal. An inactive or destroyed code answers nothing.",
+        tech: ["FastAPI", "OTP sign-in", "SQLite"],
+      },
+    ],
     architecture:
       "React (Vite) frontend served to visitors' phones. A FastAPI backend exposes /api/stt, /api/chat and /api/speak. Speech is transcribed with faster-whisper on the GPU; the RAG engine uses LangChain retrievers over ChromaDB and calls LLaMA 3.2 through Ollama; answers are synthesised with edge-tts. Exhibitors sign in with an OTP, manage files, and can activate or deactivate the booth QR code, destroy it, or regenerate it. Session analytics are stored in SQLite in WAL mode.",
     decision: {
       title: "Run the model locally",
       body: "LLaMA 3.2 runs through Ollama on the exhibitor's own machine, so the documents and the model never leave it and a question costs nothing to answer. Only the finished answer goes to edge-tts for speech. The price is hardware: speech-to-text needs a GPU to stay responsive.",
+      points: [
+        { k: "Documents", v: "Never leave the machine (a hosted API would receive them)" },
+        { k: "Cost per question", v: "None (a hosted API is paid per use)" },
+        { k: "The price", v: "Hardware: speech-to-text needs a GPU" },
+      ],
     },
     flow: [
       { label: "Voice", detail: "visitor's phone" },
@@ -89,6 +136,7 @@ export const PROJECTS: Project[] = [
     ],
     tech: ["Python", "FastAPI", "LangChain", "ChromaDB", "Ollama", "LLaMA 3.2", "faster-whisper", "edge-tts", "React", "SQLite"],
     github: "https://github.com/4aruu/Lumira",
+    facts: [{ k: "Presented", v: "AICERA-ICAISCST 2026" }],
     role: "Wrote the code, end to end, in a team of four.",
   },
   {
@@ -104,6 +152,37 @@ export const PROJECTS: Project[] = [
       "A search over 231 curated dishes, Kerala cuisine first, with nutrition, allergen and sustainability data for each. Pick a goal such as Diabetic, Heart-Safe or Weight Loss, mark what you avoid, and NutriSwap suggests alternatives from the same food group and compares any two side by side.",
     problem:
       "Generic nutrition apps rarely know Kerala dishes, and allergen data is often missing. Treating missing data as safe is the dangerous default.",
+    needs: [
+      "Know Kerala dishes, not just generic ones",
+      "Suggest a swap that fits a specific health goal",
+      "Never call a dish safe when its allergen data is missing",
+    ],
+    ideas: [
+      {
+        title: "Kerala dishes first",
+        why: "Generic nutrition databases rarely list them, so the catalogue was built by hand: 231 dishes, each with nutrition, allergen and sustainability data.",
+        how: "Seed data in PostgreSQL, modelled with SQLAlchemy and validated with Pydantic.",
+        tech: ["PostgreSQL", "SQLAlchemy", "Pydantic"],
+      },
+      {
+        title: "Swap, don’t just forbid",
+        why: "A list of what not to eat leaves you with nothing to eat. NutriSwap suggests an alternative from the same food group that fits your goal, and puts the two side by side.",
+        how: "Goal presets (Diabetic, Heart-Safe, Weight Loss) and a comparison view drawn with Recharts and D3.",
+        tech: ["React", "Recharts", "D3"],
+      },
+      {
+        title: "Filters that answer instantly",
+        why: "Changing a goal or an allergen should feel immediate, not like a page load.",
+        how: "The whole catalogue arrives in one request; every filter then runs in the browser with no further calls to the server.",
+        tech: ["FastAPI", "Redux Toolkit"],
+      },
+      {
+        title: "Tested and scanned on every push",
+        why: "A health app gives advice people may act on, so it is built and checked like production software.",
+        how: "GitHub Actions runs the tests and a production build; Trivy scans the Docker image and OWASP ZAP the running container; SlowAPI rate-limits the API.",
+        tech: ["GitHub Actions", "Docker", "Trivy", "OWASP ZAP"],
+      },
+    ],
     architecture:
       "React 18 (Vite, Redux Toolkit, Recharts, D3) on Vercel. FastAPI with SQLAlchemy and Pydantic on Render, backed by PostgreSQL on Aiven. Frontend and backend each ship as a Docker image. GitHub Actions runs unit tests, pytest and a production build on every push, and a separate pipeline scans the image with Trivy and runs an OWASP ZAP baseline scan against the running container. The API applies rate limits per endpoint with SlowAPI.",
     decision: {
@@ -151,11 +230,37 @@ export const PROJECTS: Project[] = [
       "Students ask InfoBot about timetables, syllabi and study materials in plain language. Behind it, a generator turns course data (teachers, subjects, lecture and practical hours per semester) into weekly timetables for several semesters at once, inside the college's fixed period and break structure.",
     problem:
       "Building timetables for three semesters meant two weeks of back-and-forth between staff, and every change restarted the negotiation.",
+    needs: [
+      "Timetables for three semesters that never disagree",
+      "A timetable for every teacher, with no clashes",
+      "Answers to students’ everyday questions, on demand",
+    ],
+    ideas: [
+      {
+        title: "Every semester and every teacher, at once",
+        why: "A teacher who teaches in several semesters can’t be in two rooms at the same time. Generating semesters 4, 6 and 8 together means that rule holds across all of them, and every teacher gets a timetable of their own.",
+        how: "Course records (teacher, subject, lecture, practical and theory hours, semester) and the full rule set go to a language model; the timetables come back as CSV, one per semester and one per teacher.",
+        tech: ["Python", "MySQL", "Language model"],
+      },
+      {
+        title: "One assistant, two jobs",
+        why: "Students needed syllabi, study materials and timetables on demand; staff needed the timetables made in the first place. One backend serves both.",
+        how: "Async FastAPI endpoints keep concurrent student sessions from waiting on each other. MySQL holds courses, timetables, syllabi and study materials.",
+        tech: ["FastAPI", "React", "MySQL"],
+      },
+    ],
     architecture:
       "React frontend on a FastAPI backend with async endpoints, so concurrent student sessions do not block each other. Academic data lives in MySQL, administered through phpMyAdmin. The timetable generator feeds structured course data and the period rules to a language model and receives the timetables back as CSV.",
     decision: {
       title: "Keep the timetable rules in data",
       body: "Period times, breaks and per-subject hours are passed to the generator as structured input. When the college changes its schedule, only the rules change; the program stays the same.",
+      points: [
+        { k: "Time", v: "Seven periods, three breaks, a shifted Friday afternoon" },
+        { k: "Fixed", v: "Mentoring, Placement and Minor hours sit in set slots" },
+        { k: "Shape", v: "Practicals are three consecutive hours" },
+        { k: "People", v: "No teacher in two rooms at once" },
+        { k: "Electives", v: "Semester 8’s three electives share one period" },
+      ],
     },
     flow: [
       { label: "Course data", detail: "MySQL" },
@@ -181,6 +286,7 @@ export const PROJECTS: Project[] = [
     ],
     tech: ["Python", "FastAPI", "React", "MySQL", "phpMyAdmin"],
     github: "https://github.com/4aruu/InfoBot",
+    facts: [{ k: "For", v: "Semesters 4, 6 and 8" }],
   },
   {
     id: "taskit",

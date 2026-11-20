@@ -1538,3 +1538,38 @@ body:has(.gz-entry[data-lights~="VIII"]:focus-within) .atlas-rail-link[data-num=
 @media (max-width: 639.98px) {
   .gz-list { columns: 1; }
 }
+
+/* ── Case studies: why first (2026-11-20) ── */
+.cs-needs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 24px; border-top: 2px solid rgb(var(--ink)); }
+.cs-needs li { display: flex; flex-direction: column; gap: 8px; padding: 16px 0 20px; border-bottom: 1px solid rgb(var(--line) / var(--line-a)); font-family: var(--font-serif), Georgia, serif; font-size: clamp(1.25rem, 1.8vw, 1.5rem); line-height: 1.2; }
+.cs-needs-n { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; color: rgb(var(--accent)); }
+.cs-constraint { margin: 8px 0 0; max-width: 62ch; padding: 16px 20px; border-left: 2px solid rgb(var(--signal)); background: rgb(var(--l1)); font-size: 1.0625rem; line-height: 1.55; }
+.cs-constraint-k { display: block; margin-bottom: 6px; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--accent)); }
+
+.cs-ideas { list-style: none; margin: -36px 0 0; padding: 0; }
+.cs-idea { display: grid; grid-template-columns: 56px minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr); column-gap: 24px; row-gap: 12px; padding: 28px 0 32px; border-bottom: 1px solid rgb(var(--line) / var(--line-a)); align-items: start; }
+.cs-idea-n { padding-top: 0.5em; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; color: rgb(var(--accent)); }
+.cs-idea-title { margin: 0; font-family: var(--font-serif), Georgia, serif; font-weight: 400; font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.1; letter-spacing: -0.015em; text-wrap: balance; }
+.cs-idea-why p, .cs-idea-how p { margin: 0; font-size: 1rem; line-height: 1.6; }
+.cs-idea-why p:last-child { color: rgb(var(--ink)); }
+.cs-idea-how > p:not(.cs-idea-k) { color: rgb(var(--ink-2)); }
+.cs-idea-how { display: flex; flex-direction: column; gap: 0; }
+.cs-idea-how .cs-stack { margin-top: 14px; }
+p.cs-idea-k { margin: 0 0 6px; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--ink-2)); }
+
+.cs-decision-points { margin: 12px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 24px; border-top: 1px solid rgb(var(--pd-line)); }
+.cs-decision-points > div { padding: 12px 0; border-bottom: 1px solid rgb(var(--pd-line)); }
+.cs-decision-points dt { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--pd-accent)); }
+.cs-decision-points dd { margin: 4px 0 0; font-size: 0.9375rem; line-height: 1.45; color: rgb(var(--pd-ink)); }
+
+@media (max-width: 1023.98px) {
+  .cs-idea { grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1fr); }
+  .cs-idea-title { grid-column: 2 / -1; }
+  .cs-idea-why { grid-column: 2; }
+  .cs-idea-how { grid-column: 3; }
+}
+@media (max-width: 767.98px) {
+  .cs-idea { grid-template-columns: minmax(0, 1fr); }
+  .cs-idea-n { padding-top: 0; }
+  .cs-idea-title, .cs-idea-why, .cs-idea-how { grid-column: 1; }
+}
