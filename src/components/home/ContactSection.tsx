@@ -14,7 +14,7 @@ export default function ContactSection() {
             Hiring for cloud or AI engineering?
           </h2>
           <p className="t-body prose-w mt-4 cta-muted">
-            I am looking for my first full-time role in the UAE, Kuwait or India, and I can relocate.
+            I am looking for full-time roles in the UAE, Kuwait or India, and I can relocate.
             Email is the fastest way to reach me.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
