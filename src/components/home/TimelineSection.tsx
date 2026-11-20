@@ -1,33 +1,59 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import SectionHead from "./SectionHead";
 import Statement from "./Statement";
 import { TIMELINE, type Milestone } from "@/data/profile";
 import TimelineReveal from "@/components/atlas/motion/TimelineReveal";
 
-function ItemLink({ m }: { m: Milestone }) {
+/* Where a card leads, in plain words, and the line it rolls over to on hover:
+   something that reads like a small win. */
+function linkCopy(m: Milestone) {
+  const href = m.href ?? "";
+  if (m.external) return { label: "Source on GitHub", win: "Dig into the code", arrow: "↗" };
+  if (href.startsWith("/projects")) return { label: "Read the case study", win: "See how I built it", arrow: "→" };
+  if (href === "#contact") return { label: "Get in touch", win: "Let’s build something", arrow: "→" };
+  return { label: "See the role", win: "See what I delivered", arrow: "→" };
+}
+
+/* The card's one link. Its ::after stretches over the whole card, so the card
+   is a single click target and a single tab stop. Screen readers hear the
+   plain label plus the card title; the win line is hidden from them. */
+function CardLink({ m }: { m: Milestone }) {
   if (!m.href) return null;
-  const label = m.external ? "Source on GitHub" : m.href.startsWith("/projects") ? "Read the case study" : "See details";
-  const cls = "link t-secondary mt-1 inline-flex min-h-[44px] items-center gap-1";
+  const { label, win, arrow } = linkCopy(m);
+  const body = (
+    <>
+      <span className="win-roll">
+        <span className="win-a">
+          {label}
+          <span className="sr-only">: {m.title}</span>
+        </span>
+        <span className="win-b" aria-hidden>
+          {win}
+        </span>
+      </span>
+      <span className={arrow === "↗" ? "win-arrow is-diag" : "win-arrow"} aria-hidden>
+        <span>{arrow}</span>
+      </span>
+      {m.external && <span className="sr-only"> (opens in a new tab)</span>}
+    </>
+  );
   if (m.external) {
     return (
-      <a href={m.href} className={cls} target="_blank" rel="noopener noreferrer">
-        {label}
-        <ArrowUpRight size={14} aria-hidden />
-        <span className="sr-only">(opens in a new tab)</span>
+      <a href={m.href} className="tl-go" target="_blank" rel="noopener noreferrer">
+        {body}
       </a>
     );
   }
   if (m.href.startsWith("/")) {
     return (
-      <Link href={m.href} className={cls}>
-        {label}
+      <Link href={m.href} className="tl-go">
+        {body}
       </Link>
     );
   }
   return (
-    <a href={m.href} className={cls}>
-      {label}
+    <a href={m.href} className="tl-go">
+      {body}
     </a>
   );
 }
@@ -55,17 +81,30 @@ export default function TimelineSection() {
               style={{ "--row": i + 1 } as React.CSSProperties}
             >
               <span className="tl-dot" aria-hidden />
-              <div className="surface p-5">
-                <p className="t-meta text-ink-2">
-                  <time>{m.when}</time>
-                  {m.kind !== "Now" && <span className="text-ink-3"> · {m.kind}</span>}
-                </p>
-                <h3 className="t-h4 mt-2 text-ink">{m.title}</h3>
-                {m.place && <p className="t-secondary mt-1 text-ink-2">{m.place}</p>}
-                <p className="t-secondary mt-2 text-ink-2">{m.body}</p>
-                {m.stack && <p className="t-meta mt-2 text-ink-3">{m.stack}</p>}
-                <ItemLink m={m} />
-              </div>
+              <article className={m.href ? "surface tl-card win-host has-link" : "surface tl-card"}>
+                {/* what kind of step, and when */}
+                <header className="tl-card-head">
+                  <span className="tl-kind">{m.kind === "Now" ? "Now" : m.kind}</span>
+                  {m.kind !== "Now" && <time className="tl-when">{m.when}</time>}
+                </header>
+                {/* what it was, and where */}
+                <h3 className="tl-title">{m.title}</h3>
+                {m.place && <p className="tl-place">{m.place}</p>}
+                <p className="tl-body">{m.body}</p>
+                {/* what it used, and where to go next */}
+                {(m.stack || m.href) && (
+                  <footer className="tl-card-foot">
+                    {m.stack && (
+                      <ul className="tl-stack" aria-label="Built with">
+                        {m.stack.split(" · ").map((t) => (
+                          <li key={t}>{t}</li>
+                        ))}
+                      </ul>
+                    )}
+                    <CardLink m={m} />
+                  </footer>
+                )}
+              </article>
             </li>
           ))}
         </ol>

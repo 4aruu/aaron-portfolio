@@ -27,7 +27,7 @@ export default function WeekGrid() {
   );
   return (
     <figure id="week" className="week" aria-labelledby="week-caption">
-      <div className="week-scroll">
+      <div className="week-scroll" tabIndex={0} role="region" aria-label="Sample week, scrolls sideways on small screens">
         <table className="week-grid">
           <caption className="sr-only">Semester 6 week, sample course codes</caption>
           <thead>

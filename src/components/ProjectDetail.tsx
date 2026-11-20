@@ -53,15 +53,15 @@ function Sec({ tag, title, children, wide = false }: { tag: string; title: strin
 function TurnLink({ p, dir }: { p: Project; dir: "next" | "prev" }) {
   const isNext = dir === "next";
   return (
-    <Link href={`/projects/${p.id}`} className={isNext ? "cs-turn is-next" : "cs-turn is-prev"} rel={dir}>
+    <Link href={`/projects/${p.id}`} className={isNext ? "cs-turn win-host is-next" : "cs-turn win-host is-prev"} rel={dir}>
       <span className="cs-turn-label">
-        <span className="cs-turn-roll">
-          <span className="cs-turn-a">{isNext ? "Next case study" : "Previous case study"}</span>
-          <span className="cs-turn-b" aria-hidden>
+        <span className="win-roll">
+          <span className="win-a">{isNext ? "Next case study" : "Previous case study"}</span>
+          <span className="win-b" aria-hidden>
             {isNext ? "Onward — you’re on a roll" : "Back for another look"}
           </span>
         </span>
-        <span className="cs-turn-arrow" aria-hidden>
+        <span className={isNext ? "win-arrow" : "win-arrow is-back"} aria-hidden>
           <span>{isNext ? "→" : "←"}</span>
         </span>
       </span>

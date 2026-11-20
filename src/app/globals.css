@@ -1257,8 +1257,10 @@ html:has(.atlas-index[open]) { overflow: hidden; }
 
 /* Plate V · InfoBot, the week */
 .p05 { background: rgb(var(--l1)); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 40px; align-items: start; }
-.week { grid-column: 1 / span 7; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-.week-scroll { overflow-x: auto; }
+.week { grid-column: 1 / span 7; min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+/* position: relative keeps the cells' sr-only text inside the scroller; without it
+   that text escapes the clip and widens the page on phones. */
+.week-scroll { position: relative; overflow-x: auto; }
 .week-grid { width: 100%; min-width: 560px; border-collapse: collapse; table-layout: fixed; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; }
 .week-grid th { font-weight: 400; text-align: left; padding: 10px 8px; color: rgb(var(--ink-2)); border: 1px solid rgb(var(--ink)); background: rgb(var(--l1)); }
 .week-grid thead th { border-top-width: 2px; }
@@ -1345,48 +1347,20 @@ html:has(.atlas-index[open]) { overflow: hidden; }
   border: 1px solid rgb(var(--ink)); color: rgb(var(--ink)); text-decoration: none;
   transition: background-color var(--motion-200) var(--ease-out), color var(--motion-200) var(--ease-out);
 }
-.cs-turn.is-next { --turn-hi: var(--signal); text-align: right; align-items: flex-end; background: rgb(var(--ink)); color: rgb(var(--l0)); }
+.cs-turn.is-next { --win-hi: var(--signal); text-align: right; align-items: flex-end; background: rgb(var(--ink)); color: rgb(var(--l0)); }
 /* At night the next card turns light, so its highlight switches to the day accent to keep contrast. */
-:root:has(> head > meta[name="color-scheme"][content="dark"]) .cs-turn.is-next { --turn-hi: 173 51 12; }
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .cs-turn.is-next { --win-hi: 173 51 12; }
 @media (prefers-color-scheme: dark) {
-  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .cs-turn.is-next { --turn-hi: 173 51 12; }
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .cs-turn.is-next { --win-hi: 173 51 12; }
 }
 .cs-turn.is-prev { align-items: flex-start; }
 .cs-turn-label { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .cs-turn.is-prev .cs-turn-label { flex-direction: row-reverse; }
-.cs-turn-roll { display: grid; overflow: hidden; height: 1.3em; line-height: 1.3em; }
-.cs-turn-a, .cs-turn-b { grid-area: 1 / 1; transition: transform var(--motion-300) var(--ease-out); }
-.cs-turn-b { transform: translateY(110%); color: rgb(var(--turn-hi, var(--accent))); }
-.cs-turn-arrow { position: relative; display: inline-flex; width: 1.25em; height: 1.3em; overflow: hidden; color: rgb(var(--turn-hi, var(--accent))); }
-.cs-turn-arrow > span { display: grid; place-items: center; width: 100%; }
 .cs-turn-title { font-family: var(--font-serif), Georgia, serif; font-size: clamp(1.75rem, 3.2vw, 2.75rem); line-height: 1; letter-spacing: -0.02em; }
 .cs-turn.is-prev .cs-turn-title { font-size: clamp(1.375rem, 2.2vw, 1.875rem); }
 .cs-turn-sub { font-size: 0.9375rem; line-height: 1.45; max-width: 46ch; opacity: 0.78; }
 .cs-turn.is-prev:hover { background: rgb(var(--ink) / 0.05); }
 .cs-turn.is-next:hover { background: rgb(var(--ink) / 0.9); }
-.cs-turn:hover .cs-turn-a, .cs-turn:focus-visible .cs-turn-a { transform: translateY(-110%); }
-.cs-turn:hover .cs-turn-b, .cs-turn:focus-visible .cs-turn-b { transform: translateY(0); }
-@media (prefers-reduced-motion: no-preference) {
-  /* the arrow loops while hovered: out one side, back in from the other */
-  .cs-turn.is-next:hover .cs-turn-arrow > span, .cs-turn.is-next:focus-visible .cs-turn-arrow > span { animation: cs-loop-next 900ms var(--ease-out) infinite; }
-  .cs-turn.is-prev:hover .cs-turn-arrow > span, .cs-turn.is-prev:focus-visible .cs-turn-arrow > span { animation: cs-loop-prev 900ms var(--ease-out) infinite; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cs-turn-a, .cs-turn-b { transition: none; }
-}
-@keyframes cs-loop-next {
-  0% { transform: translateX(0); opacity: 1; }
-  45% { transform: translateX(120%); opacity: 0; }
-  46% { transform: translateX(-120%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
-}
-@keyframes cs-loop-prev {
-  0% { transform: translateX(0); opacity: 1; }
-  45% { transform: translateX(-120%); opacity: 0; }
-  46% { transform: translateX(120%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
-}
-
 @media (max-width: 1023.98px) {
   .cs-open-text, .cs-numbers { grid-column: 1 / -1; }
   .cs-does .cs-body, .cs-checks { grid-column: 1 / -1; }
@@ -1400,4 +1374,79 @@ html:has(.atlas-index[open]) { overflow: hidden; }
   .cs-turn.is-next { order: -1; }
   .cs-glance { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cs-glance > div, .cs-glance > div + div { padding: 14px 12px 14px 0; border-right: 0; border-bottom: 1px solid rgb(var(--line) / var(--line-a)); }
+}
+
+/* ── Win links (2026-11-20) ──────────────────────────────────────
+   A link whose label rolls over to a line that reads like a small win, with an
+   arrow that loops while the pointer is on it. The host (.win-host) is the
+   element that owns the hover: the whole card, or the link itself. */
+.win-roll { display: inline-grid; overflow: hidden; height: 1.3em; line-height: 1.3em; }
+.win-a, .win-b { grid-area: 1 / 1; white-space: nowrap; transition: transform var(--motion-300) var(--ease-out); }
+.win-b { transform: translateY(110%); color: rgb(var(--win-hi, var(--accent))); }
+.win-arrow { display: inline-flex; flex: none; width: 1.25em; height: 1.3em; overflow: hidden; color: rgb(var(--win-hi, var(--accent))); }
+.win-arrow > span { display: grid; place-items: center; width: 100%; }
+.win-host:focus-within .win-a { transform: translateY(-110%); }
+.win-host:focus-within .win-b { transform: translateY(0); }
+@media (hover: hover) {
+  .win-host:hover .win-a { transform: translateY(-110%); }
+  .win-host:hover .win-b { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .win-host:focus-within .win-arrow > span { animation: win-loop-x 900ms var(--ease-out) infinite; }
+  .win-host:focus-within .win-arrow.is-back > span { animation-name: win-loop-back; }
+  .win-host:focus-within .win-arrow.is-diag > span { animation-name: win-loop-diag; }
+}
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .win-host:hover .win-arrow > span { animation: win-loop-x 900ms var(--ease-out) infinite; }
+  .win-host:hover .win-arrow.is-back > span { animation-name: win-loop-back; }
+  .win-host:hover .win-arrow.is-diag > span { animation-name: win-loop-diag; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .win-a, .win-b { transition: none; }
+}
+/* out one side, back in from the other, on repeat */
+@keyframes win-loop-x {
+  0% { transform: translateX(0); opacity: 1; }
+  45% { transform: translateX(120%); opacity: 0; }
+  46% { transform: translateX(-120%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes win-loop-back {
+  0% { transform: translateX(0); opacity: 1; }
+  45% { transform: translateX(-120%); opacity: 0; }
+  46% { transform: translateX(120%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes win-loop-diag {
+  0% { transform: translate(0, 0); opacity: 1; }
+  45% { transform: translate(110%, -110%); opacity: 0; }
+  46% { transform: translate(-110%, 110%); opacity: 0; }
+  100% { transform: translate(0, 0); opacity: 1; }
+}
+
+/* ── Timeline cards (2026-11-20) ─────────────────────────────────
+   Three groups, split by hairlines: what and when · what it was · what it used
+   and where to go. A card with a link is one click target and one tab stop. */
+.tl-card { position: relative; display: flex; flex-direction: column; padding: 20px 20px 16px; transition: border-color var(--motion-200) var(--ease-out), background-color var(--motion-200) var(--ease-out); }
+.tl-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid rgb(var(--line) / var(--line-a)); }
+.tl-kind, .tl-when { font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--ink-2)); }
+.tl-when { text-transform: none; letter-spacing: 0.02em; }
+.tl-item[data-kind="Project"] .tl-kind, .tl-item[data-kind="Now"] .tl-kind { color: rgb(var(--accent)); }
+.tl-title { margin: 0; font-family: var(--font-serif), Georgia, serif; font-weight: 400; font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.01em; color: rgb(var(--ink)); text-wrap: balance; }
+.tl-place { margin: 6px 0 0; font-size: 0.875rem; line-height: 1.45; color: rgb(var(--ink-2)); }
+.tl-body { margin: 12px 0 0; max-width: 60ch; font-size: 0.9375rem; line-height: 1.55; color: rgb(var(--ink)); }
+.tl-card-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; margin-top: 16px; padding-top: 12px; border-top: 1px solid rgb(var(--line) / var(--line-a)); }
+.tl-stack { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.tl-stack li { padding: 2px 8px; border: 1px solid rgb(var(--line) / var(--line-strong-a)); border-radius: 4px; font-family: var(--font-mono), ui-monospace, monospace; font-size: 0.75rem; line-height: 1.5; color: rgb(var(--ink-2)); }
+.tl-go { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-size: 0.875rem; font-weight: 500; color: rgb(var(--ink)); text-decoration: none; }
+/* both lines share one cell; keep the short one against the arrow */
+.tl-go .win-roll, .cs-turn.is-next .win-roll { justify-items: end; }
+.tl-go::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.tl-item[data-kind="Now"] .tl-card { border-color: rgb(var(--accent) / 0.45); }
+@media (hover: hover) {
+  .tl-card.has-link:hover { border-color: rgb(var(--ink) / 0.35); background-color: rgb(var(--l2)); }
+}
+@supports selector(:has(*)) {
+  .tl-go:focus-visible { outline: none; }
+  .tl-card:has(.tl-go:focus-visible) { outline: 2px solid rgb(var(--accent)); outline-offset: 3px; }
 }
